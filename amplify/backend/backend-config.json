@@ -1,6 +1,6 @@
 {
   "auth": {
-    "hacklyticsportal20234b531498": {
+    "hacklyticsportal2023": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],

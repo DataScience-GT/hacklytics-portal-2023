@@ -61,7 +61,7 @@ const App = () => {
 
             {user && (
               <View width="100%">
-                <Text>Hello {user.username}</Text>
+                <Text>Hello {user.attributes?.email}</Text>
                 <Button onClick={signOut}>
                   <Text>Sign Out</Text>
                 </Button>

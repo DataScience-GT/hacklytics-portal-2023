@@ -26,8 +26,8 @@ const formFields = {
       isRequired: false,
       name: "custom:gtemail",
       type: "email",
-      errorMessage: "",
-      onChange: (e: React.ChangeEvent<HTMLInputElement>) => {console.log(e.currentTarget.value)}
+      // errorMessage: "",
+      // onChange: (e: React.ChangeEvent<HTMLInputElement>) => {console.log(e.currentTarget.value)}
     },
     name: {
       order: 3,

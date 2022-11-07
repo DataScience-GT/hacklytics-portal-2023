@@ -1,15 +1,19 @@
 {
   "auth": {
-    "hacklyticsportal2023b2114565": {
+    "hacklyticsportal20234b531498": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "customAuth": false,
       "frontendAuthConfig": {
         "socialProviders": [],
-        "usernameAttributes": [],
-        "signupAttributes": [
+        "usernameAttributes": [
           "EMAIL"
+        ],
+        "signupAttributes": [
+          "BIRTHDATE",
+          "EMAIL",
+          "NAME"
         ],
         "passwordProtectionSettings": {
           "passwordPolicyMinLength": 8,

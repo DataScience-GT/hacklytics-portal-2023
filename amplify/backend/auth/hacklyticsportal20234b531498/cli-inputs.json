@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "hacklyticsportal2023b2114565_identitypool_b2114565",
+    "identityPoolName": "hacklyticsportal20234b531498_identitypool_4b531498",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "hacklyb2114565",
-    "userPoolName": "hacklyticsportal2023b2114565_userpool_b2114565",
+    "resourceNameTruncated": "hackly4b531498",
+    "userPoolName": "hacklyticsportal20234b531498_userpool_4b531498",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -20,7 +20,9 @@
     "passwordPolicyMinLength": 8,
     "passwordPolicyCharacters": [],
     "requiredAttributes": [
-      "email"
+      "birthdate",
+      "email",
+      "name"
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
@@ -31,12 +33,15 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "hacklyb2114565_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "hackly4b531498_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "b2114565",
-    "resourceName": "hacklyticsportal2023b2114565",
+    "sharedId": "4b531498",
+    "resourceName": "hacklyticsportal20234b531498",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "default",
+    "usernameAttributes": [
+      "email"
+    ],
     "triggers": {},
     "userPoolGroupList": [],
     "serviceName": "Cognito",

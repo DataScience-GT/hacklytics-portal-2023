@@ -15,67 +15,36 @@ import "@aws-amplify/ui-react/styles.css";
 import theme from "./theme";
 import logo from "./logo.svg";
 
-import GraphQLAPI, { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql';
-import { listTodos, ListTodosQuery } from './graphql'
+// import GraphQLAPI, { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql';
+// import { listTodos, ListTodosQuery } from './graphql'
 
 Amplify.configure(aws_exports);
 
+const formFields = {
+  signUp: {
+    email: {
+      order:1
+    },
+    name: {
+      order: 2,
+    },
+    birthdate: {
+      order: 3,
+    },    
+    password: {
+      order: 4
+    },
+    confirm_password: {
+      order: 5
+    }
+  },
+}
 
 const App = () => {
-  const [todos, setTodos] = useState<ListTodosQuery>();
-
-  useEffect(() => {
-    fetchTodos();
-  }, []);
-
-  const fetchTodos = async () => {
-    try {
-      const response = (await GraphQLAPI.graphql({
-        query: listTodos,
-        authMode: GRAPHQL_AUTH_MODE.API_KEY
-      })) as { data: ListTodosQuery }
-      console.log(response.data.listTodos?.items)
-      if (response.data && response.data.listTodos) {
-        setTodos(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // async function fetchNotes() {
-  //   const apiData = await API.graphql({ query: listNotes });
-  //   const notesFromAPI = apiData.data.listNotes.items;
-  //   setNotes(notesFromAPI);
-  // }
-
-  // async function createNote(event) {
-  //   event.preventDefault();
-  //   const form = new FormData(event.target);
-  //   const data = {
-  //     name: form.get("name"),
-  //     description: form.get("description"),
-  //   };
-  //   await API.graphql({
-  //     query: createNoteMutation,
-  //     variables: { input: data },
-  //   });
-  //   fetchNotes();
-  //   event.target.reset();
-  // }
-
-  // async function deleteNote({ id }) {
-  //   const newNotes = notes.filter((note) => note.id !== id);
-  //   setNotes(newNotes);
-  //   await API.graphql({
-  //     query: deleteNoteMutation,
-  //     variables: { input: { id } },
-  //   });
-  // }
 
   return (
     <AmplifyProvider theme={theme}>
-      <Authenticator>
+      <Authenticator formFields={formFields}>
         {({ signOut, user }) => (
           <Flex
             direction="column"

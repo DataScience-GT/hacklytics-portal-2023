@@ -17,6 +17,9 @@
       },
       "api": {
         "hacklyticsportal2023": {}
+      },
+      "storage": {
+        "imagestorage": {}
       }
     }
   }

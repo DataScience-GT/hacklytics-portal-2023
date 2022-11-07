@@ -1,0 +1,20 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify0f0acd1e2a0b4-staging-14346-authRole",
+      "UnauthRoleArn": "arn:aws:iam::521654603461:role/amplify-amplify0f0acd1e2a0b4-staging-14346-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::521654603461:role/amplify-amplify0f0acd1e2a0b4-staging-14346-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
+      "UnauthRoleName": "amplify-amplify0f0acd1e2a0b4-staging-14346-unauthRole",
+      "StackName": "amplify-amplify0f0acd1e2a0b4-staging-14346",
+      "StackId": "arn:aws:cloudformation:us-east-1:521654603461:stack/amplify-amplify0f0acd1e2a0b4-staging-14346/9ecdb210-5e3d-11ed-94a3-0ec5b82fbad9",
+      "AmplifyAppId": "d1nefwyjdgyk10"
+    },
+    "categories": {
+      "auth": {
+        "hacklyticsportal2023b2114565": {}
+      }
+    }
+  }
+}

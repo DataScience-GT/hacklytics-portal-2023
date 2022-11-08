@@ -7,7 +7,6 @@ import aws_exports from "./aws-exports";
 import "@aws-amplify/ui-react/styles.css";
 
 import { Theme, ThemeMap, ThemeContext } from "./context/ThemeContext";
-import { Theme as AmpTheme, useTheme } from "@aws-amplify/ui-react";
 import hacklytics from "./theme";
 
 // import logo from "./logo.svg";

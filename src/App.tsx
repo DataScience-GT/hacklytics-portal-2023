@@ -12,6 +12,7 @@ import theme from "./theme";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
 
 Amplify.configure(aws_exports);
 
@@ -62,9 +63,10 @@ const App = () => {
             <BrowserRouter>
               <Routes>
                 <Route
-                  path="/"
+                  path="/*"
                   element={<HomePage user={user} signOut={signOut} />}
                 />
+                <Route path="/settings" element={<SettingsPage />} />
               </Routes>
             </BrowserRouter>
           );

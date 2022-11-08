@@ -3,14 +3,14 @@ import { hacklytics, synthwave, terminal, classic } from "../theme";
 import { Theme as AmpTheme } from "@aws-amplify/ui-react";
 
 export enum Theme {
-  Default = "default",
+  Hacklytics = "hacklytics",
   Synthwave = "synthwave",
   Terminal = "terminal",
   Classic = "classic",
 }
 
 export const ThemeMap = new Map<Theme, AmpTheme>([
-  [Theme.Default, hacklytics],
+  [Theme.Hacklytics, hacklytics],
   [Theme.Synthwave, synthwave],
   [Theme.Terminal, terminal],
   [Theme.Classic, classic],
@@ -24,7 +24,7 @@ export type ThemeContextType = {
 };
 
 export const ThemeContext = createContext<ThemeContextType>({
-  theme: Theme.Default,
+  theme: Theme.Hacklytics,
   setTheme: (theme) => console.warn("no theme provider"),
   colorMode: "system",
   setColorMode: (colorMode) => console.warn("no colorMode provider"),

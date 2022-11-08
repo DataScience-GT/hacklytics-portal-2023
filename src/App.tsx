@@ -86,7 +86,7 @@ const App = () => {
       <ThemeContext.Provider
         value={{ theme, setTheme, colorMode, setColorMode }}
       >
-        <Authenticator formFields={formFields}>
+        <Authenticator formFields={formFields} variation="modal">
           {({ signOut, user }) => {
             const groups = user?.getSignInUserSession()?.getAccessToken()
               .payload["cognito:groups"];
@@ -107,11 +107,11 @@ const App = () => {
                     element={<SettingsPage user={user} signOut={signOut} />}
                   />
                 </Routes>
-                <View className={styles.Background}></View>
               </BrowserRouter>
             );
           }}
         </Authenticator>
+        <View className={styles.Background}></View>
       </ThemeContext.Provider>
     </AmplifyProvider>
   );

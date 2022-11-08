@@ -1,7 +1,7 @@
 import { Theme } from "@aws-amplify/ui-react";
 
 const theme: Theme = {
-  name: "cra-my-theme",
+  name: "cra-hacklytics-theme",
   tokens: {
     colors: {
       font: {

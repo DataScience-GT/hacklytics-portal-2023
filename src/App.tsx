@@ -51,7 +51,6 @@ const App = () => {
     <AmplifyProvider theme={theme}>
       <Authenticator formFields={formFields}>
         {({ signOut, user }) => {
-          console.log(1)
           return (
             <BrowserRouter>
               <Routes>

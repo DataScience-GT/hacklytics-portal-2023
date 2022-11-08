@@ -102,7 +102,10 @@ const App = () => {
                     path="/*"
                     element={<HomePage user={user} signOut={signOut} />}
                   />
-                  <Route path="/settings" element={<SettingsPage />} />
+                  <Route
+                    path="/settings"
+                    element={<SettingsPage user={user} signOut={signOut} />}
+                  />
                 </Routes>
                 <View className={styles.Background}></View>
               </BrowserRouter>

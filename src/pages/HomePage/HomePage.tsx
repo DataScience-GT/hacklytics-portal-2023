@@ -13,7 +13,7 @@ interface HomePageProps {
 const HomePage: FC<HomePageProps> = ({ user, signOut }) => (
   <div className={styles.HomePage}>
     <View width="100%" padding="medium">
-        <Card variation="elevated" maxWidth={"20em"}>
+        <Card variation="outlined" maxWidth={"20em"}>
           <Text>a</Text>
         </Card>
     </View>

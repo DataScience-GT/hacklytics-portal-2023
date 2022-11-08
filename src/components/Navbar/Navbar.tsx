@@ -10,8 +10,10 @@ import {
   Flex,
   Menu,
   MenuItem,
-  Link,
+  Divider,
 } from "@aws-amplify/ui-react";
+
+import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/DSGT/square-logo.png";
 
@@ -39,10 +41,21 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => (
           height="100%"
           width="fit-content"
         >
-          <Image className={styles.Logo} alt="DSGT Logo" src={logo} />
-          <Heading className={styles.DSGT} level={4}>
-            DSGT
-          </Heading>
+          <Link to="/" style={{ textDecoration: "none" }}>
+            <Flex
+              direction={"row"}
+              justifyContent="flex-start"
+              alignItems="center"
+              gap="0.5em"
+              height="100%"
+              width="fit-content"
+            >
+              <Image className={styles.Logo} alt="DSGT Logo" src={logo} />
+              <Heading className={styles.DSGT} level={4}>
+                DSGT
+              </Heading>
+            </Flex>
+          </Link>
         </Flex>
         <Flex
           direction={"row"}
@@ -55,20 +68,16 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => (
         >
           <View width="fit-content">
             <Menu menuAlign="start">
-              <MenuItem
-                onClick={() => {
-                  window.location.href = "/account";
-                }}
-              >
-                Account
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  window.location.href = "/settings";
-                }}
-              >
-                Settings
-              </MenuItem>
+              <Link className={styles.MenuLink} to="/">
+                <MenuItem>Dashboard</MenuItem>
+              </Link>
+              <Link className={styles.MenuLink} to="/account">
+                <MenuItem>Account</MenuItem>
+              </Link>
+              <Link className={styles.MenuLink} to="/settings">
+                <MenuItem>Settings</MenuItem>
+              </Link>
+              <Divider />
               <MenuItem className={styles.LogoutButton} onClick={signOut}>
                 Logout
               </MenuItem>

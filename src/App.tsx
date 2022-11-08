@@ -31,11 +31,11 @@ const formFields = {
     },
     name: {
       order: 3,
-      isRequired: true
+      isRequired: true,
     },
     birthdate: {
       order: 4,
-      isRequired: true
+      isRequired: true,
     },
     password: {
       order: 5,
@@ -50,16 +50,19 @@ const App = () => {
   return (
     <AmplifyProvider theme={theme}>
       <Authenticator formFields={formFields}>
-        {({ signOut, user }) => (
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/"
-                element={<HomePage user={user} signOut={signOut} />}
-              />
-            </Routes>
-          </BrowserRouter>
-        )}
+        {({ signOut, user }) => {
+          console.log(1)
+          return (
+            <BrowserRouter>
+              <Routes>
+                <Route
+                  path="/"
+                  element={<HomePage user={user} signOut={signOut} />}
+                />
+              </Routes>
+            </BrowserRouter>
+          );
+        }}
       </Authenticator>
     </AmplifyProvider>
   );

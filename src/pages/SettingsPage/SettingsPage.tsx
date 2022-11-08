@@ -26,7 +26,7 @@ const SettingsPage: FC<SettingsPageProps> = ({ user, signOut }) => {
   const { theme, setTheme, colorMode, setColorMode } = useContext(ThemeContext);
   return (
     <div className={styles.SettingsPage}>
-      <View width="100%" padding="1em">
+      <View width="100%" padding="medium">
         <Flex direction="column" gap={"1em"}>
           <View>
             <ToggleButtonGroup

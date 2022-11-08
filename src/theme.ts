@@ -18,6 +18,7 @@ export const hacklytics: Theme = {
       }
     },
   },
+  overrides: [defaultDarkModeOverride]
 };
 
 export const synthwave: Theme = {

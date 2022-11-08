@@ -14,7 +14,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => (
   <div className={styles.HomePage}>
     {user && (
       <View width="100%" padding="1em">
-        <Text>Hello {user.attributes?.name}</Text>
+        <Text>dev Hello {user.attributes?.name}</Text>
         {user.attributes &&
           Object.values(user.attributes).map((attr, i) => (
             <Text key={i}>{attr}</Text>

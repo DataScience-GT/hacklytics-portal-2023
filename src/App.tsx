@@ -51,6 +51,13 @@ const App = () => {
     <AmplifyProvider theme={theme}>
       <Authenticator formFields={formFields}>
         {({ signOut, user }) => {
+          const groups = user?.getSignInUserSession()?.getAccessToken().payload[
+            "cognito:groups"
+          ];
+          if (groups?.includes("Administrator")) {
+            // user is an admin
+            console.log("Admin!");
+          }
           return (
             <BrowserRouter>
               <Routes>

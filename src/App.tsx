@@ -13,6 +13,7 @@ import theme from "./theme";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
+import Navbar from "./components/Navbar/Navbar";
 
 Amplify.configure(aws_exports);
 
@@ -61,6 +62,7 @@ const App = () => {
           }
           return (
             <BrowserRouter>
+              <Navbar user={user} signOut={signOut} />
               <Routes>
                 <Route
                   path="/*"

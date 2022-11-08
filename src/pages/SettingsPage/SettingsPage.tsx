@@ -1,9 +1,14 @@
 import React, { FC } from 'react';
 import styles from './SettingsPage.module.scss';
 
-interface SettingsPageProps {}
+import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 
-const SettingsPage: FC<SettingsPageProps> = () => (
+interface SettingsPageProps {
+  user?: AmplifyUser;
+  signOut?: (data?: AuthEventData | undefined) => void;
+}
+
+const SettingsPage: FC<SettingsPageProps> = ({user, signOut}) => (
   <div className={styles.SettingsPage}>
     SettingsPage Component
   </div>

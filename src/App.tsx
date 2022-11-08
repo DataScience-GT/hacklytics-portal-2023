@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import styles from "./App.module.scss";
 import { Amplify } from "aws-amplify";
-import { AmplifyProvider, Authenticator } from "@aws-amplify/ui-react";
+import { AmplifyProvider, Authenticator, View } from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
 import "@aws-amplify/ui-react/styles.css";
 
 import { Theme, ThemeMap, ThemeContext } from "./context/ThemeContext";
-import { Theme as AmpTheme } from "@aws-amplify/ui-react";
+import { Theme as AmpTheme, useTheme } from "@aws-amplify/ui-react";
 import hacklytics from "./theme";
 
 // import logo from "./logo.svg";
@@ -53,40 +54,62 @@ const formFields = {
 };
 
 const App = () => {
-  const [theme, setTheme] = useState(Theme.Default);
+  const [theme, setTheme] = useState<Theme>(
+    (localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics
+  );
   const [colorMode, setColorMode] = useState<"system" | "light" | "dark">(
-    "system"
+    (localStorage.getItem("hacklytics-color-mode") as
+      | "system"
+      | "light"
+      | "dark") ?? "system"
   );
 
-  const [ampTheme, setAmpTheme] = useState<AmpTheme>(
-    ThemeMap.get(theme) ?? hacklytics
-  );
+  useEffect(() => {
+    let prevTheme = localStorage.getItem("hacklytics-theme") as Theme;
+    let prevColorMode = localStorage.getItem("hacklytics-color-mode") as
+      | "system"
+      | "light"
+      | "dark";
+    if (prevTheme !== theme) {
+      localStorage.setItem("hacklytics-theme", theme);
+    }
+    if (prevColorMode !== colorMode) {
+      localStorage.setItem("hacklytics-color-mode", colorMode);
+    }
+  }, [colorMode, theme]);
 
   return (
-    <AmplifyProvider theme={ampTheme} colorMode={colorMode}>
-      <Authenticator formFields={formFields}>
-        {({ signOut, user }) => {
-          const groups = user?.getSignInUserSession()?.getAccessToken().payload[
-            "cognito:groups"
-          ];
-          if (groups?.includes("Administrator")) {
-            // user is an admin
-            console.log("Admin!");
-          }
-          return (
-            <BrowserRouter>
-              <Navbar user={user} signOut={signOut} />
-              <Routes>
-                <Route
-                  path="/*"
-                  element={<HomePage user={user} signOut={signOut} />}
-                />
-                <Route path="/settings" element={<SettingsPage />} />
-              </Routes>
-            </BrowserRouter>
-          );
-        }}
-      </Authenticator>
+    <AmplifyProvider
+      theme={ThemeMap.get(theme) ?? hacklytics}
+      colorMode={colorMode}
+    >
+      <ThemeContext.Provider
+        value={{ theme, setTheme, colorMode, setColorMode }}
+      >
+        <Authenticator formFields={formFields}>
+          {({ signOut, user }) => {
+            const groups = user?.getSignInUserSession()?.getAccessToken()
+              .payload["cognito:groups"];
+            if (groups?.includes("Administrator")) {
+              // user is an admin
+              console.log("Admin!");
+            }
+            return (
+              <BrowserRouter>
+                <Navbar user={user} signOut={signOut} />
+                <Routes>
+                  <Route
+                    path="/*"
+                    element={<HomePage user={user} signOut={signOut} />}
+                  />
+                  <Route path="/settings" element={<SettingsPage />} />
+                </Routes>
+                <View className={styles.Background}></View>
+              </BrowserRouter>
+            );
+          }}
+        </Authenticator>
+      </ThemeContext.Provider>
     </AmplifyProvider>
   );
 };

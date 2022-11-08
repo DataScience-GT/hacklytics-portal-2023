@@ -24,10 +24,10 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ user, signOut }) => (
   <div data-testid="Navbar">
-    <View as="header" className={styles.Navbar}>
+    <View as="header" className={styles.Navbar} width="100vw">
       <Flex
         direction={"row"}
-        justifyContent="flex-start"
+        justifyContent="space-between"
         alignItems="center"
         gap="0.5em"
         height="100%"
@@ -67,7 +67,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => (
           grow={1}
         >
           <View width="fit-content">
-            <Menu menuAlign="start">
+            <Menu menuAlign="end">
               <Link className={styles.MenuLink} to="/">
                 <MenuItem>Dashboard</MenuItem>
               </Link>

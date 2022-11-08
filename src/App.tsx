@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Amplify } from "aws-amplify";
 import { AmplifyProvider, Authenticator } from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
 import "@aws-amplify/ui-react/styles.css";
-import theme from "./theme";
+
+import { Theme, ThemeMap, ThemeContext } from "./context/ThemeContext";
+import { Theme as AmpTheme } from "@aws-amplify/ui-react";
+import hacklytics from "./theme";
+
 // import logo from "./logo.svg";
 
 // import GraphQLAPI, { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql';
@@ -49,8 +53,17 @@ const formFields = {
 };
 
 const App = () => {
+  const [theme, setTheme] = useState(Theme.Default);
+  const [colorMode, setColorMode] = useState<"system" | "light" | "dark">(
+    "system"
+  );
+
+  const [ampTheme, setAmpTheme] = useState<AmpTheme>(
+    ThemeMap.get(theme) ?? hacklytics
+  );
+
   return (
-    <AmplifyProvider theme={theme}>
+    <AmplifyProvider theme={ampTheme} colorMode={colorMode}>
       <Authenticator formFields={formFields}>
         {({ signOut, user }) => {
           const groups = user?.getSignInUserSession()?.getAccessToken().payload[

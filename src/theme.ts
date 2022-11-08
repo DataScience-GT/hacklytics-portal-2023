@@ -1,6 +1,6 @@
 import { defaultDarkModeOverride, Theme } from "@aws-amplify/ui-react";
 
-const theme: Theme = {
+export const hacklytics: Theme = {
   name: "hacklytics-theme",
   tokens: {
     colors: {
@@ -292,4 +292,4 @@ export const classic: Theme = {
   overrides: [defaultDarkModeOverride],
 };
 
-export default theme;
+export default hacklytics;

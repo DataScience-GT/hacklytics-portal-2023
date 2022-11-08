@@ -24,7 +24,7 @@ interface NavbarProps {
 
 const Navbar: FC<NavbarProps> = ({ user, signOut }) => (
   <div data-testid="Navbar">
-    <View as="header" className={styles.Navbar} width="100vw">
+    <View as="header" className={styles.Navbar} width="100vw" padding="medium">
       <Flex
         direction={"row"}
         justifyContent="space-between"

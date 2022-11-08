@@ -1,0 +1,23 @@
+.Navbar {
+    height: 4em;
+    // overflow: hidden;
+    box-shadow: rgb(0 0 0 / 8%) 0px 3px 4px 0px;
+    box-sizing: border-box;
+    padding: 0 1em;
+}
+
+.Logo {
+    height: 2.5em;
+}
+
+.DSGT {
+  font-family: "Outfit";
+  font-weight: 700;
+}
+
+
+.LogoutButton {
+    &:hover {
+        background-color: red;
+    }
+}

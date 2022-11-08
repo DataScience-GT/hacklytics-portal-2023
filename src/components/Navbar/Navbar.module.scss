@@ -26,6 +26,6 @@
 
 .LogoutButton {
     &:hover {
-        background-color: red;
+        background-color: var(--amplify-colors-red-60);
     }
 }

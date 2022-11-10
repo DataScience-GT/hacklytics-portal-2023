@@ -17,7 +17,7 @@ import {
 import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/DSGT/square-logo.png";
-import getGroups from "../../Scripts/Groups";
+import getGroups from "../../misc/Groups";
 
 interface NavbarProps {
   user?: AmplifyUser;

@@ -19,7 +19,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
-import getGroups from "./Scripts/Groups";
+import getGroups from "./misc/Groups";
 
 Amplify.configure(aws_exports);
 

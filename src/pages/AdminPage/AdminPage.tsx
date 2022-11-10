@@ -5,16 +5,13 @@ import Modal from "react-modal";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import {
-  Heading,
   View,
   SwitchField,
   Button,
-  Alert,
   Flex,
-  Divider,
-  Collection,
   Tabs,
   TabItem,
+  Text,
 } from "@aws-amplify/ui-react";
 import modalStyle from "../../Scripts/ModalStyle";
 import Status from "../../Types/Status";
@@ -82,10 +79,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           parentSelector={() => document.getElementById("modal-container")!}
           style={modalStyle}
         >
-          <Flex
-            direction="column"
-            justifyContent={"space-between"}
-          >
+          <Flex direction="column" justifyContent={"space-between"}>
             <Tabs
               spacing="relative"
               defaultIndex={SettingTabMap.get(window.location.pathname) ?? 0}
@@ -101,8 +95,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                   );
                 }}
               >
-                <View padding="medium 0 0 0">
-                  <Heading level={5}>Admin Settings</Heading>
+                <Flex direction={"column"} alignItems="center">
                   <SwitchField
                     label="Event Open?"
                     isChecked={eventActive}
@@ -112,7 +105,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     }}
                   />
                   <StatusAlert status={status} />
-                </View>
+                </Flex>
               </TabItem>
               <TabItem
                 title="Event"
@@ -124,7 +117,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                   );
                 }}
               >
-                asdasd
+                <Flex direction={"column"} alignItems="center">
+                  <Text as="p">hello</Text>
+                </Flex>
               </TabItem>
             </Tabs>
             <Flex direction={"row"} justifyContent="flex-end">

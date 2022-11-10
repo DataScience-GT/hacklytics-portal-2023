@@ -29,7 +29,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       <View width="100%" padding="medium">
         {notes &&
           notes.map((n, i) => (
-            <Card variation="outlined" maxWidth={"20em"}>
+            <Card key={i} variation="outlined" maxWidth={"20em"}>
               <Text>{n.name}</Text>
               <Text>{n.description}</Text>
             </Card>

@@ -17,6 +17,7 @@ import {
 import { Link } from "react-router-dom";
 
 import logo from "../../assets/images/DSGT/square-logo.png";
+import getGroups from "../../scripts/Groups";
 
 interface NavbarProps {
   user?: AmplifyUser;
@@ -24,13 +25,6 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
-  const [groups, setGroups] = useState<string[]>([]);
-  useEffect(() => {
-    const g = user?.getSignInUserSession()?.getAccessToken().payload[
-      "cognito:groups"
-    ];
-    if (g) setGroups(g);
-  }, []);
   return (
     <div data-testid="Navbar">
       <View
@@ -80,7 +74,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
             width="fit-content"
             grow={1}
           >
-            {groups.includes("Administrator") && (
+            {user && getGroups(user).includes("Administrator") && (
               <Link to="/admin" style={{ textDecoration: "none" }}>
                 <Button size="small">Admin Console</Button>
               </Link>

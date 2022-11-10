@@ -1,1 +1,12 @@
-.AdminPage {}
+.AdminPage {
+}
+
+.SettingsMenuItem {
+  color: var(--amplify-colors-font-primary);
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  &._active {
+    background-color: var(--amplify-colors-background-secondary);
+  }
+}

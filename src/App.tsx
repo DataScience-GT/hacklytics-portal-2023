@@ -19,7 +19,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
-import getGroups from "./scripts/Groups";
+import getGroups from "./Scripts/Groups";
 
 Amplify.configure(aws_exports);
 
@@ -91,23 +91,25 @@ const App = () => {
           {({ signOut, user }) => {
             return (
               <BrowserRouter>
-                <Navbar user={user} signOut={signOut} />
-                <Routes>
-                  <Route
-                    path="/*"
-                    element={<HomePage user={user} signOut={signOut} />}
-                  />
-                  <Route
-                    path="/settings"
-                    element={<SettingsPage user={user} signOut={signOut} />}
-                  />
-                  {user && getGroups(user).includes("Administrator") && (
+                <div id="modal-container">
+                  <Navbar user={user} signOut={signOut} />
+                  <Routes>
                     <Route
-                      path="/admin"
-                      element={<AdminPage user={user} signOut={signOut} />}
+                      path="/*"
+                      element={<HomePage user={user} signOut={signOut} />}
                     />
-                  )}
-                </Routes>
+                    <Route
+                      path="/settings"
+                      element={<SettingsPage user={user} signOut={signOut} />}
+                    />
+                    {user && getGroups(user).includes("Administrator") && (
+                      <Route
+                        path="/admin/*"
+                        element={<AdminPage user={user} signOut={signOut} />}
+                      />
+                    )}
+                  </Routes>
+                </div>
               </BrowserRouter>
             );
           }}

@@ -12,6 +12,7 @@ import {
   Tabs,
   TabItem,
   Text,
+  Loader,
 } from "@aws-amplify/ui-react";
 import modalStyle from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
@@ -45,6 +46,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [adminSettings, setAdminSettings] = useState<AdminSettings>({
     id: "0",
   });
+  const [settingsLoading, setSettingsLoading] = useState(true);
 
   const saveSettings = async (
     e: React.ChangeEvent,
@@ -98,10 +100,12 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   };
 
   useEffect(() => {
-    loadSettings();
+    loadSettings(() => {
+      setSettingsLoading(false);
+    });
   }, []);
 
-  const loadSettings = async () => {
+  const loadSettings = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: getAdminSettings,
       variables: {
@@ -110,6 +114,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     setAdminSettings(res.data.getAdminSettings);
+    if (callback) callback();
   };
 
   return (
@@ -155,24 +160,38 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               }}
             >
               <TabItem title="General">
-                <Flex direction={"column"} alignItems="center">
-                  <SwitchField
-                    label="Event Open?"
-                    isChecked={adminSettings?.eventStarted ?? false}
-                    onChange={(e) => {
-                      saveSettings(e, {
-                        ...adminSettings,
-                        eventStarted: e.target.checked,
-                      });
-                    }}
-                  />
-                  {settingStatus.show && <StatusAlert status={settingStatus} />}
-                </Flex>
+                {settingsLoading ? (
+                  <Flex direction={"column"} alignItems="center">
+                    <Loader size="large" />
+                  </Flex>
+                ) : (
+                  <Flex direction={"column"} alignItems="center">
+                    <SwitchField
+                      label="Event Open?"
+                      isChecked={adminSettings?.eventStarted ?? false}
+                      onChange={(e) => {
+                        saveSettings(e, {
+                          ...adminSettings,
+                          eventStarted: e.target.checked,
+                        });
+                      }}
+                    />
+                    {settingStatus.show && (
+                      <StatusAlert status={settingStatus} />
+                    )}
+                  </Flex>
+                )}
               </TabItem>
               <TabItem title="Event">
-                <Flex direction={"column"} alignItems="center">
-                  <Text as="p">hello</Text>
-                </Flex>
+                {settingsLoading ? (
+                  <Flex direction={"column"} alignItems="center">
+                    <Loader size="large" />
+                  </Flex>
+                ) : (
+                  <Flex direction={"column"} alignItems="center">
+                    <Text as="p">hello</Text>
+                  </Flex>
+                )}
               </TabItem>
             </Tabs>
             <Flex direction={"row"} justifyContent="flex-end">

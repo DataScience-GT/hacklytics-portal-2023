@@ -17,7 +17,7 @@ import modalStyle from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
-import { API, graphqlOperation } from "aws-amplify";
+import { API } from "aws-amplify";
 import { getAdminSettings } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
 import { AdminSettings } from "../../models/index";

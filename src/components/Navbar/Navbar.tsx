@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import styles from "./Navbar.module.scss";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";

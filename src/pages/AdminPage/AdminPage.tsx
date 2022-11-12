@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./AdminPage.module.scss";
 // import GLOBAL from "../../GLOBAL.module.scss";
 import Modal from "react-modal";
@@ -16,7 +16,11 @@ import {
 import modalStyle from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
-// import { Link } from "react-router-dom";
+
+import { API, graphqlOperation } from "aws-amplify";
+import { getAdminSettings } from "../../graphql/queries";
+import { updateAdminSettings } from "../../graphql/mutations";
+import { AdminSettings } from "../../models/index";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -34,26 +38,78 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     window.location.pathname.includes("/admin/settings")
   );
 
-  const [status, setStatus] = React.useState<Status>({
+  const [settingStatus, setSettingStatus] = React.useState<Status>({
     show: false,
   });
 
-  const [eventActive, setEventActive] = React.useState(false);
+  const [adminSettings, setAdminSettings] = useState<AdminSettings>({
+    id: "0",
+  });
 
-  const saveSettings = (e: React.ChangeEvent, checked: boolean) => {
-    setStatus({
-      show: false,
-      message: "",
-    });
-    console.log(e.currentTarget);
-    if (checked) {
-      setStatus({
+  const saveSettings = async (
+    e: React.ChangeEvent,
+    newSettings: AdminSettings
+  ) => {
+    // hide status alert
+    setSettingStatus({ show: false });
+    // attempt to update the graphql database
+    try {
+      const res: any = await API.graphql({
+        query: updateAdminSettings,
+        variables: {
+          input: {
+            ...newSettings,
+            createdAt: undefined,
+            updatedAt: undefined,
+            _deleted: undefined,
+            _lastChangedAt: undefined,
+          },
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+
+      //check for errors
+      if (res.errors) {
+        //errors
+        setSettingStatus({
+          show: true,
+          type: "error",
+          message: "Could not update settings",
+        });
+        return;
+      } else {
+        //success
+        // update the local state
+        setAdminSettings(res.data.updateAdminSettings);
+        setSettingStatus({
+          show: true,
+          type: "success",
+          message: "Settings saved",
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setSettingStatus({
         show: true,
-        type: "success",
-        message: "Settings saved",
-        isDismissible: true,
+        type: "error",
+        message: "Could not update settings",
       });
     }
+  };
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
+
+  const loadSettings = async () => {
+    const res: any = await API.graphql({
+      query: getAdminSettings,
+      variables: {
+        id: "9996afdb-c7e7-46fc-bfae-b0939b9027d0",
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    setAdminSettings(res.data.getAdminSettings);
   };
 
   return (
@@ -74,6 +130,14 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             window.history.pushState({}, "Admin", "/admin");
             setSettingsModalOpen(false);
           }}
+          onAfterClose={() => {
+            // get the current settings
+            loadSettings();
+            // reset status
+            setSettingStatus({
+              show: false,
+            });
+          }}
           contentLabel="Admin Settings Modal"
           appElement={document.getElementById("modal-container") as HTMLElement}
           parentSelector={() => document.getElementById("modal-container")!}
@@ -84,39 +148,28 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               spacing="relative"
               defaultIndex={SettingTabMap.get(window.location.pathname) ?? 0}
               grow={1}
+              onChange={(index: string | number) => {
+                let SettingTabMapRev = Array.from(SettingTabMap.keys());
+                let i = parseInt(index as string);
+                window.history.pushState({}, "Settings", SettingTabMapRev[i]);
+              }}
             >
-              <TabItem
-                title="General"
-                onClick={() => {
-                  window.history.pushState(
-                    {},
-                    "Admin Settings",
-                    "/admin/settings/general"
-                  );
-                }}
-              >
+              <TabItem title="General">
                 <Flex direction={"column"} alignItems="center">
                   <SwitchField
                     label="Event Open?"
-                    isChecked={eventActive}
+                    isChecked={adminSettings?.eventStarted ?? false}
                     onChange={(e) => {
-                      setEventActive(e.currentTarget.checked);
-                      saveSettings(e, e.currentTarget.checked);
+                      saveSettings(e, {
+                        ...adminSettings,
+                        eventStarted: e.target.checked,
+                      });
                     }}
                   />
-                  <StatusAlert status={status} />
+                  {settingStatus.show && <StatusAlert status={settingStatus} />}
                 </Flex>
               </TabItem>
-              <TabItem
-                title="Event"
-                onClick={() => {
-                  window.history.pushState(
-                    {},
-                    "Event Settings",
-                    "/admin/settings/event"
-                  );
-                }}
-              >
+              <TabItem title="Event">
                 <Flex direction={"column"} alignItems="center">
                   <Text as="p">hello</Text>
                 </Flex>

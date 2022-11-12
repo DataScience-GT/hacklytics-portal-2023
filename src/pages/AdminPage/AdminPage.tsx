@@ -1,6 +1,6 @@
-import React, { FC, useEffect } from "react";
+import React, { FC } from "react";
 import styles from "./AdminPage.module.scss";
-import GLOBAL from "../../GLOBAL.module.scss";
+// import GLOBAL from "../../GLOBAL.module.scss";
 import Modal from "react-modal";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";

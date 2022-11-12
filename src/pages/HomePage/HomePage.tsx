@@ -1,13 +1,12 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC } from "react";
 import styles from "./HomePage.module.scss";
 
-import { View, Text, Card } from "@aws-amplify/ui-react";
+import { View, Text } from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 
-import { listTodos } from "../../graphql";
-import { API, graphqlOperation } from "aws-amplify";
-import { Todo } from "../../models";
+// import { listTodos } from "../../graphql";
+// import { API, graphqlOperation } from "aws-amplify";
 
 interface HomePageProps {
   user?: AmplifyUser;
@@ -15,25 +14,26 @@ interface HomePageProps {
 }
 
 const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
-  const [notes, setNotes] = useState<Todo[]>();
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-  const fetchNotes = async () => {
-    const notesData: any = await API.graphql(graphqlOperation(listTodos));
-    setNotes(notesData.data.listTodos.items);
-  };
+  // const [notes, setNotes] = useState<Todo[]>();
+  // useEffect(() => {
+  //   fetchNotes();
+  // }, []);
+  // const fetchNotes = async () => {
+  //   const notesData: any = await API.graphql(graphqlOperation(listTodos));
+  //   setNotes(notesData.data.listTodos.items);
+  // };
 
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-        {notes &&
+        <Text>Hello</Text>
+        {/* {notes &&
           notes.map((n, i) => (
             <Card key={i} variation="outlined" maxWidth={"20em"}>
               <Text>{n.name}</Text>
               <Text>{n.description}</Text>
             </Card>
-          ))}
+          ))} */}
       </View>
     </div>
   );

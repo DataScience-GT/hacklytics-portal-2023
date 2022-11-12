@@ -16,7 +16,7 @@ import {
 import modalStyle from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 interface AdminPageProps {
   user?: AmplifyUser;

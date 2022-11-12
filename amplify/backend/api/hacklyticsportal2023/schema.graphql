@@ -1,13 +1,5 @@
-type Todo @model @auth(rules: [{allow: public}]) {
+type AdminSettings @model @auth(rules: [{allow: groups, groups: ["Administrator"], operations: [read, create, update, delete]}]) {
   id: ID!
-  name: String!
-  description: String
-}
-
-type Note @model @auth(rules: [{allow: public}]) {
-  id: ID!
-  name: String!
-  description: String
-  image: String
+  eventStarted: Boolean
 }
  

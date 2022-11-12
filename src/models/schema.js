@@ -1,7 +1,7 @@
 export const schema = {
     "models": {
-        "Todo": {
-            "name": "Todo",
+        "AdminSettings": {
+            "name": "AdminSettings",
             "fields": {
                 "id": {
                     "name": "id",
@@ -10,17 +10,10 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "name": {
-                    "name": "name",
+                "eventStarted": {
+                    "name": "eventStarted",
                     "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "description": {
-                    "name": "description",
-                    "isArray": false,
-                    "type": "String",
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -42,7 +35,7 @@ export const schema = {
                 }
             },
             "syncable": true,
-            "pluralName": "Todos",
+            "pluralName": "AdminSettings",
             "attributes": [
                 {
                     "type": "model",
@@ -53,85 +46,17 @@ export const schema = {
                     "properties": {
                         "rules": [
                             {
-                                "allow": "public",
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "Administrator"
+                                ],
                                 "operations": [
+                                    "read",
                                     "create",
                                     "update",
-                                    "delete",
-                                    "read"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ]
-        },
-        "Note": {
-            "name": "Note",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "name": {
-                    "name": "name",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "description": {
-                    "name": "description",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "image": {
-                    "name": "image",
-                    "isArray": false,
-                    "type": "String",
-                    "isRequired": false,
-                    "attributes": []
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "Notes",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                },
-                {
-                    "type": "auth",
-                    "properties": {
-                        "rules": [
-                            {
-                                "allow": "public",
-                                "operations": [
-                                    "create",
-                                    "update",
-                                    "delete",
-                                    "read"
+                                    "delete"
                                 ]
                             }
                         ]
@@ -143,5 +68,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.1",
-    "version": "ccad33fea595628aea0dc56bfeaba283"
+    "version": "8c85895d4d0bd3d3c42121db109ca1ab"
 };

@@ -358,16 +358,19 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             onSubmit={(fields) => {
               // Example function to trim all string inputs
               // console.log(fields);
-              return fields;
-              // const updatedFields: any = {};
-              // Object.keys(fields).forEach((key) => {
-              //   if (typeof fields[key] === "string") {
-              //     updatedFields[key] = fields[key].trim();
-              //   } else {
-              //     updatedFields[key] = fields[key];
-              //   }
-              // });
-              // return updatedFields;
+              // return fields;
+              const updatedFields: any = {};
+              //foreach field that is a string, trim it
+              Object.keys(fields).forEach((key) => {
+                if (typeof fields[key as keyof typeof fields] === "string") {
+                  updatedFields[key] = (
+                    fields[key as keyof typeof fields] as string
+                  ).trim();
+                } else {
+                  updatedFields[key] = fields[key as keyof typeof fields];
+                }
+              });
+              return updatedFields;
             }}
             onCancel={() => {
               setCreateEventModalOpen(false);

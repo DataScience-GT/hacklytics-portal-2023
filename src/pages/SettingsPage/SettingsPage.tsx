@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect, useState } from "react";
+import React, { FC, useContext } from "react";
 import styles from "./SettingsPage.module.scss";
 import GLOBAL from "../../GLOBAL.module.scss";
 
@@ -8,12 +8,10 @@ import { Auth } from "aws-amplify";
 import {
   ToggleButtonGroup,
   ToggleButton,
-  Text,
   View,
   Button,
   Flex,
 } from "@aws-amplify/ui-react";
-import { CognitoUserSession } from "amazon-cognito-identity-js";
 
 import { Theme, ThemeContext } from "../../context/ThemeContext";
 
@@ -26,7 +24,7 @@ const SettingsPage: FC<SettingsPageProps> = ({ user, signOut }) => {
   const { theme, setTheme, colorMode, setColorMode } = useContext(ThemeContext);
   return (
     <div className={styles.SettingsPage}>
-      <View width="100%" padding="1em">
+      <View width="100%" padding="medium">
         <Flex direction="column" gap={"1em"}>
           <View>
             <ToggleButtonGroup

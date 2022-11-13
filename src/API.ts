@@ -2,18 +2,79 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
-export type CreateTodoInput = {
+export type CreateAdminSettingsInput = {
+  id?: string | null,
+  hacklyticsOpen?: boolean | null,
+  _version?: number | null,
+};
+
+export type ModelAdminSettingsConditionInput = {
+  hacklyticsOpen?: ModelBooleanInput | null,
+  and?: Array< ModelAdminSettingsConditionInput | null > | null,
+  or?: Array< ModelAdminSettingsConditionInput | null > | null,
+  not?: ModelAdminSettingsConditionInput | null,
+};
+
+export type ModelBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export enum ModelAttributeTypes {
+  binary = "binary",
+  binarySet = "binarySet",
+  bool = "bool",
+  list = "list",
+  map = "map",
+  number = "number",
+  numberSet = "numberSet",
+  string = "string",
+  stringSet = "stringSet",
+  _null = "_null",
+}
+
+
+export type AdminSettings = {
+  __typename: "AdminSettings",
+  id: string,
+  hacklyticsOpen?: boolean | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateAdminSettingsInput = {
+  id: string,
+  hacklyticsOpen?: boolean | null,
+  _version?: number | null,
+};
+
+export type DeleteAdminSettingsInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateEventInput = {
   id?: string | null,
   name: string,
   description?: string | null,
+  start?: string | null,
+  end?: string | null,
+  _version?: number | null,
 };
 
-export type ModelTodoConditionInput = {
+export type ModelEventConditionInput = {
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
-  and?: Array< ModelTodoConditionInput | null > | null,
-  or?: Array< ModelTodoConditionInput | null > | null,
-  not?: ModelTodoConditionInput | null,
+  start?: ModelStringInput | null,
+  end?: ModelStringInput | null,
+  and?: Array< ModelEventConditionInput | null > | null,
+  or?: Array< ModelEventConditionInput | null > | null,
+  not?: ModelEventConditionInput | null,
 };
 
 export type ModelStringInput = {
@@ -32,20 +93,6 @@ export type ModelStringInput = {
   size?: ModelSizeInput | null,
 };
 
-export enum ModelAttributeTypes {
-  binary = "binary",
-  binarySet = "binarySet",
-  bool = "bool",
-  list = "list",
-  map = "map",
-  number = "number",
-  numberSet = "numberSet",
-  string = "string",
-  stringSet = "stringSet",
-  _null = "_null",
-}
-
-
 export type ModelSizeInput = {
   ne?: number | null,
   eq?: number | null,
@@ -56,69 +103,40 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type Todo = {
-  __typename: "Todo",
+export type Event = {
+  __typename: "Event",
   id: string,
   name: string,
   description?: string | null,
+  start?: string | null,
+  end?: string | null,
   createdAt: string,
   updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
 };
 
-export type UpdateTodoInput = {
+export type UpdateEventInput = {
   id: string,
   name?: string | null,
   description?: string | null,
+  start?: string | null,
+  end?: string | null,
+  _version?: number | null,
 };
 
-export type DeleteTodoInput = {
+export type DeleteEventInput = {
   id: string,
+  _version?: number | null,
 };
 
-export type CreateNoteInput = {
-  id?: string | null,
-  name: string,
-  description?: string | null,
-  image?: string | null,
-};
-
-export type ModelNoteConditionInput = {
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  image?: ModelStringInput | null,
-  and?: Array< ModelNoteConditionInput | null > | null,
-  or?: Array< ModelNoteConditionInput | null > | null,
-  not?: ModelNoteConditionInput | null,
-};
-
-export type Note = {
-  __typename: "Note",
-  id: string,
-  name: string,
-  description?: string | null,
-  image?: string | null,
-  createdAt: string,
-  updatedAt: string,
-};
-
-export type UpdateNoteInput = {
-  id: string,
-  name?: string | null,
-  description?: string | null,
-  image?: string | null,
-};
-
-export type DeleteNoteInput = {
-  id: string,
-};
-
-export type ModelTodoFilterInput = {
+export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
-  name?: ModelStringInput | null,
-  description?: ModelStringInput | null,
-  and?: Array< ModelTodoFilterInput | null > | null,
-  or?: Array< ModelTodoFilterInput | null > | null,
-  not?: ModelTodoFilterInput | null,
+  hacklyticsOpen?: ModelBooleanInput | null,
+  and?: Array< ModelAdminSettingsFilterInput | null > | null,
+  or?: Array< ModelAdminSettingsFilterInput | null > | null,
+  not?: ModelAdminSettingsFilterInput | null,
 };
 
 export type ModelIDInput = {
@@ -137,34 +155,36 @@ export type ModelIDInput = {
   size?: ModelSizeInput | null,
 };
 
-export type ModelTodoConnection = {
-  __typename: "ModelTodoConnection",
-  items:  Array<Todo | null >,
+export type ModelAdminSettingsConnection = {
+  __typename: "ModelAdminSettingsConnection",
+  items:  Array<AdminSettings | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
-export type ModelNoteFilterInput = {
+export type ModelEventFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
-  image?: ModelStringInput | null,
-  and?: Array< ModelNoteFilterInput | null > | null,
-  or?: Array< ModelNoteFilterInput | null > | null,
-  not?: ModelNoteFilterInput | null,
+  start?: ModelStringInput | null,
+  end?: ModelStringInput | null,
+  and?: Array< ModelEventFilterInput | null > | null,
+  or?: Array< ModelEventFilterInput | null > | null,
+  not?: ModelEventFilterInput | null,
 };
 
-export type ModelNoteConnection = {
-  __typename: "ModelNoteConnection",
-  items:  Array<Note | null >,
+export type ModelEventConnection = {
+  __typename: "ModelEventConnection",
+  items:  Array<Event | null >,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
-export type ModelSubscriptionTodoFilterInput = {
+export type ModelSubscriptionAdminSettingsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionTodoFilterInput | null > | null,
-  or?: Array< ModelSubscriptionTodoFilterInput | null > | null,
+  hacklyticsOpen?: ModelSubscriptionBooleanInput | null,
+  and?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -182,6 +202,21 @@ export type ModelSubscriptionIDInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionBooleanInput = {
+  ne?: boolean | null,
+  eq?: boolean | null,
+};
+
+export type ModelSubscriptionEventFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  start?: ModelSubscriptionStringInput | null,
+  end?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionEventFilterInput | null > | null,
+  or?: Array< ModelSubscriptionEventFilterInput | null > | null,
+};
+
 export type ModelSubscriptionStringInput = {
   ne?: string | null,
   eq?: string | null,
@@ -197,277 +232,371 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionNoteFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  image?: ModelSubscriptionStringInput | null,
-  and?: Array< ModelSubscriptionNoteFilterInput | null > | null,
-  or?: Array< ModelSubscriptionNoteFilterInput | null > | null,
+export type CreateAdminSettingsMutationVariables = {
+  input: CreateAdminSettingsInput,
+  condition?: ModelAdminSettingsConditionInput | null,
 };
 
-export type CreateTodoMutationVariables = {
-  input: CreateTodoInput,
-  condition?: ModelTodoConditionInput | null,
-};
-
-export type CreateTodoMutation = {
-  createTodo?:  {
-    __typename: "Todo",
+export type CreateAdminSettingsMutation = {
+  createAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type UpdateTodoMutationVariables = {
-  input: UpdateTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type UpdateAdminSettingsMutationVariables = {
+  input: UpdateAdminSettingsInput,
+  condition?: ModelAdminSettingsConditionInput | null,
 };
 
-export type UpdateTodoMutation = {
-  updateTodo?:  {
-    __typename: "Todo",
+export type UpdateAdminSettingsMutation = {
+  updateAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type DeleteTodoMutationVariables = {
-  input: DeleteTodoInput,
-  condition?: ModelTodoConditionInput | null,
+export type DeleteAdminSettingsMutationVariables = {
+  input: DeleteAdminSettingsInput,
+  condition?: ModelAdminSettingsConditionInput | null,
 };
 
-export type DeleteTodoMutation = {
-  deleteTodo?:  {
-    __typename: "Todo",
+export type DeleteAdminSettingsMutation = {
+  deleteAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type CreateNoteMutationVariables = {
-  input: CreateNoteInput,
-  condition?: ModelNoteConditionInput | null,
+export type CreateEventMutationVariables = {
+  input: CreateEventInput,
+  condition?: ModelEventConditionInput | null,
 };
 
-export type CreateNoteMutation = {
-  createNote?:  {
-    __typename: "Note",
+export type CreateEventMutation = {
+  createEvent?:  {
+    __typename: "Event",
     id: string,
     name: string,
     description?: string | null,
-    image?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type UpdateNoteMutationVariables = {
-  input: UpdateNoteInput,
-  condition?: ModelNoteConditionInput | null,
+export type UpdateEventMutationVariables = {
+  input: UpdateEventInput,
+  condition?: ModelEventConditionInput | null,
 };
 
-export type UpdateNoteMutation = {
-  updateNote?:  {
-    __typename: "Note",
+export type UpdateEventMutation = {
+  updateEvent?:  {
+    __typename: "Event",
     id: string,
     name: string,
     description?: string | null,
-    image?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type DeleteNoteMutationVariables = {
-  input: DeleteNoteInput,
-  condition?: ModelNoteConditionInput | null,
+export type DeleteEventMutationVariables = {
+  input: DeleteEventInput,
+  condition?: ModelEventConditionInput | null,
 };
 
-export type DeleteNoteMutation = {
-  deleteNote?:  {
-    __typename: "Note",
+export type DeleteEventMutation = {
+  deleteEvent?:  {
+    __typename: "Event",
     id: string,
     name: string,
     description?: string | null,
-    image?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type GetTodoQueryVariables = {
+export type GetAdminSettingsQueryVariables = {
   id: string,
 };
 
-export type GetTodoQuery = {
-  getTodo?:  {
-    __typename: "Todo",
+export type GetAdminSettingsQuery = {
+  getAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type ListTodosQueryVariables = {
-  filter?: ModelTodoFilterInput | null,
+export type ListAdminSettingsQueryVariables = {
+  filter?: ModelAdminSettingsFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListTodosQuery = {
-  listTodos?:  {
-    __typename: "ModelTodoConnection",
+export type ListAdminSettingsQuery = {
+  listAdminSettings?:  {
+    __typename: "ModelAdminSettingsConnection",
     items:  Array< {
-      __typename: "Todo",
+      __typename: "AdminSettings",
       id: string,
-      name: string,
-      description?: string | null,
+      hacklyticsOpen?: boolean | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
-export type GetNoteQueryVariables = {
+export type SyncAdminSettingsQueryVariables = {
+  filter?: ModelAdminSettingsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncAdminSettingsQuery = {
+  syncAdminSettings?:  {
+    __typename: "ModelAdminSettingsConnection",
+    items:  Array< {
+      __typename: "AdminSettings",
+      id: string,
+      hacklyticsOpen?: boolean | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetEventQueryVariables = {
   id: string,
 };
 
-export type GetNoteQuery = {
-  getNote?:  {
-    __typename: "Note",
+export type GetEventQuery = {
+  getEvent?:  {
+    __typename: "Event",
     id: string,
     name: string,
     description?: string | null,
-    image?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type ListNotesQueryVariables = {
-  filter?: ModelNoteFilterInput | null,
+export type ListEventsQueryVariables = {
+  filter?: ModelEventFilterInput | null,
   limit?: number | null,
   nextToken?: string | null,
 };
 
-export type ListNotesQuery = {
-  listNotes?:  {
-    __typename: "ModelNoteConnection",
+export type ListEventsQuery = {
+  listEvents?:  {
+    __typename: "ModelEventConnection",
     items:  Array< {
-      __typename: "Note",
+      __typename: "Event",
       id: string,
       name: string,
       description?: string | null,
-      image?: string | null,
+      start?: string | null,
+      end?: string | null,
       createdAt: string,
       updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
     } | null >,
     nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
-export type OnCreateTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
+export type SyncEventsQueryVariables = {
+  filter?: ModelEventFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
 };
 
-export type OnCreateTodoSubscription = {
-  onCreateTodo?:  {
-    __typename: "Todo",
-    id: string,
-    name: string,
-    description?: string | null,
-    createdAt: string,
-    updatedAt: string,
+export type SyncEventsQuery = {
+  syncEvents?:  {
+    __typename: "ModelEventConnection",
+    items:  Array< {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      start?: string | null,
+      end?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
-export type OnUpdateTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
+export type OnCreateAdminSettingsSubscriptionVariables = {
+  filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
 
-export type OnUpdateTodoSubscription = {
-  onUpdateTodo?:  {
-    __typename: "Todo",
+export type OnCreateAdminSettingsSubscription = {
+  onCreateAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type OnDeleteTodoSubscriptionVariables = {
-  filter?: ModelSubscriptionTodoFilterInput | null,
+export type OnUpdateAdminSettingsSubscriptionVariables = {
+  filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
 
-export type OnDeleteTodoSubscription = {
-  onDeleteTodo?:  {
-    __typename: "Todo",
+export type OnUpdateAdminSettingsSubscription = {
+  onUpdateAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type OnCreateNoteSubscriptionVariables = {
-  filter?: ModelSubscriptionNoteFilterInput | null,
+export type OnDeleteAdminSettingsSubscriptionVariables = {
+  filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
 
-export type OnCreateNoteSubscription = {
-  onCreateNote?:  {
-    __typename: "Note",
+export type OnDeleteAdminSettingsSubscription = {
+  onDeleteAdminSettings?:  {
+    __typename: "AdminSettings",
     id: string,
-    name: string,
-    description?: string | null,
-    image?: string | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type OnUpdateNoteSubscriptionVariables = {
-  filter?: ModelSubscriptionNoteFilterInput | null,
+export type OnCreateEventSubscriptionVariables = {
+  filter?: ModelSubscriptionEventFilterInput | null,
 };
 
-export type OnUpdateNoteSubscription = {
-  onUpdateNote?:  {
-    __typename: "Note",
+export type OnCreateEventSubscription = {
+  onCreateEvent?:  {
+    __typename: "Event",
     id: string,
     name: string,
     description?: string | null,
-    image?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
-export type OnDeleteNoteSubscriptionVariables = {
-  filter?: ModelSubscriptionNoteFilterInput | null,
+export type OnUpdateEventSubscriptionVariables = {
+  filter?: ModelSubscriptionEventFilterInput | null,
 };
 
-export type OnDeleteNoteSubscription = {
-  onDeleteNote?:  {
-    __typename: "Note",
+export type OnUpdateEventSubscription = {
+  onUpdateEvent?:  {
+    __typename: "Event",
     id: string,
     name: string,
     description?: string | null,
-    image?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteEventSubscriptionVariables = {
+  filter?: ModelSubscriptionEventFilterInput | null,
+};
+
+export type OnDeleteEventSubscription = {
+  onDeleteEvent?:  {
+    __typename: "Event",
+    id: string,
+    name: string,
+    description?: string | null,
+    start?: string | null,
+    end?: string | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };

@@ -1,9 +1,14 @@
 .Danger {
-    background: var(--amplify-colors-red-60);
-    &:hover {
-        background: var(--amplify-colors-red-80);
-    }
-    &:focus {
-        background: var(--amplify-colors-red-100);
-    }
+  background: var(--amplify-colors-red-60);
+  &:hover {
+    background: var(--amplify-colors-red-80);
+  }
+  &:focus {
+    background: var(--amplify-colors-red-100);
+  }
+}
+
+.Link {
+  color: inherit;
+  text-decoration: none;
 }

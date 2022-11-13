@@ -24,5 +24,29 @@
         "imagestorage": {}
       }
     }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hacklyticsportal2023-prod-221126-authRole",
+      "UnauthRoleArn": "arn:aws:iam::521654603461:role/amplify-hacklyticsportal2023-prod-221126-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::521654603461:role/amplify-hacklyticsportal2023-prod-221126-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
+      "UnauthRoleName": "amplify-hacklyticsportal2023-prod-221126-unauthRole",
+      "StackName": "amplify-hacklyticsportal2023-prod-221126",
+      "StackId": "arn:aws:cloudformation:us-east-1:521654603461:stack/amplify-hacklyticsportal2023-prod-221126/ddeab610-6300-11ed-b68d-0a2e7833040d",
+      "AmplifyAppId": "d1nefwyjdgyk10"
+    },
+    "categories": {
+      "auth": {
+        "hacklyticsportal2023": {}
+      },
+      "api": {
+        "hacklyticsportal2023": {}
+      },
+      "storage": {
+        "imagestorage": {}
+      }
+    }
   }
 }

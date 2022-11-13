@@ -2,90 +2,108 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
-    $input: CreateTodoInput!
-    $condition: ModelTodoConditionInput
+export const createAdminSettings = /* GraphQL */ `
+  mutation CreateAdminSettings(
+    $input: CreateAdminSettingsInput!
+    $condition: ModelAdminSettingsConditionInput
   ) {
-    createTodo(input: $input, condition: $condition) {
+    createAdminSettings(input: $input, condition: $condition) {
       id
-      name
-      description
+      hacklyticsOpen
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $input: UpdateTodoInput!
-    $condition: ModelTodoConditionInput
+export const updateAdminSettings = /* GraphQL */ `
+  mutation UpdateAdminSettings(
+    $input: UpdateAdminSettingsInput!
+    $condition: ModelAdminSettingsConditionInput
   ) {
-    updateTodo(input: $input, condition: $condition) {
+    updateAdminSettings(input: $input, condition: $condition) {
       id
-      name
-      description
+      hacklyticsOpen
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $input: DeleteTodoInput!
-    $condition: ModelTodoConditionInput
+export const deleteAdminSettings = /* GraphQL */ `
+  mutation DeleteAdminSettings(
+    $input: DeleteAdminSettingsInput!
+    $condition: ModelAdminSettingsConditionInput
   ) {
-    deleteTodo(input: $input, condition: $condition) {
+    deleteAdminSettings(input: $input, condition: $condition) {
       id
-      name
-      description
+      hacklyticsOpen
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const createNote = /* GraphQL */ `
-  mutation CreateNote(
-    $input: CreateNoteInput!
-    $condition: ModelNoteConditionInput
+export const createEvent = /* GraphQL */ `
+  mutation CreateEvent(
+    $input: CreateEventInput!
+    $condition: ModelEventConditionInput
   ) {
-    createNote(input: $input, condition: $condition) {
+    createEvent(input: $input, condition: $condition) {
       id
       name
       description
-      image
+      start
+      end
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const updateNote = /* GraphQL */ `
-  mutation UpdateNote(
-    $input: UpdateNoteInput!
-    $condition: ModelNoteConditionInput
+export const updateEvent = /* GraphQL */ `
+  mutation UpdateEvent(
+    $input: UpdateEventInput!
+    $condition: ModelEventConditionInput
   ) {
-    updateNote(input: $input, condition: $condition) {
+    updateEvent(input: $input, condition: $condition) {
       id
       name
       description
-      image
+      start
+      end
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
-export const deleteNote = /* GraphQL */ `
-  mutation DeleteNote(
-    $input: DeleteNoteInput!
-    $condition: ModelNoteConditionInput
+export const deleteEvent = /* GraphQL */ `
+  mutation DeleteEvent(
+    $input: DeleteEventInput!
+    $condition: ModelEventConditionInput
   ) {
-    deleteNote(input: $input, condition: $condition) {
+    deleteEvent(input: $input, condition: $condition) {
       id
       name
       description
-      image
+      start
+      end
       createdAt
       updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;

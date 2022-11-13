@@ -7,7 +7,6 @@ import aws_exports from "./aws-exports";
 import "@aws-amplify/ui-react/styles.css";
 
 import { Theme, ThemeMap, ThemeContext } from "./context/ThemeContext";
-import { Theme as AmpTheme, useTheme } from "@aws-amplify/ui-react";
 import hacklytics from "./theme";
 
 // import logo from "./logo.svg";
@@ -19,6 +18,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage/HomePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import getGroups from "./misc/Groups";
 
 Amplify.configure(aws_exports);
 
@@ -88,25 +89,27 @@ const App = () => {
       >
         <Authenticator formFields={formFields} variation="modal">
           {({ signOut, user }) => {
-            const groups = user?.getSignInUserSession()?.getAccessToken()
-              .payload["cognito:groups"];
-            if (groups?.includes("Administrator")) {
-              // user is an admin
-              console.log("Admin!");
-            }
             return (
               <BrowserRouter>
-                <Navbar user={user} signOut={signOut} />
-                <Routes>
-                  <Route
-                    path="/*"
-                    element={<HomePage user={user} signOut={signOut} />}
-                  />
-                  <Route
-                    path="/settings"
-                    element={<SettingsPage user={user} signOut={signOut} />}
-                  />
-                </Routes>
+                <div id="modal-container">
+                  <Navbar user={user} signOut={signOut} />
+                  <Routes>
+                    <Route
+                      path="/*"
+                      element={<HomePage user={user} signOut={signOut} />}
+                    />
+                    <Route
+                      path="/settings"
+                      element={<SettingsPage user={user} signOut={signOut} />}
+                    />
+                    {user && getGroups(user).includes("Administrator") && (
+                      <Route
+                        path="/admin/*"
+                        element={<AdminPage user={user} signOut={signOut} />}
+                      />
+                    )}
+                  </Routes>
+                </div>
               </BrowserRouter>
             );
           }}

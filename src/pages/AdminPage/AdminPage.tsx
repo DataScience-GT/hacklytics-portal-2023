@@ -162,11 +162,14 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             <Loader size="large" />
           </Flex>
         ) : (
-          <Table>
+          <Table highlightOnHover={events.length >= 1}>
             <TableHead>
               <TableRow>
                 <TableCell as="th">Event Name</TableCell>
-                <TableCell as="th">Event Date</TableCell>
+                <TableCell as="th">Description</TableCell>
+                <TableCell as="th">Location</TableCell>
+                <TableCell as="th">Start</TableCell>
+                <TableCell as="th">End</TableCell>
                 <TableCell as="th">Status</TableCell>
               </TableRow>
             </TableHead>
@@ -174,7 +177,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               {events.length <= 0 ? (
                 <>
                   <TableRow>
-                    <TableCell colSpan={3}>
+                    <TableCell colSpan={6}>
                       <Text style={{ textAlign: "center" }}>
                         Create an event to get started
                       </Text>
@@ -183,10 +186,48 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 </>
               ) : (
                 events.map((event) => (
-                  <TableRow key={event.id}>
+                  <TableRow
+                    key={event.id}
+                    onClick={() => {
+                      alert("clicked " + event.id);
+                    }}
+                  >
                     <TableCell>{event.name}</TableCell>
-                    <TableCell>{event.start}</TableCell>
-                    <TableCell>dfg</TableCell>
+                    <TableCell>
+                      {event.description ?? <Badge>Undefined</Badge>}
+                    </TableCell>
+                    <TableCell>
+                      {event.location ?? <Badge>Undefined</Badge>}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(event.start ?? "").toLocaleString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                        // year: "numeric",
+
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      }) ?? <Badge>Undefined</Badge>}
+                    </TableCell>
+                    <TableCell>
+                      {new Date(event.end ?? "").toLocaleString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                        // year: "numeric",
+
+                        hour: "numeric",
+                        minute: "numeric",
+                        hour12: true,
+                      }) ?? <Badge>Undefined</Badge>}
+                    </TableCell>
+                    <TableCell>
+                      {event.status ? (
+                        <Badge variation="success">Open</Badge>
+                      ) : (
+                        <Badge variation="error">Closed</Badge>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))
               )}

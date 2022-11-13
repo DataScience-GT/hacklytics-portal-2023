@@ -33,3 +33,4 @@ export { default as ProfileCard } from "./ProfileCard";
 export { default as SideBar } from "./SideBar";
 export { default as NavBar } from "./NavBar";
 export { default as CreateEvent } from "./CreateEvent";
+export { default as UpdateEvent } from "./UpdateEvent";

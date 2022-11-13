@@ -4,12 +4,12 @@
 
 export type CreateAdminSettingsInput = {
   id?: string | null,
-  eventStarted?: boolean | null,
+  hacklyticsOpen?: boolean | null,
   _version?: number | null,
 };
 
 export type ModelAdminSettingsConditionInput = {
-  eventStarted?: ModelBooleanInput | null,
+  hacklyticsOpen?: ModelBooleanInput | null,
   and?: Array< ModelAdminSettingsConditionInput | null > | null,
   or?: Array< ModelAdminSettingsConditionInput | null > | null,
   not?: ModelAdminSettingsConditionInput | null,
@@ -39,7 +39,7 @@ export enum ModelAttributeTypes {
 export type AdminSettings = {
   __typename: "AdminSettings",
   id: string,
-  eventStarted?: boolean | null,
+  hacklyticsOpen?: boolean | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -49,7 +49,7 @@ export type AdminSettings = {
 
 export type UpdateAdminSettingsInput = {
   id: string,
-  eventStarted?: boolean | null,
+  hacklyticsOpen?: boolean | null,
   _version?: number | null,
 };
 
@@ -62,12 +62,16 @@ export type CreateEventInput = {
   id?: string | null,
   name: string,
   description?: string | null,
+  start?: string | null,
+  end?: string | null,
   _version?: number | null,
 };
 
 export type ModelEventConditionInput = {
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  start?: ModelStringInput | null,
+  end?: ModelStringInput | null,
   and?: Array< ModelEventConditionInput | null > | null,
   or?: Array< ModelEventConditionInput | null > | null,
   not?: ModelEventConditionInput | null,
@@ -104,6 +108,8 @@ export type Event = {
   id: string,
   name: string,
   description?: string | null,
+  start?: string | null,
+  end?: string | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -115,6 +121,8 @@ export type UpdateEventInput = {
   id: string,
   name?: string | null,
   description?: string | null,
+  start?: string | null,
+  end?: string | null,
   _version?: number | null,
 };
 
@@ -125,7 +133,7 @@ export type DeleteEventInput = {
 
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
-  eventStarted?: ModelBooleanInput | null,
+  hacklyticsOpen?: ModelBooleanInput | null,
   and?: Array< ModelAdminSettingsFilterInput | null > | null,
   or?: Array< ModelAdminSettingsFilterInput | null > | null,
   not?: ModelAdminSettingsFilterInput | null,
@@ -158,6 +166,8 @@ export type ModelEventFilterInput = {
   id?: ModelIDInput | null,
   name?: ModelStringInput | null,
   description?: ModelStringInput | null,
+  start?: ModelStringInput | null,
+  end?: ModelStringInput | null,
   and?: Array< ModelEventFilterInput | null > | null,
   or?: Array< ModelEventFilterInput | null > | null,
   not?: ModelEventFilterInput | null,
@@ -172,7 +182,7 @@ export type ModelEventConnection = {
 
 export type ModelSubscriptionAdminSettingsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  eventStarted?: ModelSubscriptionBooleanInput | null,
+  hacklyticsOpen?: ModelSubscriptionBooleanInput | null,
   and?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
   or?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
 };
@@ -201,6 +211,8 @@ export type ModelSubscriptionEventFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   name?: ModelSubscriptionStringInput | null,
   description?: ModelSubscriptionStringInput | null,
+  start?: ModelSubscriptionStringInput | null,
+  end?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionEventFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventFilterInput | null > | null,
 };
@@ -229,7 +241,7 @@ export type CreateAdminSettingsMutation = {
   createAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -247,7 +259,7 @@ export type UpdateAdminSettingsMutation = {
   updateAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -265,7 +277,7 @@ export type DeleteAdminSettingsMutation = {
   deleteAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -285,6 +297,8 @@ export type CreateEventMutation = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -304,6 +318,8 @@ export type UpdateEventMutation = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -323,6 +339,8 @@ export type DeleteEventMutation = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -339,7 +357,7 @@ export type GetAdminSettingsQuery = {
   getAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -360,7 +378,7 @@ export type ListAdminSettingsQuery = {
     items:  Array< {
       __typename: "AdminSettings",
       id: string,
-      eventStarted?: boolean | null,
+      hacklyticsOpen?: boolean | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -385,7 +403,7 @@ export type SyncAdminSettingsQuery = {
     items:  Array< {
       __typename: "AdminSettings",
       id: string,
-      eventStarted?: boolean | null,
+      hacklyticsOpen?: boolean | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -407,6 +425,8 @@ export type GetEventQuery = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -429,6 +449,8 @@ export type ListEventsQuery = {
       id: string,
       name: string,
       description?: string | null,
+      start?: string | null,
+      end?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -455,6 +477,8 @@ export type SyncEventsQuery = {
       id: string,
       name: string,
       description?: string | null,
+      start?: string | null,
+      end?: string | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -474,7 +498,7 @@ export type OnCreateAdminSettingsSubscription = {
   onCreateAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -491,7 +515,7 @@ export type OnUpdateAdminSettingsSubscription = {
   onUpdateAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -508,7 +532,7 @@ export type OnDeleteAdminSettingsSubscription = {
   onDeleteAdminSettings?:  {
     __typename: "AdminSettings",
     id: string,
-    eventStarted?: boolean | null,
+    hacklyticsOpen?: boolean | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -527,6 +551,8 @@ export type OnCreateEventSubscription = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -545,6 +571,8 @@ export type OnUpdateEventSubscription = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -563,6 +591,8 @@ export type OnDeleteEventSubscription = {
     id: string,
     name: string,
     description?: string | null,
+    start?: string | null,
+    end?: string | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

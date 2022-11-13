@@ -10,8 +10,8 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "eventStarted": {
-                    "name": "eventStarted",
+                "hacklyticsOpen": {
+                    "name": "hacklyticsOpen",
                     "isArray": false,
                     "type": "Boolean",
                     "isRequired": false,
@@ -165,5 +165,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.1",
-    "version": "ecf6b36a8c399a3364db6023c4486410"
+    "version": "9e3dae62026e48f7dc938eb30a356a79"
 };

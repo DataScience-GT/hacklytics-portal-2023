@@ -6,7 +6,7 @@ export const getAdminSettings = /* GraphQL */ `
   query GetAdminSettings($id: ID!) {
     getAdminSettings(id: $id) {
       id
-      eventStarted
+      hacklyticsOpen
       createdAt
       updatedAt
       _version
@@ -24,7 +24,7 @@ export const listAdminSettings = /* GraphQL */ `
     listAdminSettings(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        eventStarted
+        hacklyticsOpen
         createdAt
         updatedAt
         _version
@@ -51,7 +51,7 @@ export const syncAdminSettings = /* GraphQL */ `
     ) {
       items {
         id
-        eventStarted
+        hacklyticsOpen
         createdAt
         updatedAt
         _version
@@ -69,6 +69,8 @@ export const getEvent = /* GraphQL */ `
       id
       name
       description
+      start
+      end
       createdAt
       updatedAt
       _version
@@ -88,6 +90,8 @@ export const listEvents = /* GraphQL */ `
         id
         name
         description
+        start
+        end
         createdAt
         updatedAt
         _version
@@ -116,6 +120,8 @@ export const syncEvents = /* GraphQL */ `
         id
         name
         description
+        start
+        end
         createdAt
         updatedAt
         _version

@@ -12,14 +12,14 @@ type EventMetaData = {
 
 type EagerAdminSettings = {
   readonly id: string;
-  readonly eventStarted?: boolean | null;
+  readonly hacklyticsOpen?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyAdminSettings = {
   readonly id: string;
-  readonly eventStarted?: boolean | null;
+  readonly hacklyticsOpen?: boolean | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

@@ -8,7 +8,7 @@ export const onCreateAdminSettings = /* GraphQL */ `
   ) {
     onCreateAdminSettings(filter: $filter) {
       id
-      eventStarted
+      hacklyticsOpen
       createdAt
       updatedAt
       _version
@@ -23,7 +23,7 @@ export const onUpdateAdminSettings = /* GraphQL */ `
   ) {
     onUpdateAdminSettings(filter: $filter) {
       id
-      eventStarted
+      hacklyticsOpen
       createdAt
       updatedAt
       _version
@@ -38,7 +38,7 @@ export const onDeleteAdminSettings = /* GraphQL */ `
   ) {
     onDeleteAdminSettings(filter: $filter) {
       id
-      eventStarted
+      hacklyticsOpen
       createdAt
       updatedAt
       _version
@@ -53,6 +53,8 @@ export const onCreateEvent = /* GraphQL */ `
       id
       name
       description
+      start
+      end
       createdAt
       updatedAt
       _version
@@ -67,6 +69,8 @@ export const onUpdateEvent = /* GraphQL */ `
       id
       name
       description
+      start
+      end
       createdAt
       updatedAt
       _version
@@ -81,6 +85,8 @@ export const onDeleteEvent = /* GraphQL */ `
       id
       name
       description
+      start
+      end
       createdAt
       updatedAt
       _version

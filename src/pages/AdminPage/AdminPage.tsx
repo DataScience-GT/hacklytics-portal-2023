@@ -374,10 +374,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
             onSuccess={(fields) => {
               // create new event in database
-              console.log(fields);
+              // console.log(fields);
 
               setCreateEventModalOpen(false);
-              loadEvents();
+              setEvents([...events, fields as Event]);
             }}
             onError={(error) => {
               console.error(error);

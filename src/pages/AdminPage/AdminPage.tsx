@@ -19,6 +19,7 @@ import {
   TableCell,
   TableBody,
   Badge,
+  Heading,
 } from "@aws-amplify/ui-react";
 import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
@@ -204,9 +205,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                         setCreateEventModalOpen(true);
                       }}
                     >
-                      <Text style={{ textAlign: "center" }}>
+                      <Heading level={5} style={{ textAlign: "center" }}>
                         Create a new event
-                      </Text>
+                      </Heading>
                     </TableCell>
                   </TableRow>
                   {events.map((event) => (
@@ -356,7 +357,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           <CreateEvent
             onSubmit={(fields) => {
               // Example function to trim all string inputs
-              console.log(fields);
+              // console.log(fields);
               return fields;
               // const updatedFields: any = {};
               // Object.keys(fields).forEach((key) => {
@@ -371,7 +372,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             onCancel={() => {
               setCreateEventModalOpen(false);
             }}
-            onSuccess={() => {
+            onSuccess={(fields) => {
+              // create new event in database
+              console.log(fields);
+
               setCreateEventModalOpen(false);
               loadEvents();
             }}

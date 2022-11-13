@@ -94,6 +94,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "start": {
                     "name": "start",
                     "isArray": false,
@@ -105,6 +112,13 @@ export const schema = {
                     "name": "end",
                     "isArray": false,
                     "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "location": {
+                    "name": "location",
+                    "isArray": false,
+                    "type": "String",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -165,5 +179,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.1",
-    "version": "9e3dae62026e48f7dc938eb30a356a79"
+    "version": "c67a12761bbd0618935740b933e548b3"
 };

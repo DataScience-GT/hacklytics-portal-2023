@@ -34,8 +34,10 @@ type EagerEvent = {
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
+  readonly status?: boolean | null;
   readonly start?: string | null;
   readonly end?: string | null;
+  readonly location?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -44,8 +46,10 @@ type LazyEvent = {
   readonly id: string;
   readonly name: string;
   readonly description?: string | null;
+  readonly status?: boolean | null;
   readonly start?: string | null;
   readonly end?: string | null;
+  readonly location?: string | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

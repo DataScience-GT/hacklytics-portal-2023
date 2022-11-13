@@ -13,15 +13,21 @@ import {
   TabItem,
   Text,
   Loader,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Badge,
 } from "@aws-amplify/ui-react";
 import modalStyle from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
 import { API } from "aws-amplify";
-import { getAdminSettings } from "../../graphql/queries";
+import { getAdminSettings, listEvents } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
-import { AdminSettings } from "../../models/index";
+import { AdminSettings, Event } from "../../models/index";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -38,15 +44,38 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [settingsModalOpen, setSettingsModalOpen] = React.useState(
     window.location.pathname.includes("/admin/settings")
   );
-
   const [settingStatus, setSettingStatus] = React.useState<Status>({
     show: false,
   });
-
   const [adminSettings, setAdminSettings] = useState<AdminSettings>({
     id: "0",
   });
   const [settingsLoading, setSettingsLoading] = useState(true);
+
+  //events --------------------
+  const [events, setEvents] = useState<Event[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
+
+  useEffect(() => {
+    loadSettings(() => {
+      setSettingsLoading(false);
+    });
+    loadEvents(() => {
+      setEventsLoading(false);
+    });
+  }, []);
+
+  const loadSettings = async (callback?: () => void) => {
+    const res: any = await API.graphql({
+      query: getAdminSettings,
+      variables: {
+        id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    setAdminSettings(res.data.getAdminSettings);
+    if (callback) callback();
+  };
 
   const saveSettings = async (
     e: React.ChangeEvent,
@@ -99,22 +128,16 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     }
   };
 
-  useEffect(() => {
-    loadSettings(() => {
-      setSettingsLoading(false);
-    });
-  }, []);
-
-  const loadSettings = async (callback?: () => void) => {
+  // events --------------------
+  const loadEvents = async (callback?: () => void) => {
     const res: any = await API.graphql({
-      query: getAdminSettings,
+      query: listEvents,
       variables: {
-        id:
-          process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID 
+        id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    setAdminSettings(res.data.getAdminSettings);
+    setEvents(res.data.listEvents.items);
     if (callback) callback();
   };
 
@@ -129,6 +152,50 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         >
           Open Settings
         </Button>
+
+        {eventsLoading ? (
+          <Flex
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <Loader size="large" />
+          </Flex>
+        ) : (
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell as="th">Event Name</TableCell>
+                <TableCell as="th">Event Date</TableCell>
+                <TableCell as="th">Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {events.length <= 0 ? (
+                <>
+                  <TableRow>
+                    <TableCell colSpan={3}>
+                      <Text style={{ textAlign: "center" }}>
+                        Create an event to get started
+                      </Text>
+                    </TableCell>
+                  </TableRow>
+                </>
+              ) : (
+                events.map((event) => (
+                  <TableRow key={event.id}>
+                    <TableCell>{event.name}</TableCell>
+                    <TableCell>{event.start}</TableCell>
+                    <TableCell>dfg</TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        )}
+
+        {/* SETTINGS MODAL */}
+
         <Modal
           isOpen={settingsModalOpen}
           onRequestClose={() => {

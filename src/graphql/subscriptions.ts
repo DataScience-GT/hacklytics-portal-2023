@@ -53,8 +53,10 @@ export const onCreateEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
       createdAt
       updatedAt
       _version
@@ -69,8 +71,10 @@ export const onUpdateEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
       createdAt
       updatedAt
       _version
@@ -85,8 +89,10 @@ export const onDeleteEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
       createdAt
       updatedAt
       _version

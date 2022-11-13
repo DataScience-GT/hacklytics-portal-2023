@@ -69,8 +69,10 @@ export const getEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
       createdAt
       updatedAt
       _version
@@ -90,8 +92,10 @@ export const listEvents = /* GraphQL */ `
         id
         name
         description
+        status
         start
         end
+        location
         createdAt
         updatedAt
         _version
@@ -120,8 +124,10 @@ export const syncEvents = /* GraphQL */ `
         id
         name
         description
+        status
         start
         end
+        location
         createdAt
         updatedAt
         _version

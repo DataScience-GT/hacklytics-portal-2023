@@ -1,13 +1,36 @@
-type AdminSettings @model @auth(rules: [{allow: groups, groups: ["Administrator"], operations: [read, create, update, delete]}, {allow: private, operations: [read]}]) {
+type AdminSettings
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
   id: ID!
   hacklyticsOpen: Boolean
 }
 
-type Event @model @auth(rules: [{allow: groups, groups: ["Administrator"], operations: [read, create, update, delete]}, {allow: private, operations: [read]}]) {
+type Event
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
   id: ID!
   name: String!
   description: String
+  status: Boolean
   start: AWSDateTime
   end: AWSDateTime
+  location: String
 }
- 

@@ -1,9 +1,13 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 
-import { View, Text } from "@aws-amplify/ui-react";
+import { View, Text, Loader, Flex } from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
+import { API } from "aws-amplify";
+import { getAdminSettings } from "../../graphql";
+import { AdminSettings } from "../../models/index";
+import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 
 // import { listTodos } from "../../graphql";
 // import { API, graphqlOperation } from "aws-amplify";
@@ -14,26 +18,47 @@ interface HomePageProps {
 }
 
 const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
-  // const [notes, setNotes] = useState<Todo[]>();
-  // useEffect(() => {
-  //   fetchNotes();
-  // }, []);
-  // const fetchNotes = async () => {
-  //   const notesData: any = await API.graphql(graphqlOperation(listTodos));
-  //   setNotes(notesData.data.listTodos.items);
-  // };
+  const [adminSettings, setAdminSettings] = useState<AdminSettings>({
+    id: "0",
+  });
+  const [settingsLoading, setSettingsLoading] = useState(true);
+
+  useEffect(() => {
+    loadSettings(() => {
+      setSettingsLoading(false);
+    });
+  }, []);
+
+  const loadSettings = async (callback?: () => void) => {
+    const res: any = await API.graphql({
+      query: getAdminSettings,
+      variables: {
+        id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    setAdminSettings(res.data.getAdminSettings);
+    if (callback) callback();
+  };
 
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-        <Text>Hello</Text>
-        {/* {notes &&
-          notes.map((n, i) => (
-            <Card key={i} variation="outlined" maxWidth={"20em"}>
-              <Text>{n.name}</Text>
-              <Text>{n.description}</Text>
-            </Card>
-          ))} */}
+        {settingsLoading ? (
+          <Flex
+            direction={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <Loader size={"large"} />
+          </Flex>
+        ) : adminSettings.hacklyticsOpen ? (
+          // hacklytics is open :D (started)
+          <Text>a</Text>
+        ) : (
+          // hacklytics is closed :( (not started)
+          <HacklyticsCard />
+        )}
       </View>
     </div>
   );

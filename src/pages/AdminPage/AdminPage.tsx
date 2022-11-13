@@ -35,8 +35,8 @@ const SettingTabMap = new Map<string, number>([
 
 const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   console.log(
-    "REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID",
-    process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID
+    "env",
+    process.env
   );
   // settings --------------------
   const [settingsModalOpen, setSettingsModalOpen] = React.useState(

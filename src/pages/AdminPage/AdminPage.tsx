@@ -109,7 +109,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: getAdminSettings,
       variables: {
-        id: "9996afdb-c7e7-46fc-bfae-b0939b9027d0",
+        id:
+          process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID ||
+          ""
+          // "9996afdb-c7e7-46fc-bfae-b0939b9027d0",
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });

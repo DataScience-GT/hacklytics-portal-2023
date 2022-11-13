@@ -167,12 +167,12 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 ) : (
                   <Flex direction={"column"} alignItems="center">
                     <SwitchField
-                      label="Event Open?"
-                      isChecked={adminSettings?.eventStarted ?? false}
+                      label="Hacklytics Open?"
+                      isChecked={adminSettings?.hacklyticsOpen ?? false}
                       onChange={(e) => {
                         saveSettings(e, {
                           ...adminSettings,
-                          eventStarted: e.target.checked,
+                          hacklyticsOpen: e.target.checked,
                         });
                       }}
                     />

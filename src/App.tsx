@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styles from "./App.module.scss";
-import { Amplify } from "aws-amplify";
+import { Amplify, AuthModeStrategyType } from "aws-amplify";
 import { AmplifyProvider, Authenticator, View } from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
@@ -21,7 +21,12 @@ import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import getGroups from "./misc/Groups";
 
-Amplify.configure(aws_exports);
+Amplify.configure({
+  ...aws_exports,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH,
+  },
+});
 
 const formFields = {
   signUp: {

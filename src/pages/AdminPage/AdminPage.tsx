@@ -20,7 +20,7 @@ import {
   TableBody,
   Badge,
 } from "@aws-amplify/ui-react";
-import modalStyle from "../../misc/ModalStyle";
+import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
@@ -28,6 +28,7 @@ import { API } from "aws-amplify";
 import { getAdminSettings, listEvents } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
 import { AdminSettings, Event } from "../../models/index";
+import { CreateEvent } from "../../ui-components";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -55,6 +56,11 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   //events --------------------
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+
+  const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
+  const [createEventStatus, setCreateEventStatus] = useState<Status>({
+    show: false,
+  });
 
   useEffect(() => {
     loadSettings(() => {
@@ -177,7 +183,12 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               {events.length <= 0 ? (
                 <>
                   <TableRow>
-                    <TableCell colSpan={6}>
+                    <TableCell
+                      colSpan={6}
+                      onClick={() => {
+                        setCreateEventModalOpen(true);
+                      }}
+                    >
                       <Text style={{ textAlign: "center" }}>
                         Create an event to get started
                       </Text>
@@ -185,51 +196,65 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                   </TableRow>
                 </>
               ) : (
-                events.map((event) => (
-                  <TableRow
-                    key={event.id}
-                    onClick={() => {
-                      alert("clicked " + event.id);
-                    }}
-                  >
-                    <TableCell>{event.name}</TableCell>
-                    <TableCell>
-                      {event.description ?? <Badge>Undefined</Badge>}
-                    </TableCell>
-                    <TableCell>
-                      {event.location ?? <Badge>Undefined</Badge>}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(event.start ?? "").toLocaleString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        // year: "numeric",
-
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                      }) ?? <Badge>Undefined</Badge>}
-                    </TableCell>
-                    <TableCell>
-                      {new Date(event.end ?? "").toLocaleString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        // year: "numeric",
-
-                        hour: "numeric",
-                        minute: "numeric",
-                        hour12: true,
-                      }) ?? <Badge>Undefined</Badge>}
-                    </TableCell>
-                    <TableCell>
-                      {event.status ? (
-                        <Badge variation="success">Open</Badge>
-                      ) : (
-                        <Badge variation="error">Closed</Badge>
-                      )}
+                <>
+                  <TableRow>
+                    <TableCell
+                      colSpan={6}
+                      onClick={() => {
+                        setCreateEventModalOpen(true);
+                      }}
+                    >
+                      <Text style={{ textAlign: "center" }}>
+                        Create a new event
+                      </Text>
                     </TableCell>
                   </TableRow>
-                ))
+                  {events.map((event) => (
+                    <TableRow
+                      key={event.id}
+                      onClick={() => {
+                        alert("clicked " + event.id);
+                      }}
+                    >
+                      <TableCell>{event.name}</TableCell>
+                      <TableCell>
+                        {event.description ?? <Badge>Undefined</Badge>}
+                      </TableCell>
+                      <TableCell>
+                        {event.location ?? <Badge>Undefined</Badge>}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(event.start ?? "").toLocaleString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          // year: "numeric",
+
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        }) ?? <Badge>Undefined</Badge>}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(event.end ?? "").toLocaleString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          // year: "numeric",
+
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        }) ?? <Badge>Undefined</Badge>}
+                      </TableCell>
+                      <TableCell>
+                        {event.status ? (
+                          <Badge variation="success">Open</Badge>
+                        ) : (
+                          <Badge variation="error">Closed</Badge>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
               )}
             </TableBody>
           </Table>
@@ -314,6 +339,51 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               </Button>
             </Flex>
           </Flex>
+        </Modal>
+
+        {/* CREATE EVENT MODAL */}
+        <Modal
+          contentLabel="Create Event Modal"
+          isOpen={createEventModalOpen}
+          onRequestClose={() => {
+            setCreateEventModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <StatusAlert status={createEventStatus} />
+          <CreateEvent
+            onSubmit={(fields) => {
+              // Example function to trim all string inputs
+              console.log(fields);
+              return fields;
+              // const updatedFields: any = {};
+              // Object.keys(fields).forEach((key) => {
+              //   if (typeof fields[key] === "string") {
+              //     updatedFields[key] = fields[key].trim();
+              //   } else {
+              //     updatedFields[key] = fields[key];
+              //   }
+              // });
+              // return updatedFields;
+            }}
+            onCancel={() => {
+              setCreateEventModalOpen(false);
+            }}
+            onSuccess={() => {
+              setCreateEventModalOpen(false);
+              loadEvents();
+            }}
+            onError={(error) => {
+              console.error(error);
+              setCreateEventStatus({
+                show: true,
+                type: "error",
+                message: "Error creating event",
+              });
+            }}
+          />
         </Modal>
       </View>
     </div>

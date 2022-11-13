@@ -110,8 +110,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       query: getAdminSettings,
       variables: {
         id:
-          process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID ||
-          "9996afdb-c7e7-46fc-bfae-b0939b9027d0",
+          process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID 
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });

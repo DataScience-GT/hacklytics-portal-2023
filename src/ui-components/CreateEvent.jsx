@@ -6,9 +6,6 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { Event } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import {
   Button,
   Flex,
@@ -17,6 +14,9 @@ import {
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Event } from "../models";
+import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function CreateEvent(props) {
   const {
@@ -31,12 +31,12 @@ export default function CreateEvent(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
-    description: undefined,
-    location: undefined,
+    name: "",
+    description: "",
+    location: "",
     status: false,
-    start: undefined,
-    end: undefined,
+    start: "",
+    end: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -64,7 +64,14 @@ export default function CreateEvent(props) {
     start: [],
     end: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -72,6 +79,23 @@ export default function CreateEvent(props) {
     }
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
+  };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat("default", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      calendar: "iso8601",
+      numberingSystem: "latn",
+      hour12: false,
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
   };
   return (
     <Grid
@@ -112,6 +136,11 @@ export default function CreateEvent(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(new Event(modelFields));
           if (onSuccess) {
             onSuccess(modelFields);
@@ -125,13 +154,14 @@ export default function CreateEvent(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "CreateEvent")}
+      {...rest}
     >
       <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -188,6 +218,7 @@ export default function CreateEvent(props) {
         label="Location"
         isRequired={false}
         isReadOnly={false}
+        value={location}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -246,8 +277,10 @@ export default function CreateEvent(props) {
         isRequired={false}
         isReadOnly={false}
         type="datetime-local"
+        value={start && convertToLocal(new Date(start))}
         onChange={(e) => {
-          let { value } = e.target;
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
               name,
@@ -263,7 +296,7 @@ export default function CreateEvent(props) {
           if (errors.start?.hasError) {
             runValidationTasks("start", value);
           }
-          setStart(new Date(value).toISOString());
+          setStart(value);
         }}
         onBlur={() => runValidationTasks("start", start)}
         errorMessage={errors.start?.errorMessage}
@@ -275,8 +308,10 @@ export default function CreateEvent(props) {
         isRequired={false}
         isReadOnly={false}
         type="datetime-local"
+        value={end && convertToLocal(new Date(end))}
         onChange={(e) => {
-          let { value } = e.target;
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
               name,
@@ -292,7 +327,7 @@ export default function CreateEvent(props) {
           if (errors.end?.hasError) {
             runValidationTasks("end", value);
           }
-          setEnd(new Date(value).toISOString());
+          setEnd(value);
         }}
         onBlur={() => runValidationTasks("end", end)}
         errorMessage={errors.end?.errorMessage}
@@ -306,10 +341,16 @@ export default function CreateEvent(props) {
         <Button
           children="Clear"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
           {...getOverrideProps(overrides, "ClearButton")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, "RightAlignCTASubFlex")}>
+        <Flex
+          gap="15px"
+          {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
+        >
           <Button
             children="Cancel"
             type="button"

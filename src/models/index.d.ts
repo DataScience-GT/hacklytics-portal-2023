@@ -1,12 +1,16 @@
 import { ModelInit, MutableModel } from "@aws-amplify/datastore";
 // @ts-ignore
-import { LazyLoading, LazyLoadingDisabled } from "@aws-amplify/datastore";
+import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
 type AdminSettingsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
 type EventMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type CheckinMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
@@ -38,6 +42,7 @@ type EagerEvent = {
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
+  readonly checkins?: (Checkin | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -50,6 +55,7 @@ type LazyEvent = {
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
+  readonly checkins: AsyncCollection<Checkin>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -58,4 +64,32 @@ export declare type Event = LazyLoading extends LazyLoadingDisabled ? EagerEvent
 
 export declare const Event: (new (init: ModelInit<Event, EventMetaData>) => Event) & {
   copyOf(source: Event, mutator: (draft: MutableModel<Event, EventMetaData>) => MutableModel<Event, EventMetaData> | void): Event;
+}
+
+type EagerCheckin = {
+  readonly id: string;
+  readonly createdBy: string;
+  readonly createdByName: string;
+  readonly user: string;
+  readonly userName: string;
+  readonly event: Event;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyCheckin = {
+  readonly id: string;
+  readonly createdBy: string;
+  readonly createdByName: string;
+  readonly user: string;
+  readonly userName: string;
+  readonly event: AsyncItem<Event>;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Checkin = LazyLoading extends LazyLoadingDisabled ? EagerCheckin : LazyCheckin
+
+export declare const Checkin: (new (init: ModelInit<Checkin, CheckinMetaData>) => Checkin) & {
+  copyOf(source: Checkin, mutator: (draft: MutableModel<Checkin, CheckinMetaData>) => MutableModel<Checkin, CheckinMetaData> | void): Checkin;
 }

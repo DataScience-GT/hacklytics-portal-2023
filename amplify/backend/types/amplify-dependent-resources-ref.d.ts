@@ -17,6 +17,20 @@ export type AmplifyDependentResourcesAttributes = {
       "UserPoolName": "string"
     }
   },
+  "function": {
+    "hacklyticsportal20232e32fd51": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "hacklyticsportal2023listusers": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "Name": "string",
+      "Region": "string"
+    }
+  },
   "storage": {
     "imagestorage": {
       "BucketName": "string",

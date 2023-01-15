@@ -33,4 +33,41 @@ type Event
   start: AWSDateTime
   end: AWSDateTime
   location: String
+  checkins: [Checkin] @hasMany
+}
+
+type Checkin
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  createdBy: String!
+  createdByName: String!
+  user: String!
+  userName: String!
+  event: Event! @belongsTo
+}
+
+type Query {
+  # @model
+  # @auth(
+  #   rules: [
+  #     {
+  #       allow: groups
+  #       groups: ["AndroidApp"]
+  #       operations: [read, create, update, delete]
+  #     }
+  #   ]
+  # )
+  getUserById(user_uuid: String): String
+    @function(name: "hacklyticsportal20232e32fd51-${env}")
+  listUsers: String @function(name: "hacklyticsportal2023listusers-${env}")
 }

@@ -5,9 +5,9 @@
  **************************************************************************/
 
 import * as React from "react";
-import { Event } from "../models";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { GridProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
+import { Event } from "../models";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -29,15 +29,15 @@ export declare type UpdateEventValidationValues = {
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateEventOverridesProps = {
-    UpdateEventGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    description?: FormProps<TextAreaFieldProps>;
-    location?: FormProps<TextFieldProps>;
-    status?: FormProps<SwitchFieldProps>;
-    start?: FormProps<TextFieldProps>;
-    end?: FormProps<TextFieldProps>;
+    UpdateEventGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    location?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<SwitchFieldProps>;
+    start?: PrimitiveOverrideProps<TextFieldProps>;
+    end?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UpdateEventProps = React.PropsWithChildren<{
     overrides?: UpdateEventOverridesProps | undefined | null;
@@ -50,5 +50,5 @@ export declare type UpdateEventProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: UpdateEventInputValues) => UpdateEventInputValues;
     onValidate?: UpdateEventValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function UpdateEvent(props: UpdateEventProps): React.ReactElement;

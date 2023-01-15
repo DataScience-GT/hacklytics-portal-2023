@@ -6,9 +6,6 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { fetchByPath, validateField } from "./utils";
-import { Event } from "../models";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import {
   Button,
   Flex,
@@ -17,10 +14,13 @@ import {
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Event } from "../models";
+import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function UpdateEvent(props) {
   const {
-    id,
+    id: idProp,
     event,
     onSuccess,
     onError,
@@ -32,12 +32,12 @@ export default function UpdateEvent(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: undefined,
-    description: undefined,
-    location: undefined,
+    name: "",
+    description: "",
+    location: "",
     status: false,
-    start: undefined,
-    end: undefined,
+    start: "",
+    end: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -49,7 +49,9 @@ export default function UpdateEvent(props) {
   const [end, setEnd] = React.useState(initialValues.end);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = { ...initialValues, ...eventRecord };
+    const cleanValues = eventRecord
+      ? { ...initialValues, ...eventRecord }
+      : initialValues;
     setName(cleanValues.name);
     setDescription(cleanValues.description);
     setLocation(cleanValues.location);
@@ -61,11 +63,11 @@ export default function UpdateEvent(props) {
   const [eventRecord, setEventRecord] = React.useState(event);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = id ? await DataStore.query(Event, id) : event;
+      const record = idProp ? await DataStore.query(Event, idProp) : event;
       setEventRecord(record);
     };
     queryData();
-  }, [id, event]);
+  }, [idProp, event]);
   React.useEffect(resetStateValues, [eventRecord]);
   const validations = {
     name: [{ type: "Required" }],
@@ -75,7 +77,14 @@ export default function UpdateEvent(props) {
     start: [],
     end: [],
   };
-  const runValidationTasks = async (fieldName, value) => {
+  const runValidationTasks = async (
+    fieldName,
+    currentValue,
+    getDisplayValue
+  ) => {
+    const value = getDisplayValue
+      ? getDisplayValue(currentValue)
+      : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -140,6 +149,11 @@ export default function UpdateEvent(props) {
           modelFields = onSubmit(modelFields);
         }
         try {
+          Object.entries(modelFields).forEach(([key, value]) => {
+            if (typeof value === "string" && value.trim() === "") {
+              modelFields[key] = undefined;
+            }
+          });
           await DataStore.save(
             Event.copyOf(eventRecord, (updated) => {
               Object.assign(updated, modelFields);
@@ -154,14 +168,14 @@ export default function UpdateEvent(props) {
           }
         }
       }}
-      {...rest}
       {...getOverrideProps(overrides, "UpdateEvent")}
+      {...rest}
     >
       <TextField
         label="Name"
         isRequired={true}
         isReadOnly={false}
-        defaultValue={name}
+        value={name}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -190,7 +204,7 @@ export default function UpdateEvent(props) {
         label="Description"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={description}
+        value={description}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -219,7 +233,7 @@ export default function UpdateEvent(props) {
         label="Location"
         isRequired={false}
         isReadOnly={false}
-        defaultValue={location}
+        value={location}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
@@ -278,9 +292,10 @@ export default function UpdateEvent(props) {
         isRequired={false}
         isReadOnly={false}
         type="datetime-local"
-        defaultValue={start && convertToLocal(new Date(start))}
+        value={start && convertToLocal(new Date(start))}
         onChange={(e) => {
-          let { value } = e.target;
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
               name,
@@ -296,7 +311,7 @@ export default function UpdateEvent(props) {
           if (errors.start?.hasError) {
             runValidationTasks("start", value);
           }
-          setStart(new Date(value).toISOString());
+          setStart(value);
         }}
         onBlur={() => runValidationTasks("start", start)}
         errorMessage={errors.start?.errorMessage}
@@ -308,9 +323,10 @@ export default function UpdateEvent(props) {
         isRequired={false}
         isReadOnly={false}
         type="datetime-local"
-        defaultValue={end && convertToLocal(new Date(end))}
+        value={end && convertToLocal(new Date(end))}
         onChange={(e) => {
-          let { value } = e.target;
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
           if (onChange) {
             const modelFields = {
               name,
@@ -326,7 +342,7 @@ export default function UpdateEvent(props) {
           if (errors.end?.hasError) {
             runValidationTasks("end", value);
           }
-          setEnd(new Date(value).toISOString());
+          setEnd(value);
         }}
         onBlur={() => runValidationTasks("end", end)}
         errorMessage={errors.end?.errorMessage}
@@ -340,10 +356,17 @@ export default function UpdateEvent(props) {
         <Button
           children="Reset"
           type="reset"
-          onClick={resetStateValues}
+          onClick={(event) => {
+            event.preventDefault();
+            resetStateValues();
+          }}
+          isDisabled={!(idProp || event)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
-        <Flex {...getOverrideProps(overrides, "RightAlignCTASubFlex")}>
+        <Flex
+          gap="15px"
+          {...getOverrideProps(overrides, "RightAlignCTASubFlex")}
+        >
           <Button
             children="Cancel"
             type="button"
@@ -356,7 +379,10 @@ export default function UpdateEvent(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || event) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

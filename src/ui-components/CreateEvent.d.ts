@@ -5,8 +5,8 @@
  **************************************************************************/
 
 import * as React from "react";
-import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { GridProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 export declare type ValidationResponse = {
     hasError: boolean;
     errorMessage?: string;
@@ -28,15 +28,15 @@ export declare type CreateEventValidationValues = {
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
 };
-export declare type FormProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
+export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type CreateEventOverridesProps = {
-    CreateEventGrid?: FormProps<GridProps>;
-    name?: FormProps<TextFieldProps>;
-    description?: FormProps<TextAreaFieldProps>;
-    location?: FormProps<TextFieldProps>;
-    status?: FormProps<SwitchFieldProps>;
-    start?: FormProps<TextFieldProps>;
-    end?: FormProps<TextFieldProps>;
+    CreateEventGrid?: PrimitiveOverrideProps<GridProps>;
+    name?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextAreaFieldProps>;
+    location?: PrimitiveOverrideProps<TextFieldProps>;
+    status?: PrimitiveOverrideProps<SwitchFieldProps>;
+    start?: PrimitiveOverrideProps<TextFieldProps>;
+    end?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type CreateEventProps = React.PropsWithChildren<{
     overrides?: CreateEventOverridesProps | undefined | null;
@@ -48,5 +48,5 @@ export declare type CreateEventProps = React.PropsWithChildren<{
     onCancel?: () => void;
     onChange?: (fields: CreateEventInputValues) => CreateEventInputValues;
     onValidate?: CreateEventValidationValues;
-}>;
+} & React.CSSProperties>;
 export default function CreateEvent(props: CreateEventProps): React.ReactElement;

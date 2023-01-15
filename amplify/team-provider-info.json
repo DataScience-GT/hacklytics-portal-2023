@@ -24,8 +24,14 @@
         "imagestorage": {}
       },
       "function": {
-        "hacklyticsportal20232e32fd51": {},
-        "hacklyticsportal2023listusers": {}
+        "hacklyticsportal20232e32fd51": {
+          "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
+          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-6c6d556b2f542b476a53-build.zip"
+        },
+        "hacklyticsportal2023listusers": {
+          "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
+          "s3Key": "amplify-builds/hacklyticsportal2023listusers-68756330644d71474378-build.zip"
+        }
       }
     }
   },

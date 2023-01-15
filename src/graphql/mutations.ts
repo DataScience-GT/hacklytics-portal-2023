@@ -63,6 +63,10 @@ export const createEvent = /* GraphQL */ `
       start
       end
       location
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -84,6 +88,10 @@ export const updateEvent = /* GraphQL */ `
       start
       end
       location
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -105,11 +113,117 @@ export const deleteEvent = /* GraphQL */ `
       start
       end
       location
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+    }
+  }
+`;
+export const createCheckin = /* GraphQL */ `
+  mutation CreateCheckin(
+    $input: CreateCheckinInput!
+    $condition: ModelCheckinConditionInput
+  ) {
+    createCheckin(input: $input, condition: $condition) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const updateCheckin = /* GraphQL */ `
+  mutation UpdateCheckin(
+    $input: UpdateCheckinInput!
+    $condition: ModelCheckinConditionInput
+  ) {
+    updateCheckin(input: $input, condition: $condition) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const deleteCheckin = /* GraphQL */ `
+  mutation DeleteCheckin(
+    $input: DeleteCheckinInput!
+    $condition: ModelCheckinConditionInput
+  ) {
+    deleteCheckin(input: $input, condition: $condition) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
     }
   }
 `;

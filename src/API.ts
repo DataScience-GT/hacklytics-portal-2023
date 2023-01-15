@@ -116,11 +116,35 @@ export type Event = {
   start?: string | null,
   end?: string | null,
   location?: string | null,
+  checkins?: ModelCheckinConnection | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
+};
+
+export type ModelCheckinConnection = {
+  __typename: "ModelCheckinConnection",
+  items:  Array<Checkin | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type Checkin = {
+  __typename: "Checkin",
+  id: string,
+  createdBy: string,
+  createdByName: string,
+  user: string,
+  userName: string,
+  event: Event,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+  eventCheckinsId?: string | null,
 };
 
 export type UpdateEventInput = {
@@ -139,12 +163,25 @@ export type DeleteEventInput = {
   _version?: number | null,
 };
 
-export type ModelAdminSettingsFilterInput = {
-  id?: ModelIDInput | null,
-  hacklyticsOpen?: ModelBooleanInput | null,
-  and?: Array< ModelAdminSettingsFilterInput | null > | null,
-  or?: Array< ModelAdminSettingsFilterInput | null > | null,
-  not?: ModelAdminSettingsFilterInput | null,
+export type CreateCheckinInput = {
+  id?: string | null,
+  createdBy: string,
+  createdByName: string,
+  user: string,
+  userName: string,
+  _version?: number | null,
+  eventCheckinsId?: string | null,
+};
+
+export type ModelCheckinConditionInput = {
+  createdBy?: ModelStringInput | null,
+  createdByName?: ModelStringInput | null,
+  user?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  and?: Array< ModelCheckinConditionInput | null > | null,
+  or?: Array< ModelCheckinConditionInput | null > | null,
+  not?: ModelCheckinConditionInput | null,
+  eventCheckinsId?: ModelIDInput | null,
 };
 
 export type ModelIDInput = {
@@ -161,6 +198,29 @@ export type ModelIDInput = {
   attributeExists?: boolean | null,
   attributeType?: ModelAttributeTypes | null,
   size?: ModelSizeInput | null,
+};
+
+export type UpdateCheckinInput = {
+  id: string,
+  createdBy?: string | null,
+  createdByName?: string | null,
+  user?: string | null,
+  userName?: string | null,
+  _version?: number | null,
+  eventCheckinsId?: string | null,
+};
+
+export type DeleteCheckinInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type ModelAdminSettingsFilterInput = {
+  id?: ModelIDInput | null,
+  hacklyticsOpen?: ModelBooleanInput | null,
+  and?: Array< ModelAdminSettingsFilterInput | null > | null,
+  or?: Array< ModelAdminSettingsFilterInput | null > | null,
+  not?: ModelAdminSettingsFilterInput | null,
 };
 
 export type ModelAdminSettingsConnection = {
@@ -188,6 +248,18 @@ export type ModelEventConnection = {
   items:  Array<Event | null >,
   nextToken?: string | null,
   startedAt?: number | null,
+};
+
+export type ModelCheckinFilterInput = {
+  id?: ModelIDInput | null,
+  createdBy?: ModelStringInput | null,
+  createdByName?: ModelStringInput | null,
+  user?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  and?: Array< ModelCheckinFilterInput | null > | null,
+  or?: Array< ModelCheckinFilterInput | null > | null,
+  not?: ModelCheckinFilterInput | null,
+  eventCheckinsId?: ModelIDInput | null,
 };
 
 export type ModelSubscriptionAdminSettingsFilterInput = {
@@ -242,6 +314,16 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionCheckinFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  createdBy?: ModelSubscriptionStringInput | null,
+  createdByName?: ModelSubscriptionStringInput | null,
+  user?: ModelSubscriptionStringInput | null,
+  userName?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
+  or?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -313,6 +395,11 @@ export type CreateEventMutation = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -336,6 +423,11 @@ export type UpdateEventMutation = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -359,12 +451,140 @@ export type DeleteEventMutation = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
   } | null,
+};
+
+export type CreateCheckinMutationVariables = {
+  input: CreateCheckinInput,
+  condition?: ModelCheckinConditionInput | null,
+};
+
+export type CreateCheckinMutation = {
+  createCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type UpdateCheckinMutationVariables = {
+  input: UpdateCheckinInput,
+  condition?: ModelCheckinConditionInput | null,
+};
+
+export type UpdateCheckinMutation = {
+  updateCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type DeleteCheckinMutationVariables = {
+  input: DeleteCheckinInput,
+  condition?: ModelCheckinConditionInput | null,
+};
+
+export type DeleteCheckinMutation = {
+  deleteCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type GetUserByIdQueryVariables = {
+  user_uuid?: string | null,
+};
+
+export type GetUserByIdQuery = {
+  getUserById?: string | null,
+};
+
+export type ListUsersQuery = {
+  listUsers?: string | null,
 };
 
 export type GetAdminSettingsQueryVariables = {
@@ -447,6 +667,11 @@ export type GetEventQuery = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -508,6 +733,99 @@ export type SyncEventsQuery = {
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetCheckinQueryVariables = {
+  id: string,
+};
+
+export type GetCheckinQuery = {
+  getCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type ListCheckinsQueryVariables = {
+  filter?: ModelCheckinFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListCheckinsQuery = {
+  listCheckins?:  {
+    __typename: "ModelCheckinConnection",
+    items:  Array< {
+      __typename: "Checkin",
+      id: string,
+      createdBy: string,
+      createdByName: string,
+      user: string,
+      userName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      eventCheckinsId?: string | null,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncCheckinsQueryVariables = {
+  filter?: ModelCheckinFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncCheckinsQuery = {
+  syncCheckins?:  {
+    __typename: "ModelCheckinConnection",
+    items:  Array< {
+      __typename: "Checkin",
+      id: string,
+      createdBy: string,
+      createdByName: string,
+      user: string,
+      userName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      eventCheckinsId?: string | null,
     } | null >,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -579,6 +897,11 @@ export type OnCreateEventSubscription = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -601,6 +924,11 @@ export type OnUpdateEventSubscription = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -623,10 +951,123 @@ export type OnDeleteEventSubscription = {
     start?: string | null,
     end?: string | null,
     location?: string | null,
+    checkins?:  {
+      __typename: "ModelCheckinConnection",
+      nextToken?: string | null,
+      startedAt?: number | null,
+    } | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateCheckinSubscriptionVariables = {
+  filter?: ModelSubscriptionCheckinFilterInput | null,
+};
+
+export type OnCreateCheckinSubscription = {
+  onCreateCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type OnUpdateCheckinSubscriptionVariables = {
+  filter?: ModelSubscriptionCheckinFilterInput | null,
+};
+
+export type OnUpdateCheckinSubscription = {
+  onUpdateCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type OnDeleteCheckinSubscriptionVariables = {
+  filter?: ModelSubscriptionCheckinFilterInput | null,
+};
+
+export type OnDeleteCheckinSubscription = {
+  onDeleteCheckin?:  {
+    __typename: "Checkin",
+    id: string,
+    createdBy: string,
+    createdByName: string,
+    user: string,
+    userName: string,
+    event:  {
+      __typename: "Event",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      start?: string | null,
+      end?: string | null,
+      location?: string | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    },
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+    eventCheckinsId?: string | null,
   } | null,
 };

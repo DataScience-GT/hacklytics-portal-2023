@@ -57,6 +57,10 @@ export const onCreateEvent = /* GraphQL */ `
       start
       end
       location
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -75,6 +79,10 @@ export const onUpdateEvent = /* GraphQL */ `
       start
       end
       location
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -93,11 +101,108 @@ export const onDeleteEvent = /* GraphQL */ `
       start
       end
       location
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
       _deleted
       _lastChangedAt
+    }
+  }
+`;
+export const onCreateCheckin = /* GraphQL */ `
+  subscription OnCreateCheckin($filter: ModelSubscriptionCheckinFilterInput) {
+    onCreateCheckin(filter: $filter) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const onUpdateCheckin = /* GraphQL */ `
+  subscription OnUpdateCheckin($filter: ModelSubscriptionCheckinFilterInput) {
+    onUpdateCheckin(filter: $filter) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const onDeleteCheckin = /* GraphQL */ `
+  subscription OnDeleteCheckin($filter: ModelSubscriptionCheckinFilterInput) {
+    onDeleteCheckin(filter: $filter) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
     }
   }
 `;

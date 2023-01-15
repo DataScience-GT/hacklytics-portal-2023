@@ -56,6 +56,19 @@ const formFields = {
     confirm_password: {
       order: 6,
     },
+    
+  },
+};
+
+const Services = {
+  async validateCustomSignUp(formData: any) {
+    if (formData["custom:gtemail"] !== "") {
+      if (!formData["custom:gtemail"].endsWith("@gatech.edu")) {
+        return {
+          "custom:gtemail": "Must be a valid GT email address",
+        };
+      }
+    }
   },
 };
 
@@ -92,7 +105,11 @@ const App = () => {
       <ThemeContext.Provider
         value={{ theme, setTheme, colorMode, setColorMode }}
       >
-        <Authenticator formFields={formFields} variation="modal">
+        <Authenticator
+          formFields={formFields}
+          services={Services}
+          variation="modal"
+        >
           {({ signOut, user }) => {
             return (
               <BrowserRouter>

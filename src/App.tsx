@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import styles from "./App.module.scss";
-import { Amplify, AuthModeStrategyType } from "aws-amplify";
-import { AmplifyProvider, Authenticator, View } from "@aws-amplify/ui-react";
+import { Amplify, Auth, AuthModeStrategyType } from "aws-amplify";
+import {
+  AmplifyProvider,
+  Authenticator,
+  CheckboxField,
+  useAuthenticator,
+  View,
+} from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -56,7 +62,27 @@ const formFields = {
     confirm_password: {
       order: 6,
     },
-    
+  },
+};
+
+const Components = {
+  SignUp: {
+    FormFields() {
+      const { validationErrors } = useAuthenticator();
+      return (
+        <>
+          <Authenticator.SignUp.FormFields />
+          <CheckboxField
+            errorMessage="You must agree to the Terms & Conditions"
+            hasError={!!validationErrors.terms1}
+            label={"I agree to the Terms & Conditions"}
+            name={"terms1"}
+            value={"yes"}
+            isRequired={true}
+          />
+        </>
+      );
+    },
   },
 };
 
@@ -64,11 +90,26 @@ const Services = {
   async validateCustomSignUp(formData: any) {
     if (formData["custom:gtemail"] !== "") {
       if (!formData["custom:gtemail"].endsWith("@gatech.edu")) {
-        return {
-          "custom:gtemail": "Must be a valid GT email address",
-        };
+        return { "custom:gtemail": "Must be a valid GT email address" };
       }
     }
+  },
+  async handleSignUp(formData: any) {
+    let { username, password, attributes } = formData;
+    username = username.toLowerCase();
+    attributes.email = attributes.email.toLowerCase();
+
+    // check email in database
+
+    // if email in DB, register user
+    return Auth.signUp({
+      username,
+      password,
+      attributes,
+      autoSignIn: {
+        enabled: true,
+      },
+    });
   },
 };
 
@@ -108,6 +149,7 @@ const App = () => {
         <Authenticator
           formFields={formFields}
           services={Services}
+          components={Components}
           variation="modal"
         >
           {({ signOut, user }) => {

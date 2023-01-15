@@ -159,7 +159,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         >
           Open Settings
         </Button>
-
+        <Heading level={3} textAlign="center" margin={"1em"}>
+          Events
+        </Heading>
         {eventsLoading ? (
           <Flex
             direction={"row"}
@@ -260,6 +262,12 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             </TableBody>
           </Table>
         )}
+
+        {/* User table */}
+
+        <Heading level={3} textAlign="center" margin={"1em"}>
+          Users
+        </Heading>
 
         {/* SETTINGS MODAL */}
 

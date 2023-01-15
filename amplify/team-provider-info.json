@@ -22,6 +22,10 @@
       },
       "storage": {
         "imagestorage": {}
+      },
+      "function": {
+        "hacklyticsportal20232e32fd51": {},
+        "hacklyticsportal2023listusers": {}
       }
     }
   },

@@ -21,12 +21,14 @@ export type AmplifyDependentResourcesAttributes = {
     "hacklyticsportal20232e32fd51": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     },
     "hacklyticsportal2023listusers": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
       "Name": "string",
       "Region": "string"
     }

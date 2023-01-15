@@ -263,10 +263,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           </Table>
         )}
 
-        {/* User table */}
+        {/* Applicant table */}
 
         <Heading level={3} textAlign="center" margin={"1em"}>
-          Users
+          Applicants
         </Heading>
 
         {/* SETTINGS MODAL */}

@@ -267,7 +267,7 @@ export default function UpdateEvent(props) {
         {...getOverrideProps(overrides, "location")}
       ></TextField>
       <SwitchField
-        label="Status"
+        label="Open?"
         defaultChecked={false}
         isDisabled={false}
         isChecked={status}

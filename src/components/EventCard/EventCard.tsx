@@ -44,6 +44,7 @@ const EventCard: FC<EventCardProps> = ({ event }: EventCardProps) => {
         </Text>
         <Text>{event?.location}</Text>
         <Text>{event?.description}</Text>
+        {event?.points && <Text>Points: {event?.points}</Text>}
       </Card>
     </div>
   );

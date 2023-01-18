@@ -29,7 +29,7 @@ import { API } from "aws-amplify";
 import { getAdminSettings, listEvents } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
 import { AdminSettings, Event } from "../../models/index";
-import { CreateEvent } from "../../ui-components";
+import { CreateEvent, UpdateEvent } from "../../ui-components";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -60,6 +60,12 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [createEventStatus, setCreateEventStatus] = useState<Status>({
+    show: false,
+  });
+
+  const [editEventModalOpen, setEditEventModalOpen] = useState(false);
+  const [eventEditing, setEventEditing] = useState<Event>({} as Event);
+  const [editEventStatus, setEditEventStatus] = useState<Status>({
     show: false,
   });
 
@@ -216,7 +222,8 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     <TableRow
                       key={event.id}
                       onClick={() => {
-                        alert("clicked " + event.id);
+                        setEventEditing(event);
+                        setEditEventModalOpen(true);
                       }}
                     >
                       <TableCell>{event.name}</TableCell>
@@ -396,6 +403,58 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 show: true,
                 type: "error",
                 message: "Error creating event",
+              });
+            }}
+          />
+        </Modal>
+
+        {/* EDIT EVENT MODAL */}
+        <Modal
+          contentLabel="EDIT Event Modal"
+          isOpen={editEventModalOpen}
+          onRequestClose={() => {
+            setEditEventModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <StatusAlert status={editEventStatus} />
+          <UpdateEvent
+            event={eventEditing}
+            // onSubmit={(fields) => {
+            //   // Example function to trim all string inputs
+            //   // console.log(fields);
+            //   // return fields;
+            //   const updatedFields: any = {};
+            //   //foreach field that is a string, trim it
+            //   Object.keys(fields).forEach((key) => {
+            //     if (typeof fields[key as keyof typeof fields] === "string") {
+            //       updatedFields[key] = (
+            //         fields[key as keyof typeof fields] as string
+            //       ).trim();
+            //     } else {
+            //       updatedFields[key] = fields[key as keyof typeof fields];
+            //     }
+            //   });
+            //   return updatedFields;
+            // }}
+            onCancel={() => {
+              setCreateEventModalOpen(false);
+            }}
+            onSuccess={(fields) => {
+              // create new event in database
+              // console.log(fields);
+
+              setCreateEventModalOpen(false);
+              setEvents([...events, fields as Event]);
+            }}
+            onError={(error) => {
+              console.error(error);
+              setCreateEventStatus({
+                show: true,
+                type: "error",
+                message: "Error updating event",
               });
             }}
           />

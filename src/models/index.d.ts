@@ -46,6 +46,7 @@ type EagerEvent = {
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
+  readonly points?: number | null;
   readonly checkins?: (Checkin | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -59,6 +60,7 @@ type LazyEvent = {
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
+  readonly points?: number | null;
   readonly checkins: AsyncCollection<Checkin>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -101,6 +103,7 @@ export declare const Checkin: (new (init: ModelInit<Checkin, CheckinMetaData>) =
 type EagerPoints = {
   readonly id: string;
   readonly userID: string;
+  readonly userName?: string | null;
   readonly points: number;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -109,6 +112,7 @@ type EagerPoints = {
 type LazyPoints = {
   readonly id: string;
   readonly userID: string;
+  readonly userName?: string | null;
   readonly points: number;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;

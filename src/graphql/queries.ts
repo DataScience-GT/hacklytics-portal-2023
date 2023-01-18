@@ -83,6 +83,7 @@ export const getEvent = /* GraphQL */ `
       start
       end
       location
+      points
       checkins {
         nextToken
         startedAt
@@ -110,6 +111,7 @@ export const listEvents = /* GraphQL */ `
         start
         end
         location
+        points
         createdAt
         updatedAt
         _version
@@ -142,6 +144,7 @@ export const syncEvents = /* GraphQL */ `
         start
         end
         location
+        points
         createdAt
         updatedAt
         _version
@@ -169,6 +172,7 @@ export const getCheckin = /* GraphQL */ `
         start
         end
         location
+        points
         createdAt
         updatedAt
         _version
@@ -244,6 +248,7 @@ export const getPoints = /* GraphQL */ `
   query GetPoints($id: ID!) {
     getPoints(id: $id) {
       userID
+      userName
       points
       id
       createdAt
@@ -263,6 +268,7 @@ export const listPoints = /* GraphQL */ `
     listPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         userID
+        userName
         points
         id
         createdAt
@@ -291,6 +297,7 @@ export const syncPoints = /* GraphQL */ `
     ) {
       items {
         userID
+        userName
         points
         id
         createdAt

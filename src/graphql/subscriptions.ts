@@ -57,6 +57,7 @@ export const onCreateEvent = /* GraphQL */ `
       start
       end
       location
+      points
       checkins {
         nextToken
         startedAt
@@ -79,6 +80,7 @@ export const onUpdateEvent = /* GraphQL */ `
       start
       end
       location
+      points
       checkins {
         nextToken
         startedAt
@@ -101,6 +103,7 @@ export const onDeleteEvent = /* GraphQL */ `
       start
       end
       location
+      points
       checkins {
         nextToken
         startedAt
@@ -129,6 +132,7 @@ export const onCreateCheckin = /* GraphQL */ `
         start
         end
         location
+        points
         createdAt
         updatedAt
         _version
@@ -160,6 +164,7 @@ export const onUpdateCheckin = /* GraphQL */ `
         start
         end
         location
+        points
         createdAt
         updatedAt
         _version
@@ -191,6 +196,7 @@ export const onDeleteCheckin = /* GraphQL */ `
         start
         end
         location
+        points
         createdAt
         updatedAt
         _version
@@ -210,6 +216,7 @@ export const onCreatePoints = /* GraphQL */ `
   subscription OnCreatePoints($filter: ModelSubscriptionPointsFilterInput) {
     onCreatePoints(filter: $filter) {
       userID
+      userName
       points
       id
       createdAt
@@ -224,6 +231,7 @@ export const onUpdatePoints = /* GraphQL */ `
   subscription OnUpdatePoints($filter: ModelSubscriptionPointsFilterInput) {
     onUpdatePoints(filter: $filter) {
       userID
+      userName
       points
       id
       createdAt
@@ -238,6 +246,7 @@ export const onDeletePoints = /* GraphQL */ `
   subscription OnDeletePoints($filter: ModelSubscriptionPointsFilterInput) {
     onDeletePoints(filter: $filter) {
       userID
+      userName
       points
       id
       createdAt

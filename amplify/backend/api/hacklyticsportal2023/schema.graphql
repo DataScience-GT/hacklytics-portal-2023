@@ -33,6 +33,7 @@ type Event
   start: AWSDateTime
   end: AWSDateTime
   location: String
+  points: Int
   checkins: [Checkin] @hasMany
 }
 
@@ -75,5 +76,6 @@ type Points
     ]
   ) {
   userID: String!
+  userName: String
   points: Int!
 }

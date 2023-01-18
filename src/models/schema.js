@@ -122,6 +122,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "points": {
+                    "name": "points",
+                    "isArray": false,
+                    "type": "Int",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "checkins": {
                     "name": "checkins",
                     "isArray": true,
@@ -310,6 +317,13 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "userName": {
+                    "name": "userName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "points": {
                     "name": "points",
                     "isArray": false,
@@ -374,5 +388,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.4",
-    "version": "e1c373c3abd5990be28ce9f8f7c8c2b9"
+    "version": "52644d8e379172d3af66e934e10830d0"
 };

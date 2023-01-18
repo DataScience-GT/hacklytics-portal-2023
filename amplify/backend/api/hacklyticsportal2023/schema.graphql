@@ -61,3 +61,11 @@ type Query {
     @function(name: "hacklyticsportal20232e32fd51-${env}")
   listUsers: String @function(name: "hacklyticsportal2023listusers-${env}")
 }
+
+
+type Points {
+  id: ID!
+  points: Int!
+  userID: String!
+  
+}

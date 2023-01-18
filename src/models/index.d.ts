@@ -2,6 +2,22 @@ import { ModelInit, MutableModel } from "@aws-amplify/datastore";
 // @ts-ignore
 import { LazyLoading, LazyLoadingDisabled, AsyncCollection, AsyncItem } from "@aws-amplify/datastore";
 
+type EagerPoints = {
+  readonly id: string;
+  readonly points: number;
+  readonly userID: string;
+}
+
+type LazyPoints = {
+  readonly id: string;
+  readonly points: number;
+  readonly userID: string;
+}
+
+export declare type Points = LazyLoading extends LazyLoadingDisabled ? EagerPoints : LazyPoints
+
+export declare const Points: (new (init: ModelInit<Points>) => Points)
+
 type AdminSettingsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }

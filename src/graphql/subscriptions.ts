@@ -209,9 +209,9 @@ export const onDeleteCheckin = /* GraphQL */ `
 export const onCreatePoints = /* GraphQL */ `
   subscription OnCreatePoints($filter: ModelSubscriptionPointsFilterInput) {
     onCreatePoints(filter: $filter) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version
@@ -223,9 +223,9 @@ export const onCreatePoints = /* GraphQL */ `
 export const onUpdatePoints = /* GraphQL */ `
   subscription OnUpdatePoints($filter: ModelSubscriptionPointsFilterInput) {
     onUpdatePoints(filter: $filter) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version
@@ -237,9 +237,9 @@ export const onUpdatePoints = /* GraphQL */ `
 export const onDeletePoints = /* GraphQL */ `
   subscription OnDeletePoints($filter: ModelSubscriptionPointsFilterInput) {
     onDeletePoints(filter: $filter) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version

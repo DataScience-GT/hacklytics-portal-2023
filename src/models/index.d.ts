@@ -100,16 +100,16 @@ export declare const Checkin: (new (init: ModelInit<Checkin, CheckinMetaData>) =
 
 type EagerPoints = {
   readonly id: string;
-  readonly points: number;
   readonly userID: string;
+  readonly points: number;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
 
 type LazyPoints = {
   readonly id: string;
-  readonly points: number;
   readonly userID: string;
+  readonly points: number;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

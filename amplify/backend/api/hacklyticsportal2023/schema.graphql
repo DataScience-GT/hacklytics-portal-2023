@@ -74,7 +74,6 @@ type Points
       { allow: private, operations: [read] }
     ]
   ) {
-  id: ID!
-  points: Int!
   userID: String!
+  points: Int!
 }

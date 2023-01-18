@@ -216,15 +216,15 @@ export type DeleteCheckinInput = {
 };
 
 export type CreatePointsInput = {
-  id?: string | null,
-  points: number,
   userID: string,
+  points: number,
+  id?: string | null,
   _version?: number | null,
 };
 
 export type ModelPointsConditionInput = {
-  points?: ModelIntInput | null,
   userID?: ModelStringInput | null,
+  points?: ModelIntInput | null,
   and?: Array< ModelPointsConditionInput | null > | null,
   or?: Array< ModelPointsConditionInput | null > | null,
   not?: ModelPointsConditionInput | null,
@@ -244,9 +244,9 @@ export type ModelIntInput = {
 
 export type Points = {
   __typename: "Points",
-  id: string,
-  points: number,
   userID: string,
+  points: number,
+  id: string,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -255,9 +255,9 @@ export type Points = {
 };
 
 export type UpdatePointsInput = {
-  id: string,
-  points?: number | null,
   userID?: string | null,
+  points?: number | null,
+  id: string,
   _version?: number | null,
 };
 
@@ -314,9 +314,8 @@ export type ModelCheckinFilterInput = {
 };
 
 export type ModelPointsFilterInput = {
-  id?: ModelIDInput | null,
-  points?: ModelIntInput | null,
   userID?: ModelStringInput | null,
+  points?: ModelIntInput | null,
   and?: Array< ModelPointsFilterInput | null > | null,
   or?: Array< ModelPointsFilterInput | null > | null,
   not?: ModelPointsFilterInput | null,
@@ -394,9 +393,8 @@ export type ModelSubscriptionCheckinFilterInput = {
 };
 
 export type ModelSubscriptionPointsFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  points?: ModelSubscriptionIntInput | null,
   userID?: ModelSubscriptionStringInput | null,
+  points?: ModelSubscriptionIntInput | null,
   and?: Array< ModelSubscriptionPointsFilterInput | null > | null,
   or?: Array< ModelSubscriptionPointsFilterInput | null > | null,
 };
@@ -670,9 +668,9 @@ export type CreatePointsMutationVariables = {
 export type CreatePointsMutation = {
   createPoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -689,9 +687,9 @@ export type UpdatePointsMutationVariables = {
 export type UpdatePointsMutation = {
   updatePoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -708,9 +706,9 @@ export type DeletePointsMutationVariables = {
 export type DeletePointsMutation = {
   deletePoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -983,9 +981,9 @@ export type GetPointsQueryVariables = {
 export type GetPointsQuery = {
   getPoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1005,9 +1003,9 @@ export type ListPointsQuery = {
     __typename: "ModelPointsConnection",
     items:  Array< {
       __typename: "Points",
-      id: string,
-      points: number,
       userID: string,
+      points: number,
+      id: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1031,9 +1029,9 @@ export type SyncPointsQuery = {
     __typename: "ModelPointsConnection",
     items:  Array< {
       __typename: "Points",
-      id: string,
-      points: number,
       userID: string,
+      points: number,
+      id: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1292,9 +1290,9 @@ export type OnCreatePointsSubscriptionVariables = {
 export type OnCreatePointsSubscription = {
   onCreatePoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1310,9 +1308,9 @@ export type OnUpdatePointsSubscriptionVariables = {
 export type OnUpdatePointsSubscription = {
   onUpdatePoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1328,9 +1326,9 @@ export type OnDeletePointsSubscriptionVariables = {
 export type OnDeletePointsSubscription = {
   onDeletePoints?:  {
     __typename: "Points",
-    id: string,
-    points: number,
     userID: string,
+    points: number,
+    id: string,
     createdAt: string,
     updatedAt: string,
     _version: number,

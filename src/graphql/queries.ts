@@ -243,9 +243,9 @@ export const syncCheckins = /* GraphQL */ `
 export const getPoints = /* GraphQL */ `
   query GetPoints($id: ID!) {
     getPoints(id: $id) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version
@@ -262,9 +262,9 @@ export const listPoints = /* GraphQL */ `
   ) {
     listPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
-        id
-        points
         userID
+        points
+        id
         createdAt
         updatedAt
         _version
@@ -290,9 +290,9 @@ export const syncPoints = /* GraphQL */ `
       lastSync: $lastSync
     ) {
       items {
-        id
-        points
         userID
+        points
+        id
         createdAt
         updatedAt
         _version

@@ -233,9 +233,9 @@ export const createPoints = /* GraphQL */ `
     $condition: ModelPointsConditionInput
   ) {
     createPoints(input: $input, condition: $condition) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version
@@ -250,9 +250,9 @@ export const updatePoints = /* GraphQL */ `
     $condition: ModelPointsConditionInput
   ) {
     updatePoints(input: $input, condition: $condition) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version
@@ -267,9 +267,9 @@ export const deletePoints = /* GraphQL */ `
     $condition: ModelPointsConditionInput
   ) {
     deletePoints(input: $input, condition: $condition) {
-      id
-      points
       userID
+      points
+      id
       createdAt
       updatedAt
       _version

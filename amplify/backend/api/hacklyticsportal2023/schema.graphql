@@ -62,10 +62,19 @@ type Query {
   listUsers: String @function(name: "hacklyticsportal2023listusers-${env}")
 }
 
-
-type Points {
+type Points
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
   id: ID!
   points: Int!
   userID: String!
-  
 }

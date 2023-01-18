@@ -240,3 +240,67 @@ export const syncCheckins = /* GraphQL */ `
     }
   }
 `;
+export const getPoints = /* GraphQL */ `
+  query GetPoints($id: ID!) {
+    getPoints(id: $id) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listPoints = /* GraphQL */ `
+  query ListPoints(
+    $filter: ModelPointsFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        points
+        userID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncPoints = /* GraphQL */ `
+  query SyncPoints(
+    $filter: ModelPointsFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncPoints(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        points
+        userID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;

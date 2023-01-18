@@ -215,6 +215,57 @@ export type DeleteCheckinInput = {
   _version?: number | null,
 };
 
+export type CreatePointsInput = {
+  id?: string | null,
+  points: number,
+  userID: string,
+  _version?: number | null,
+};
+
+export type ModelPointsConditionInput = {
+  points?: ModelIntInput | null,
+  userID?: ModelStringInput | null,
+  and?: Array< ModelPointsConditionInput | null > | null,
+  or?: Array< ModelPointsConditionInput | null > | null,
+  not?: ModelPointsConditionInput | null,
+};
+
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
+export type Points = {
+  __typename: "Points",
+  id: string,
+  points: number,
+  userID: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdatePointsInput = {
+  id: string,
+  points?: number | null,
+  userID?: string | null,
+  _version?: number | null,
+};
+
+export type DeletePointsInput = {
+  id: string,
+  _version?: number | null,
+};
+
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
@@ -260,6 +311,22 @@ export type ModelCheckinFilterInput = {
   or?: Array< ModelCheckinFilterInput | null > | null,
   not?: ModelCheckinFilterInput | null,
   eventCheckinsId?: ModelIDInput | null,
+};
+
+export type ModelPointsFilterInput = {
+  id?: ModelIDInput | null,
+  points?: ModelIntInput | null,
+  userID?: ModelStringInput | null,
+  and?: Array< ModelPointsFilterInput | null > | null,
+  or?: Array< ModelPointsFilterInput | null > | null,
+  not?: ModelPointsFilterInput | null,
+};
+
+export type ModelPointsConnection = {
+  __typename: "ModelPointsConnection",
+  items:  Array<Points | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type ModelSubscriptionAdminSettingsFilterInput = {
@@ -324,6 +391,26 @@ export type ModelSubscriptionCheckinFilterInput = {
   userName?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
   or?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
+};
+
+export type ModelSubscriptionPointsFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  points?: ModelSubscriptionIntInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionPointsFilterInput | null > | null,
+  or?: Array< ModelSubscriptionPointsFilterInput | null > | null,
+};
+
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -572,6 +659,63 @@ export type DeleteCheckinMutation = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type CreatePointsMutationVariables = {
+  input: CreatePointsInput,
+  condition?: ModelPointsConditionInput | null,
+};
+
+export type CreatePointsMutation = {
+  createPoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdatePointsMutationVariables = {
+  input: UpdatePointsInput,
+  condition?: ModelPointsConditionInput | null,
+};
+
+export type UpdatePointsMutation = {
+  updatePoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeletePointsMutationVariables = {
+  input: DeletePointsInput,
+  condition?: ModelPointsConditionInput | null,
+};
+
+export type DeletePointsMutation = {
+  deletePoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -832,6 +976,75 @@ export type SyncCheckinsQuery = {
   } | null,
 };
 
+export type GetPointsQueryVariables = {
+  id: string,
+};
+
+export type GetPointsQuery = {
+  getPoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListPointsQueryVariables = {
+  filter?: ModelPointsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListPointsQuery = {
+  listPoints?:  {
+    __typename: "ModelPointsConnection",
+    items:  Array< {
+      __typename: "Points",
+      id: string,
+      points: number,
+      userID: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncPointsQueryVariables = {
+  filter?: ModelPointsFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPointsQuery = {
+  syncPoints?:  {
+    __typename: "ModelPointsConnection",
+    items:  Array< {
+      __typename: "Points",
+      id: string,
+      points: number,
+      userID: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type OnCreateAdminSettingsSubscriptionVariables = {
   filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
@@ -1069,5 +1282,59 @@ export type OnDeleteCheckinSubscription = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     eventCheckinsId?: string | null,
+  } | null,
+};
+
+export type OnCreatePointsSubscriptionVariables = {
+  filter?: ModelSubscriptionPointsFilterInput | null,
+};
+
+export type OnCreatePointsSubscription = {
+  onCreatePoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdatePointsSubscriptionVariables = {
+  filter?: ModelSubscriptionPointsFilterInput | null,
+};
+
+export type OnUpdatePointsSubscription = {
+  onUpdatePoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeletePointsSubscriptionVariables = {
+  filter?: ModelSubscriptionPointsFilterInput | null,
+};
+
+export type OnDeletePointsSubscription = {
+  onDeletePoints?:  {
+    __typename: "Points",
+    id: string,
+    points: number,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };

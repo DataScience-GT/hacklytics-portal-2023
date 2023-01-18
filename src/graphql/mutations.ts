@@ -227,3 +227,54 @@ export const deleteCheckin = /* GraphQL */ `
     }
   }
 `;
+export const createPoints = /* GraphQL */ `
+  mutation CreatePoints(
+    $input: CreatePointsInput!
+    $condition: ModelPointsConditionInput
+  ) {
+    createPoints(input: $input, condition: $condition) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updatePoints = /* GraphQL */ `
+  mutation UpdatePoints(
+    $input: UpdatePointsInput!
+    $condition: ModelPointsConditionInput
+  ) {
+    updatePoints(input: $input, condition: $condition) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deletePoints = /* GraphQL */ `
+  mutation DeletePoints(
+    $input: DeletePointsInput!
+    $condition: ModelPointsConditionInput
+  ) {
+    deletePoints(input: $input, condition: $condition) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

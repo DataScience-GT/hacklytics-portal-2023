@@ -206,3 +206,45 @@ export const onDeleteCheckin = /* GraphQL */ `
     }
   }
 `;
+export const onCreatePoints = /* GraphQL */ `
+  subscription OnCreatePoints($filter: ModelSubscriptionPointsFilterInput) {
+    onCreatePoints(filter: $filter) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdatePoints = /* GraphQL */ `
+  subscription OnUpdatePoints($filter: ModelSubscriptionPointsFilterInput) {
+    onUpdatePoints(filter: $filter) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeletePoints = /* GraphQL */ `
+  subscription OnDeletePoints($filter: ModelSubscriptionPointsFilterInput) {
+    onDeletePoints(filter: $filter) {
+      id
+      points
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

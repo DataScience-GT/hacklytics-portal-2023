@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 
-import { View, Text, Loader, Flex } from "@aws-amplify/ui-react";
+import { View, Text, Loader, Flex, Card, Heading } from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import { API } from "aws-amplify";
-import { getAdminSettings } from "../../graphql";
+import { getAdminSettings, getPoints, listPoints } from "../../graphql";
 import { AdminSettings } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 
@@ -23,9 +23,15 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
   });
   const [settingsLoading, setSettingsLoading] = useState(true);
 
+  const [points, setPoints] = useState<number>(0);
+  const [pointsLoading, setPointsLoading] = useState(true);
+
   useEffect(() => {
     loadSettings(() => {
       setSettingsLoading(false);
+    });
+    loadPoints(() => {
+      setPointsLoading(false);
     });
   }, []);
 
@@ -41,10 +47,33 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     if (callback) callback();
   };
 
+  const loadPoints = async (callback?: () => void) => {
+    // get points for user
+    const res: any = await API.graphql({
+      query: listPoints,
+      variables: {
+        userID: user?.attributes?.sub,
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+
+    let items = res.data.listPoints.items;
+
+    if (items.length > 0) {
+      setPoints(items[0].points);
+      console.log(`you have ${items[0].points} points!`);
+    } else {
+      setPoints(0);
+      console.log(`you have 0 points :(`);
+    }
+
+    if (callback) callback();
+  };
+
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-        {settingsLoading ? (
+        {settingsLoading || pointsLoading ? (
           <Flex
             direction={"column"}
             justifyContent={"center"}
@@ -54,7 +83,10 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : adminSettings.hacklyticsOpen ? (
           // hacklytics is open :D (started)
-          <Text>a</Text>
+          <Card variation="outlined">
+            <Heading level={4}>Points</Heading>
+            <Text>You have {points} points{points > 0 ? "!" : " :("}</Text>
+          </Card>
         ) : (
           // hacklytics is closed :( (not started)
           <HacklyticsCard />

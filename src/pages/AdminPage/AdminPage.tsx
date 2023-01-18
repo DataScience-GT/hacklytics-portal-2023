@@ -421,24 +421,24 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         >
           <StatusAlert status={editEventStatus} />
           <UpdateEvent
-            event={eventEditing}
-            // onSubmit={(fields) => {
-            //   // Example function to trim all string inputs
-            //   // console.log(fields);
-            //   // return fields;
-            //   const updatedFields: any = {};
-            //   //foreach field that is a string, trim it
-            //   Object.keys(fields).forEach((key) => {
-            //     if (typeof fields[key as keyof typeof fields] === "string") {
-            //       updatedFields[key] = (
-            //         fields[key as keyof typeof fields] as string
-            //       ).trim();
-            //     } else {
-            //       updatedFields[key] = fields[key as keyof typeof fields];
-            //     }
-            //   });
-            //   return updatedFields;
-            // }}
+            event={eventEditing as Event}
+            onSubmit={(fields) => {
+              // Example function to trim all string inputs
+              // console.log(fields);
+              // return fields;
+              const updatedFields: any = {};
+              //foreach field that is a string, trim it
+              Object.keys(fields).forEach((key) => {
+                if (typeof fields[key as keyof typeof fields] === "string") {
+                  updatedFields[key] = (
+                    fields[key as keyof typeof fields] as string
+                  ).trim();
+                } else {
+                  updatedFields[key] = fields[key as keyof typeof fields];
+                }
+              });
+              return updatedFields;
+            }}
             onCancel={() => {
               setCreateEventModalOpen(false);
             }}
@@ -446,12 +446,15 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               // create new event in database
               // console.log(fields);
 
-              setCreateEventModalOpen(false);
-              setEvents([...events, fields as Event]);
+              setEditEventModalOpen(false);
+              let x = [...events];
+              // remove eventEditing from events
+              x = x.filter((e) => e.id !== eventEditing.id);
+              setEvents(x);
             }}
             onError={(error) => {
               console.error(error);
-              setCreateEventStatus({
+              setEditEventStatus({
                 show: true,
                 type: "error",
                 message: "Error updating event",

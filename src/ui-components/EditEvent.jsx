@@ -10,16 +10,14 @@ import {
   Button,
   Flex,
   Grid,
-  Heading,
   SwitchField,
-  TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
 import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Event } from "../models";
 import { fetchByPath, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function UpdateEvent(props) {
+export default function EditEvent(props) {
   const {
     id: idProp,
     event,
@@ -35,20 +33,20 @@ export default function UpdateEvent(props) {
   const initialValues = {
     name: "",
     description: "",
-    location: "",
     status: false,
     start: "",
     end: "",
+    location: "",
     points: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
     initialValues.description
   );
-  const [location, setLocation] = React.useState(initialValues.location);
   const [status, setStatus] = React.useState(initialValues.status);
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
+  const [location, setLocation] = React.useState(initialValues.location);
   const [points, setPoints] = React.useState(initialValues.points);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -57,10 +55,10 @@ export default function UpdateEvent(props) {
       : initialValues;
     setName(cleanValues.name);
     setDescription(cleanValues.description);
-    setLocation(cleanValues.location);
     setStatus(cleanValues.status);
     setStart(cleanValues.start);
     setEnd(cleanValues.end);
+    setLocation(cleanValues.location);
     setPoints(cleanValues.points);
     setErrors({});
   };
@@ -76,10 +74,10 @@ export default function UpdateEvent(props) {
   const validations = {
     name: [{ type: "Required" }],
     description: [],
-    location: [],
     status: [],
     start: [],
     end: [],
+    location: [],
     points: [],
   };
   const runValidationTasks = async (
@@ -126,10 +124,10 @@ export default function UpdateEvent(props) {
         let modelFields = {
           name,
           description,
-          location,
           status,
           start,
           end,
+          location,
           points,
         };
         const validationResponses = await Promise.all(
@@ -174,13 +172,9 @@ export default function UpdateEvent(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "UpdateEvent")}
+      {...getOverrideProps(overrides, "EditEvent")}
       {...rest}
     >
-      <Heading
-        children="Edit Event"
-        {...getOverrideProps(overrides, "SectionalElement0")}
-      ></Heading>
       <TextField
         label="Name"
         isRequired={true}
@@ -192,10 +186,10 @@ export default function UpdateEvent(props) {
             const modelFields = {
               name: value,
               description,
-              location,
               status,
               start,
               end,
+              location,
               points,
             };
             const result = onChange(modelFields);
@@ -211,7 +205,7 @@ export default function UpdateEvent(props) {
         hasError={errors.name?.hasError}
         {...getOverrideProps(overrides, "name")}
       ></TextField>
-      <TextAreaField
+      <TextField
         label="Description"
         isRequired={false}
         isReadOnly={false}
@@ -222,10 +216,10 @@ export default function UpdateEvent(props) {
             const modelFields = {
               name,
               description: value,
-              location,
               status,
               start,
               end,
+              location,
               points,
             };
             const result = onChange(modelFields);
@@ -240,36 +234,6 @@ export default function UpdateEvent(props) {
         errorMessage={errors.description?.errorMessage}
         hasError={errors.description?.hasError}
         {...getOverrideProps(overrides, "description")}
-      ></TextAreaField>
-      <TextField
-        label="Location"
-        isRequired={false}
-        isReadOnly={false}
-        value={location}
-        onChange={(e) => {
-          let { value } = e.target;
-          if (onChange) {
-            const modelFields = {
-              name,
-              description,
-              location: value,
-              status,
-              start,
-              end,
-              points,
-            };
-            const result = onChange(modelFields);
-            value = result?.location ?? value;
-          }
-          if (errors.location?.hasError) {
-            runValidationTasks("location", value);
-          }
-          setLocation(value);
-        }}
-        onBlur={() => runValidationTasks("location", location)}
-        errorMessage={errors.location?.errorMessage}
-        hasError={errors.location?.hasError}
-        {...getOverrideProps(overrides, "location")}
       ></TextField>
       <SwitchField
         label="Open?"
@@ -282,10 +246,10 @@ export default function UpdateEvent(props) {
             const modelFields = {
               name,
               description,
-              location,
               status: value,
               start,
               end,
+              location,
               points,
             };
             const result = onChange(modelFields);
@@ -314,10 +278,10 @@ export default function UpdateEvent(props) {
             const modelFields = {
               name,
               description,
-              location,
               status,
               start: value,
               end,
+              location,
               points,
             };
             const result = onChange(modelFields);
@@ -346,10 +310,10 @@ export default function UpdateEvent(props) {
             const modelFields = {
               name,
               description,
-              location,
               status,
               start,
               end: value,
+              location,
               points,
             };
             const result = onChange(modelFields);
@@ -366,6 +330,36 @@ export default function UpdateEvent(props) {
         {...getOverrideProps(overrides, "end")}
       ></TextField>
       <TextField
+        label="Location"
+        isRequired={false}
+        isReadOnly={false}
+        value={location}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              status,
+              start,
+              end,
+              location: value,
+              points,
+            };
+            const result = onChange(modelFields);
+            value = result?.location ?? value;
+          }
+          if (errors.location?.hasError) {
+            runValidationTasks("location", value);
+          }
+          setLocation(value);
+        }}
+        onBlur={() => runValidationTasks("location", location)}
+        errorMessage={errors.location?.errorMessage}
+        hasError={errors.location?.hasError}
+        {...getOverrideProps(overrides, "location")}
+      ></TextField>
+      <TextField
         label="Points"
         isRequired={false}
         isReadOnly={false}
@@ -380,10 +374,10 @@ export default function UpdateEvent(props) {
             const modelFields = {
               name,
               description,
-              location,
               status,
               start,
               end,
+              location,
               points: value,
             };
             const result = onChange(modelFields);

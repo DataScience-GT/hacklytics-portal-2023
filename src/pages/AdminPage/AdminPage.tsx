@@ -25,10 +25,10 @@ import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
-import { API } from "aws-amplify";
+import { API, DataStore } from "aws-amplify";
 import { getAdminSettings, listEvents } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
-import { AdminSettings, Event } from "../../models/index";
+import { AdminSettings, EagerEvent, Event } from "../../models/index";
 import { CreateEvent, UpdateEvent } from "../../ui-components";
 
 interface AdminPageProps {
@@ -64,7 +64,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   });
 
   const [editEventModalOpen, setEditEventModalOpen] = useState(false);
-  const [eventEditing, setEventEditing] = useState<Event>({} as Event);
+  const [eventEditing, setEventEditing] = useState<EagerEvent>(
+    {} as EagerEvent
+  );
   const [editEventStatus, setEditEventStatus] = useState<Status>({
     show: false,
   });
@@ -221,8 +223,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                   {events.map((event) => (
                     <TableRow
                       key={event.id}
-                      onClick={() => {
-                        setEventEditing(event);
+                      onClick={async () => {
+                        const ev = await DataStore.query(Event, (e) =>
+                          e.id("eq", event.id)
+                        );
+                        if (!ev) return;
+
+                        setEventEditing(ev[0]);
                         setEditEventModalOpen(true);
                       }}
                     >
@@ -410,7 +417,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
         {/* EDIT EVENT MODAL */}
         <Modal
-          contentLabel="EDIT Event Modal"
+          contentLabel="Edit Event Modal"
           isOpen={editEventModalOpen}
           onRequestClose={() => {
             setEditEventModalOpen(false);
@@ -421,7 +428,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         >
           <StatusAlert status={editEventStatus} />
           <UpdateEvent
-            event={eventEditing as Event}
+            event={eventEditing}
             onSubmit={(fields) => {
               // Example function to trim all string inputs
               // console.log(fields);
@@ -440,16 +447,16 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               return updatedFields;
             }}
             onCancel={() => {
-              setCreateEventModalOpen(false);
+              setEditEventModalOpen(false);
             }}
             onSuccess={(fields) => {
               // create new event in database
               // console.log(fields);
-
+              let newEvent = { ...eventEditing, ...fields };
               setEditEventModalOpen(false);
               let x = [...events];
               // remove eventEditing from events
-              x = x.filter((e) => e.id !== eventEditing.id);
+              x = x.map((e) => (e.id === eventEditing.id ? newEvent : e));
               setEvents(x);
             }}
             onError={(error) => {

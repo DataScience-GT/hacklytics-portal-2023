@@ -10,6 +10,7 @@ import {
   Button,
   Flex,
   Grid,
+  Heading,
   SwitchField,
   TextAreaField,
   TextField,
@@ -162,6 +163,10 @@ export default function CreateEvent(props) {
       {...getOverrideProps(overrides, "CreateEvent")}
       {...rest}
     >
+      <Heading
+        children="Create Event"
+        {...getOverrideProps(overrides, "SectionalElement0")}
+      ></Heading>
       <TextField
         label="Name"
         isRequired={true}

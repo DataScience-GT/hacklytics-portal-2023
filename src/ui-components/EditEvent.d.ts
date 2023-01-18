@@ -5,7 +5,7 @@
  **************************************************************************/
 
 import * as React from "react";
-import { GridProps, HeadingProps, SwitchFieldProps, TextAreaFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
+import { GridProps, SwitchFieldProps, TextFieldProps } from "@aws-amplify/ui-react";
 import { EscapeHatchProps } from "@aws-amplify/ui-react/internal";
 import { Event } from "../models";
 export declare type ValidationResponse = {
@@ -13,46 +13,45 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type UpdateEventInputValues = {
+export declare type EditEventInputValues = {
     name?: string;
     description?: string;
-    location?: string;
     status?: boolean;
     start?: string;
     end?: string;
+    location?: string;
     points?: number;
 };
-export declare type UpdateEventValidationValues = {
+export declare type EditEventValidationValues = {
     name?: ValidationFunction<string>;
     description?: ValidationFunction<string>;
-    location?: ValidationFunction<string>;
     status?: ValidationFunction<boolean>;
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
+    location?: ValidationFunction<string>;
     points?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type UpdateEventOverridesProps = {
-    UpdateEventGrid?: PrimitiveOverrideProps<GridProps>;
-    SectionalElement0?: PrimitiveOverrideProps<HeadingProps>;
+export declare type EditEventOverridesProps = {
+    EditEventGrid?: PrimitiveOverrideProps<GridProps>;
     name?: PrimitiveOverrideProps<TextFieldProps>;
-    description?: PrimitiveOverrideProps<TextAreaFieldProps>;
-    location?: PrimitiveOverrideProps<TextFieldProps>;
+    description?: PrimitiveOverrideProps<TextFieldProps>;
     status?: PrimitiveOverrideProps<SwitchFieldProps>;
     start?: PrimitiveOverrideProps<TextFieldProps>;
     end?: PrimitiveOverrideProps<TextFieldProps>;
+    location?: PrimitiveOverrideProps<TextFieldProps>;
     points?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type UpdateEventProps = React.PropsWithChildren<{
-    overrides?: UpdateEventOverridesProps | undefined | null;
+export declare type EditEventProps = React.PropsWithChildren<{
+    overrides?: EditEventOverridesProps | undefined | null;
 } & {
     id?: string;
     event?: Event;
-    onSubmit?: (fields: UpdateEventInputValues) => UpdateEventInputValues;
-    onSuccess?: (fields: UpdateEventInputValues) => void;
-    onError?: (fields: UpdateEventInputValues, errorMessage: string) => void;
+    onSubmit?: (fields: EditEventInputValues) => EditEventInputValues;
+    onSuccess?: (fields: EditEventInputValues) => void;
+    onError?: (fields: EditEventInputValues, errorMessage: string) => void;
     onCancel?: () => void;
-    onChange?: (fields: UpdateEventInputValues) => UpdateEventInputValues;
-    onValidate?: UpdateEventValidationValues;
+    onChange?: (fields: EditEventInputValues) => EditEventInputValues;
+    onValidate?: EditEventValidationValues;
 } & React.CSSProperties>;
-export default function UpdateEvent(props: UpdateEventProps): React.ReactElement;
+export default function EditEvent(props: EditEventProps): React.ReactElement;

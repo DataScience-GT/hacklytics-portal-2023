@@ -38,6 +38,7 @@ export default function UpdateEvent(props) {
     status: false,
     start: "",
     end: "",
+    points: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -47,6 +48,7 @@ export default function UpdateEvent(props) {
   const [status, setStatus] = React.useState(initialValues.status);
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
+  const [points, setPoints] = React.useState(initialValues.points);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = eventRecord
@@ -58,6 +60,7 @@ export default function UpdateEvent(props) {
     setStatus(cleanValues.status);
     setStart(cleanValues.start);
     setEnd(cleanValues.end);
+    setPoints(cleanValues.points);
     setErrors({});
   };
   const [eventRecord, setEventRecord] = React.useState(event);
@@ -76,6 +79,7 @@ export default function UpdateEvent(props) {
     status: [],
     start: [],
     end: [],
+    points: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -125,6 +129,7 @@ export default function UpdateEvent(props) {
           status,
           start,
           end,
+          points,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -186,6 +191,7 @@ export default function UpdateEvent(props) {
               status,
               start,
               end,
+              points,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -215,6 +221,7 @@ export default function UpdateEvent(props) {
               status,
               start,
               end,
+              points,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -244,6 +251,7 @@ export default function UpdateEvent(props) {
               status,
               start,
               end,
+              points,
             };
             const result = onChange(modelFields);
             value = result?.location ?? value;
@@ -273,6 +281,7 @@ export default function UpdateEvent(props) {
               status: value,
               start,
               end,
+              points,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -304,6 +313,7 @@ export default function UpdateEvent(props) {
               status,
               start: value,
               end,
+              points,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -335,6 +345,7 @@ export default function UpdateEvent(props) {
               status,
               start,
               end: value,
+              points,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -348,6 +359,40 @@ export default function UpdateEvent(props) {
         errorMessage={errors.end?.errorMessage}
         hasError={errors.end?.hasError}
         {...getOverrideProps(overrides, "end")}
+      ></TextField>
+      <TextField
+        label="Points"
+        isRequired={false}
+        isReadOnly={false}
+        type="number"
+        step="any"
+        value={points}
+        onChange={(e) => {
+          let value = isNaN(parseInt(e.target.value))
+            ? e.target.value
+            : parseInt(e.target.value);
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              location,
+              status,
+              start,
+              end,
+              points: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.points ?? value;
+          }
+          if (errors.points?.hasError) {
+            runValidationTasks("points", value);
+          }
+          setPoints(value);
+        }}
+        onBlur={() => runValidationTasks("points", points)}
+        errorMessage={errors.points?.errorMessage}
+        hasError={errors.points?.hasError}
+        {...getOverrideProps(overrides, "points")}
       ></TextField>
       <Flex
         justifyContent="space-between"

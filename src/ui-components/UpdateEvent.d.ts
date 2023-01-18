@@ -20,6 +20,7 @@ export declare type UpdateEventInputValues = {
     status?: boolean;
     start?: string;
     end?: string;
+    points?: number;
 };
 export declare type UpdateEventValidationValues = {
     name?: ValidationFunction<string>;
@@ -28,6 +29,7 @@ export declare type UpdateEventValidationValues = {
     status?: ValidationFunction<boolean>;
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
+    points?: ValidationFunction<number>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateEventOverridesProps = {
@@ -38,6 +40,7 @@ export declare type UpdateEventOverridesProps = {
     status?: PrimitiveOverrideProps<SwitchFieldProps>;
     start?: PrimitiveOverrideProps<TextFieldProps>;
     end?: PrimitiveOverrideProps<TextFieldProps>;
+    points?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type UpdateEventProps = React.PropsWithChildren<{
     overrides?: UpdateEventOverridesProps | undefined | null;

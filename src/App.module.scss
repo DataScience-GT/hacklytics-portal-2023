@@ -8,3 +8,10 @@
     width: 100vw;
     background: var(--amplify-colors-background-primary);
 }
+
+.ToastContainer {
+    display: block;
+    position: fixed;
+    top: 0;
+    right: 0;
+}

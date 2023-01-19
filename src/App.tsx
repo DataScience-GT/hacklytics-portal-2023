@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "./App.module.scss";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { Amplify, Auth, AuthModeStrategyType } from "aws-amplify";
 import {
   AmplifyProvider,
@@ -139,48 +143,53 @@ const App = () => {
   }, [colorMode, theme]);
 
   return (
-    <AmplifyProvider
-      theme={ThemeMap.get(theme) ?? hacklytics}
-      colorMode={colorMode}
-    >
-      <ThemeContext.Provider
-        value={{ theme, setTheme, colorMode, setColorMode }}
+    <>
+      <div className={styles.ToastContainer}>
+        <ToastContainer />
+      </div>
+      <AmplifyProvider
+        theme={ThemeMap.get(theme) ?? hacklytics}
+        colorMode={colorMode}
       >
-        <Authenticator
-          formFields={formFields}
-          services={Services}
-          components={Components}
-          variation="modal"
+        <ThemeContext.Provider
+          value={{ theme, setTheme, colorMode, setColorMode }}
         >
-          {({ signOut, user }) => {
-            return (
-              <BrowserRouter>
-                <div id="modal-container">
-                  <Navbar user={user} signOut={signOut} />
-                  <Routes>
-                    <Route
-                      path="/*"
-                      element={<HomePage user={user} signOut={signOut} />}
-                    />
-                    <Route
-                      path="/settings"
-                      element={<SettingsPage user={user} signOut={signOut} />}
-                    />
-                    {user && getGroups(user).includes("Administrator") && (
+          <Authenticator
+            formFields={formFields}
+            services={Services}
+            components={Components}
+            variation="modal"
+          >
+            {({ signOut, user }) => {
+              return (
+                <BrowserRouter>
+                  <div id="modal-container">
+                    <Navbar user={user} signOut={signOut} />
+                    <Routes>
                       <Route
-                        path="/admin/*"
-                        element={<AdminPage user={user} signOut={signOut} />}
+                        path="/*"
+                        element={<HomePage user={user} signOut={signOut} />}
                       />
-                    )}
-                  </Routes>
-                </div>
-              </BrowserRouter>
-            );
-          }}
-        </Authenticator>
-        <View className={styles.Background}></View>
-      </ThemeContext.Provider>
-    </AmplifyProvider>
+                      <Route
+                        path="/settings"
+                        element={<SettingsPage user={user} signOut={signOut} />}
+                      />
+                      {user && getGroups(user).includes("Administrator") && (
+                        <Route
+                          path="/admin/*"
+                          element={<AdminPage user={user} signOut={signOut} />}
+                        />
+                      )}
+                    </Routes>
+                  </div>
+                </BrowserRouter>
+              );
+            }}
+          </Authenticator>
+          <View className={styles.Background}></View>
+        </ThemeContext.Provider>
+      </AmplifyProvider>
+    </>
   );
 };
 

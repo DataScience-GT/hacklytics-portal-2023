@@ -21,6 +21,7 @@ type PointsMetaData = {
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
+  readonly participantEmails?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -28,6 +29,7 @@ type EagerAdminSettings = {
 type LazyAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
+  readonly participantEmails?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }

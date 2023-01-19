@@ -7,11 +7,12 @@ type AdminSettings
         groups: ["Administrator"]
         operations: [read, create, update, delete]
       }
-      { allow: private, operations: [read] }
+      { allow: public, operations: [read] }
     ]
   ) {
   id: ID!
   hacklyticsOpen: Boolean
+  participantEmails: [String]
 }
 
 type Event

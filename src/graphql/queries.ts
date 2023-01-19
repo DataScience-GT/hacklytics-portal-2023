@@ -17,6 +17,7 @@ export const getAdminSettings = /* GraphQL */ `
     getAdminSettings(id: $id) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -35,6 +36,7 @@ export const listAdminSettings = /* GraphQL */ `
       items {
         id
         hacklyticsOpen
+        participantEmails
         createdAt
         updatedAt
         _version
@@ -62,6 +64,7 @@ export const syncAdminSettings = /* GraphQL */ `
       items {
         id
         hacklyticsOpen
+        participantEmails
         createdAt
         updatedAt
         _version

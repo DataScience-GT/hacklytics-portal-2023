@@ -5,11 +5,13 @@
 export type CreateAdminSettingsInput = {
   id?: string | null,
   hacklyticsOpen?: boolean | null,
+  participantEmails?: Array< string | null > | null,
   _version?: number | null,
 };
 
 export type ModelAdminSettingsConditionInput = {
   hacklyticsOpen?: ModelBooleanInput | null,
+  participantEmails?: ModelStringInput | null,
   and?: Array< ModelAdminSettingsConditionInput | null > | null,
   or?: Array< ModelAdminSettingsConditionInput | null > | null,
   not?: ModelAdminSettingsConditionInput | null,
@@ -36,10 +38,37 @@ export enum ModelAttributeTypes {
 }
 
 
+export type ModelStringInput = {
+  ne?: string | null,
+  eq?: string | null,
+  le?: string | null,
+  lt?: string | null,
+  ge?: string | null,
+  gt?: string | null,
+  contains?: string | null,
+  notContains?: string | null,
+  between?: Array< string | null > | null,
+  beginsWith?: string | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+  size?: ModelSizeInput | null,
+};
+
+export type ModelSizeInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+};
+
 export type AdminSettings = {
   __typename: "AdminSettings",
   id: string,
   hacklyticsOpen?: boolean | null,
+  participantEmails?: Array< string | null > | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -50,6 +79,7 @@ export type AdminSettings = {
 export type UpdateAdminSettingsInput = {
   id: string,
   hacklyticsOpen?: boolean | null,
+  participantEmails?: Array< string | null > | null,
   _version?: number | null,
 };
 
@@ -81,32 +111,6 @@ export type ModelEventConditionInput = {
   and?: Array< ModelEventConditionInput | null > | null,
   or?: Array< ModelEventConditionInput | null > | null,
   not?: ModelEventConditionInput | null,
-};
-
-export type ModelStringInput = {
-  ne?: string | null,
-  eq?: string | null,
-  le?: string | null,
-  lt?: string | null,
-  ge?: string | null,
-  gt?: string | null,
-  contains?: string | null,
-  notContains?: string | null,
-  between?: Array< string | null > | null,
-  beginsWith?: string | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-  size?: ModelSizeInput | null,
-};
-
-export type ModelSizeInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
 };
 
 export type ModelIntInput = {
@@ -277,6 +281,7 @@ export type DeletePointsInput = {
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
+  participantEmails?: ModelStringInput | null,
   and?: Array< ModelAdminSettingsFilterInput | null > | null,
   or?: Array< ModelAdminSettingsFilterInput | null > | null,
   not?: ModelAdminSettingsFilterInput | null,
@@ -341,6 +346,7 @@ export type ModelPointsConnection = {
 export type ModelSubscriptionAdminSettingsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   hacklyticsOpen?: ModelSubscriptionBooleanInput | null,
+  participantEmails?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
   or?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
 };
@@ -365,19 +371,6 @@ export type ModelSubscriptionBooleanInput = {
   eq?: boolean | null,
 };
 
-export type ModelSubscriptionEventFilterInput = {
-  id?: ModelSubscriptionIDInput | null,
-  name?: ModelSubscriptionStringInput | null,
-  description?: ModelSubscriptionStringInput | null,
-  status?: ModelSubscriptionBooleanInput | null,
-  start?: ModelSubscriptionStringInput | null,
-  end?: ModelSubscriptionStringInput | null,
-  location?: ModelSubscriptionStringInput | null,
-  points?: ModelSubscriptionIntInput | null,
-  and?: Array< ModelSubscriptionEventFilterInput | null > | null,
-  or?: Array< ModelSubscriptionEventFilterInput | null > | null,
-};
-
 export type ModelSubscriptionStringInput = {
   ne?: string | null,
   eq?: string | null,
@@ -391,6 +384,19 @@ export type ModelSubscriptionStringInput = {
   beginsWith?: string | null,
   in?: Array< string | null > | null,
   notIn?: Array< string | null > | null,
+};
+
+export type ModelSubscriptionEventFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionBooleanInput | null,
+  start?: ModelSubscriptionStringInput | null,
+  end?: ModelSubscriptionStringInput | null,
+  location?: ModelSubscriptionStringInput | null,
+  points?: ModelSubscriptionIntInput | null,
+  and?: Array< ModelSubscriptionEventFilterInput | null > | null,
+  or?: Array< ModelSubscriptionEventFilterInput | null > | null,
 };
 
 export type ModelSubscriptionIntInput = {
@@ -433,6 +439,7 @@ export type CreateAdminSettingsMutation = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -451,6 +458,7 @@ export type UpdateAdminSettingsMutation = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -469,6 +477,7 @@ export type DeleteAdminSettingsMutation = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -759,6 +768,7 @@ export type GetAdminSettingsQuery = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -780,6 +790,7 @@ export type ListAdminSettingsQuery = {
       __typename: "AdminSettings",
       id: string,
       hacklyticsOpen?: boolean | null,
+      participantEmails?: Array< string | null > | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -805,6 +816,7 @@ export type SyncAdminSettingsQuery = {
       __typename: "AdminSettings",
       id: string,
       hacklyticsOpen?: boolean | null,
+      participantEmails?: Array< string | null > | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1080,6 +1092,7 @@ export type OnCreateAdminSettingsSubscription = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1097,6 +1110,7 @@ export type OnUpdateAdminSettingsSubscription = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1114,6 +1128,7 @@ export type OnDeleteAdminSettingsSubscription = {
     __typename: "AdminSettings",
     id: string,
     hacklyticsOpen?: boolean | null,
+    participantEmails?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

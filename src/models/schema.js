@@ -17,6 +17,14 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "participantEmails": {
+                    "name": "participantEmails",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -60,7 +68,7 @@ export const schema = {
                                 ]
                             },
                             {
-                                "allow": "private",
+                                "allow": "public",
                                 "operations": [
                                     "read"
                                 ]
@@ -388,5 +396,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.4",
-    "version": "52644d8e379172d3af66e934e10830d0"
+    "version": "20f1dcde167fdf6fdd9d62500f9629b8"
 };

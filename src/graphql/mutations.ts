@@ -10,6 +10,7 @@ export const createAdminSettings = /* GraphQL */ `
     createAdminSettings(input: $input, condition: $condition) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -26,6 +27,7 @@ export const updateAdminSettings = /* GraphQL */ `
     updateAdminSettings(input: $input, condition: $condition) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -42,6 +44,7 @@ export const deleteAdminSettings = /* GraphQL */ `
     deleteAdminSettings(input: $input, condition: $condition) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version

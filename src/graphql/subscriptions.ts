@@ -9,6 +9,7 @@ export const onCreateAdminSettings = /* GraphQL */ `
     onCreateAdminSettings(filter: $filter) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -24,6 +25,7 @@ export const onUpdateAdminSettings = /* GraphQL */ `
     onUpdateAdminSettings(filter: $filter) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -39,6 +41,7 @@ export const onDeleteAdminSettings = /* GraphQL */ `
     onDeleteAdminSettings(filter: $filter) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version

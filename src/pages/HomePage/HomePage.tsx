@@ -89,6 +89,14 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
     let items = res.data.listEvents.items;
 
+    // sort events by start time
+    items.sort((a: Event, b: Event) => {
+      // if no start time, set to really far in the future
+      let a1 = new Date(a.start ?? "june 2029");
+      let b1 = new Date(b.start ?? "june 2029");
+      return a1.getTime() - b1.getTime();
+    });
+
     if (items.length > 0) {
       setEvents(items);
     }

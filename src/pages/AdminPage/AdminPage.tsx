@@ -192,8 +192,8 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 return;
               }
               setEventAction("edit");
-              toast('🦄 Wow so easy!', {
-                position: "bottom-center",
+              toast.info("Select an event to edit", {
+                position: "top-center",
                 autoClose: 5000,
                 hideProgressBar: false,
                 closeOnClick: true,
@@ -201,7 +201,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 draggable: true,
                 progress: undefined,
                 theme: "light",
-                });
+              });
             }}
             isPressed={eventAction === "edit"}
           >
@@ -215,6 +215,16 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 return;
               }
               setEventAction("delete");
+              toast.info("Select an event to delete", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
             }}
             isPressed={eventAction === "delete"}
           >
@@ -279,6 +289,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                       <TableRow
                         key={event.id}
                         onClick={async () => {
+                          if (eventAction === "") {
+                            return;
+                          }
                           if (eventAction === "edit") {
                             const ev = await DataStore.query(Event, (e) =>
                               e.id("eq", event.id)
@@ -296,6 +309,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                             // setEventEditing(ev[0]);
                             // setDeleteEventModalOpen(true);
                           }
+                          setEventAction("");
                         }}
                       >
                         <TableCell>{event.name}</TableCell>

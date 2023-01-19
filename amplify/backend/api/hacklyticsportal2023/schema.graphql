@@ -2,12 +2,12 @@ type AdminSettings
   @model
   @auth(
     rules: [
+      { allow: public }
       {
         allow: groups
         groups: ["Administrator"]
         operations: [read, create, update, delete]
       }
-      { allow: public, provider: iam, operations: [read] }
     ]
   ) {
   id: ID!

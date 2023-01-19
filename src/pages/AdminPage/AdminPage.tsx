@@ -20,6 +20,8 @@ import {
   TableBody,
   Badge,
   Heading,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@aws-amplify/ui-react";
 import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
@@ -62,6 +64,8 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [createEventStatus, setCreateEventStatus] = useState<Status>({
     show: false,
   });
+
+  const [eventAction, setEventAction] = useState<"delete" | "edit" | "">("");
 
   const [editEventModalOpen, setEditEventModalOpen] = useState(false);
   const [eventEditing, setEventEditing] = useState<EagerEvent>(
@@ -173,25 +177,38 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         <Flex direction={"row"} gap={"medium"} marginBottom={"medium"}>
           <Button
             onClick={(e) => {
-              window.history.pushState({}, "Admin Settings", "/admin/settings");
+              // window.history.pushState({}, "Admin Settings", "/admin/settings");
+              setCreateEventModalOpen(true);
             }}
           >
             Create
           </Button>
-          <Button
+          <ToggleButton
             onClick={(e) => {
-              window.history.pushState({}, "Admin Settings", "/admin/settings");
+              // window.history.pushState({}, "Admin Settings", "/admin/settings");
+              if (eventAction === "edit") {
+                setEventAction("");
+                return;
+              }
+              setEventAction("edit");
             }}
+            isPressed={eventAction === "edit"}
           >
             Edit
-          </Button>
-          <Button
+          </ToggleButton>
+          <ToggleButton
             onClick={(e) => {
-              window.history.pushState({}, "Admin Settings", "/admin/settings");
+              // window.history.pushState({}, "Admin Settings", "/admin/settings");
+              if (eventAction === "delete") {
+                setEventAction("");
+                return;
+              }
+              setEventAction("delete");
             }}
+            isPressed={eventAction === "delete"}
           >
             Delete
-          </Button>
+          </ToggleButton>
         </Flex>
         {eventsLoading ? (
           <Flex
@@ -202,102 +219,123 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             <Loader size="large" />
           </Flex>
         ) : (
-          <Table highlightOnHover={events.length >= 1}>
-            <TableHead>
-              <TableRow>
-                <TableCell as="th">Event Name</TableCell>
-                <TableCell as="th">Description</TableCell>
-                <TableCell as="th">Location</TableCell>
-                <TableCell as="th">Start</TableCell>
-                <TableCell as="th">End</TableCell>
-                <TableCell as="th">Status</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {events.length <= 0 ? (
-                <>
-                  <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      onClick={() => {
-                        setCreateEventModalOpen(true);
-                      }}
-                    >
-                      <Text style={{ textAlign: "center" }}>
-                        Create an event to get started
-                      </Text>
-                    </TableCell>
-                  </TableRow>
-                </>
-              ) : (
-                <>
-                  <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      onClick={() => {
-                        setCreateEventModalOpen(true);
-                      }}
-                    >
-                      <Heading level={5} style={{ textAlign: "center" }}>
-                        Create a new event
-                      </Heading>
-                    </TableCell>
-                  </TableRow>
-                  {events.map((event) => (
-                    <TableRow
-                      key={event.id}
-                      onClick={async () => {
-                        const ev = await DataStore.query(Event, (e) =>
-                          e.id("eq", event.id)
-                        );
-                        if (!ev) return;
-
-                        setEventEditing(ev[0]);
-                        setEditEventModalOpen(true);
-                      }}
-                    >
-                      <TableCell>{event.name}</TableCell>
-                      <TableCell>
-                        {event.description ?? <Badge>Undefined</Badge>}
-                      </TableCell>
-                      <TableCell>
-                        {event.location ?? <Badge>Undefined</Badge>}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(event.start ?? "").toLocaleString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          // year: "numeric",
-
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }) ?? <Badge>Undefined</Badge>}
-                      </TableCell>
-                      <TableCell>
-                        {new Date(event.end ?? "").toLocaleString(undefined, {
-                          month: "short",
-                          day: "numeric",
-                          // year: "numeric",
-
-                          hour: "numeric",
-                          minute: "numeric",
-                          hour12: true,
-                        }) ?? <Badge>Undefined</Badge>}
-                      </TableCell>
-                      <TableCell>
-                        {event.status ? (
-                          <Badge variation="success">Open</Badge>
-                        ) : (
-                          <Badge variation="error">Closed</Badge>
-                        )}
+          <View maxWidth={"100vw"} overflow={"auto"}>
+            <Table highlightOnHover={events.length >= 1 && eventAction !== ""}>
+              <TableHead>
+                <TableRow>
+                  <TableCell as="th">Event Name</TableCell>
+                  <TableCell as="th">Description</TableCell>
+                  <TableCell as="th">Location</TableCell>
+                  <TableCell as="th">Start</TableCell>
+                  <TableCell as="th">End</TableCell>
+                  <TableCell as="th">Status</TableCell>
+                  <TableCell as="th">Points</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {events.length <= 0 ? (
+                  <>
+                    <TableRow>
+                      <TableCell
+                        colSpan={6}
+                        onClick={() => {
+                          setCreateEventModalOpen(true);
+                        }}
+                      >
+                        <Text style={{ textAlign: "center" }}>
+                          Create an event to get started
+                        </Text>
                       </TableCell>
                     </TableRow>
-                  ))}
-                </>
-              )}
-            </TableBody>
-          </Table>
+                  </>
+                ) : (
+                  <>
+                    {!events.length && (
+                      <TableRow>
+                        <TableCell
+                          colSpan={7}
+                          // onClick={() => {
+                          //   setCreateEventModalOpen(true);
+                          // }}
+                        >
+                          <Text style={{ textAlign: "center" }}>
+                            Create an event to get started
+                          </Text>
+                        </TableCell>
+                      </TableRow>
+                    )}
+                    {events.map((event) => (
+                      <TableRow
+                        key={event.id}
+                        onClick={async () => {
+                          if (eventAction === "edit") {
+                            const ev = await DataStore.query(Event, (e) =>
+                              e.id("eq", event.id)
+                            );
+                            if (!ev) return;
+
+                            setEventEditing(ev[0]);
+                            setEditEventModalOpen(true);
+                          } else if (eventAction === "delete") {
+                            // show delete modal
+                            // const ev = await DataStore.query(Event, (e) =>
+                            //   e.id("eq", event.id)
+                            // );
+                            // if (!ev) return;
+                            // setEventEditing(ev[0]);
+                            // setDeleteEventModalOpen(true);
+                          }
+                        }}
+                      >
+                        <TableCell>{event.name}</TableCell>
+                        <TableCell>
+                          {event.description ?? <Badge>Undefined</Badge>}
+                        </TableCell>
+                        <TableCell>
+                          {event.location ?? <Badge>Undefined</Badge>}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(event.start ?? "").toLocaleString(
+                            undefined,
+                            {
+                              month: "short",
+                              day: "numeric",
+                              // year: "numeric",
+
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: true,
+                            }
+                          ) ?? <Badge>Undefined</Badge>}
+                        </TableCell>
+                        <TableCell>
+                          {new Date(event.end ?? "").toLocaleString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            // year: "numeric",
+
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }) ?? <Badge>Undefined</Badge>}
+                        </TableCell>
+                        <TableCell>
+                          {event.status ? (
+                            <Badge variation="success">Open</Badge>
+                          ) : (
+                            <Badge variation="error">Closed</Badge>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {event.points ?? <Badge>Undefined</Badge>}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </>
+                )}
+              </TableBody>
+            </Table>
+          </View>
         )}
 
         {/* Applicant table */}

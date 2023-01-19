@@ -22,6 +22,9 @@ import {
   Heading,
   ToggleButtonGroup,
   ToggleButton,
+  Pagination,
+  SelectField,
+  SearchField,
 } from "@aws-amplify/ui-react";
 import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
@@ -59,7 +62,17 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   //events --------------------
   const [events, setEvents] = useState<Event[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+
+  const [eventSearch, setEventSearch] = useState<string>("");
+
+  const [eventPage, setEventPage] = useState<number>(1);
+  const [eventPageSize, setEventPageSize] = useState<number>(
+    localStorage.getItem("eventPageSize")
+      ? parseInt(localStorage.getItem("eventPageSize") as string)
+      : 10
+  );
 
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [createEventStatus, setCreateEventStatus] = useState<Status>({
@@ -84,6 +97,18 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       setEventsLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    setFilteredEvents(
+      events.filter((x) =>
+        `${x.name} ${x.description} ${x.location} ${
+          x.status ? "open" : "closed"
+        } ${x.points}`
+          .toLowerCase()
+          .includes(eventSearch)
+      )
+    );
+  }, [events, eventSearch]);
 
   const loadSettings = async (callback?: () => void) => {
     const res: any = await API.graphql({
@@ -175,16 +200,46 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Events
         </Heading>
-        <Flex direction={"row"} gap={"medium"} marginBottom={"medium"}>
+        <Flex
+          direction={"row"}
+          gap={"medium"}
+          marginBottom={"medium"}
+          wrap={"wrap"}
+        >
+          <SearchField
+            label=""
+            labelHidden={true}
+            placeholder={"Search"}
+            onChange={(e) => {
+              setEventSearch(e.target.value.toLowerCase());
+              let maxPages = Math.ceil(filteredEvents.length / eventPageSize);
+              if (eventPage > maxPages && maxPages !== 0) {
+                setEventPage(maxPages);
+              }
+
+              if (eventPage < 1) {
+                setEventPage(1);
+              }
+            }}
+            onClear={() => {
+              setEventSearch("");
+              if (eventPage < 1) {
+                setEventPage(1);
+              }
+            }}
+            isDisabled={eventsLoading || events.length === 0}
+          />
           <Button
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
               setCreateEventModalOpen(true);
             }}
+            isDisabled={eventsLoading}
           >
             Create
           </Button>
           <ToggleButton
+            isDisabled={eventsLoading || events.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
               if (eventAction === "edit") {
@@ -208,6 +263,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             Edit
           </ToggleButton>
           <ToggleButton
+            isDisabled={eventsLoading || events.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
               if (eventAction === "delete") {
@@ -240,127 +296,183 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             <Loader size="large" />
           </Flex>
         ) : (
-          <View maxWidth={"100vw"} overflow={"auto"}>
-            <Table highlightOnHover={events.length >= 1 && eventAction !== ""}>
-              <TableHead>
-                <TableRow>
-                  <TableCell as="th">Event Name</TableCell>
-                  <TableCell as="th">Description</TableCell>
-                  <TableCell as="th">Location</TableCell>
-                  <TableCell as="th">Start</TableCell>
-                  <TableCell as="th">End</TableCell>
-                  <TableCell as="th">Status</TableCell>
-                  <TableCell as="th">Points</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {events.length <= 0 ? (
-                  <>
-                    <TableRow>
-                      <TableCell
-                        colSpan={6}
-                        onClick={() => {
-                          setCreateEventModalOpen(true);
-                        }}
-                      >
-                        <Text style={{ textAlign: "center" }}>
-                          Create an event to get started
-                        </Text>
-                      </TableCell>
-                    </TableRow>
-                  </>
-                ) : (
-                  <>
-                    {!events.length && (
+          <Flex direction={"column"}>
+            <View maxWidth={"100vw"} overflow={"auto"}>
+              <Table
+                highlightOnHover={events.length >= 1 && eventAction !== ""}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell as="th">Event Name</TableCell>
+                    <TableCell as="th">Description</TableCell>
+                    <TableCell as="th">Location</TableCell>
+                    <TableCell as="th">Start</TableCell>
+                    <TableCell as="th">End</TableCell>
+                    <TableCell as="th">Status</TableCell>
+                    <TableCell as="th">Points</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody
+                  border={eventAction !== "" ? "2px solid red" : ""}
+                  boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}
+                >
+                  {events.length <= 0 ? (
+                    <>
                       <TableRow>
                         <TableCell
-                          colSpan={7}
-                          // onClick={() => {
-                          //   setCreateEventModalOpen(true);
-                          // }}
+                          colSpan={6}
+                          onClick={() => {
+                            setCreateEventModalOpen(true);
+                          }}
                         >
                           <Text style={{ textAlign: "center" }}>
                             Create an event to get started
                           </Text>
                         </TableCell>
                       </TableRow>
-                    )}
-                    {events.map((event) => (
-                      <TableRow
-                        key={event.id}
-                        onClick={async () => {
-                          if (eventAction === "") {
-                            return;
-                          }
-                          if (eventAction === "edit") {
-                            const ev = await DataStore.query(Event, (e) =>
-                              e.id("eq", event.id)
-                            );
-                            if (!ev) return;
+                    </>
+                  ) : (
+                    <>
+                      {!events.length && (
+                        <TableRow>
+                          <TableCell
+                            colSpan={7}
+                            // onClick={() => {
+                            //   setCreateEventModalOpen(true);
+                            // }}
+                          >
+                            <Text style={{ textAlign: "center" }}>
+                              Create an event to get started
+                            </Text>
+                          </TableCell>
+                        </TableRow>
+                      )}
+                      {filteredEvents
+                        .slice(
+                          (eventPage - 1) * eventPageSize,
+                          (eventPage - 1) * eventPageSize + eventPageSize
+                        )
+                        .map((event) => (
+                          <TableRow
+                            key={event.id}
+                            onClick={async () => {
+                              if (eventAction === "") {
+                                return;
+                              }
+                              if (eventAction === "edit") {
+                                const ev = await DataStore.query(Event, (e) =>
+                                  e.id("eq", event.id)
+                                );
+                                if (!ev) return;
 
-                            setEventEditing(ev[0]);
-                            setEditEventModalOpen(true);
-                          } else if (eventAction === "delete") {
-                            // show delete modal
-                            // const ev = await DataStore.query(Event, (e) =>
-                            //   e.id("eq", event.id)
-                            // );
-                            // if (!ev) return;
-                            // setEventEditing(ev[0]);
-                            // setDeleteEventModalOpen(true);
-                          }
-                          setEventAction("");
-                        }}
-                      >
-                        <TableCell>{event.name}</TableCell>
-                        <TableCell>
-                          {event.description ?? <Badge>Undefined</Badge>}
-                        </TableCell>
-                        <TableCell>
-                          {event.location ?? <Badge>Undefined</Badge>}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(event.start ?? "").toLocaleString(
-                            undefined,
-                            {
-                              month: "short",
-                              day: "numeric",
-                              // year: "numeric",
+                                setEventEditing(ev[0]);
+                                setEditEventModalOpen(true);
+                              } else if (eventAction === "delete") {
+                                // show delete modal
+                                // const ev = await DataStore.query(Event, (e) =>
+                                //   e.id("eq", event.id)
+                                // );
+                                // if (!ev) return;
+                                // setEventEditing(ev[0]);
+                                // setDeleteEventModalOpen(true);
+                              }
+                              setEventAction("");
+                            }}
+                          >
+                            <TableCell>{event.name}</TableCell>
+                            <TableCell>
+                              {event.description ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              {event.location ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              {new Date(event.start ?? "").toLocaleString(
+                                undefined,
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  // year: "numeric",
 
-                              hour: "numeric",
-                              minute: "numeric",
-                              hour12: true,
-                            }
-                          ) ?? <Badge>Undefined</Badge>}
-                        </TableCell>
-                        <TableCell>
-                          {new Date(event.end ?? "").toLocaleString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                            // year: "numeric",
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                  hour12: true,
+                                }
+                              ) ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              {new Date(event.end ?? "").toLocaleString(
+                                undefined,
+                                {
+                                  month: "short",
+                                  day: "numeric",
+                                  // year: "numeric",
 
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          }) ?? <Badge>Undefined</Badge>}
-                        </TableCell>
-                        <TableCell>
-                          {event.status ? (
-                            <Badge variation="success">Open</Badge>
-                          ) : (
-                            <Badge variation="error">Closed</Badge>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {event.points ?? <Badge>Undefined</Badge>}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </>
-                )}
-              </TableBody>
-            </Table>
-          </View>
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                  hour12: true,
+                                }
+                              ) ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              {event.status ? (
+                                <Badge variation="success">Open</Badge>
+                              ) : (
+                                <Badge variation="error">Closed</Badge>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {event.points ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </>
+                  )}
+                </TableBody>
+              </Table>
+            </View>
+            <Flex
+              direction={"row"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              gap={"large"}
+            >
+              <Pagination
+                currentPage={eventPage}
+                totalPages={Math.ceil(filteredEvents.length / eventPageSize)}
+                siblingCount={1}
+                onChange={(newPageIndex, previousPageIndex) => {
+                  setEventPage(newPageIndex);
+                }}
+                onNext={() => {
+                  setEventPage(eventPage + 1);
+                }}
+                onPrevious={() => {
+                  setEventPage(eventPage - 1);
+                }}
+              />
+              <Flex direction={"row"} alignItems={"center"}>
+                <SelectField
+                  label=""
+                  labelHidden={true}
+                  onChange={(e) => {
+                    setEventPageSize(parseInt(e.target.value));
+                    // update local storage
+                    localStorage.setItem("eventPageSize", e.target.value);
+                  }}
+                  defaultValue={eventPageSize.toString()}
+                  size={"small"}
+                >
+                  <option value={1}>1</option>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                </SelectField>
+                <Text>events per page</Text>
+              </Flex>
+            </Flex>
+          </Flex>
         )}
 
         {/* Applicant table */}

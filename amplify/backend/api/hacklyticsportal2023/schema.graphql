@@ -7,7 +7,7 @@ type AdminSettings
         groups: ["Administrator"]
         operations: [read, create, update, delete]
       }
-      { allow: public, operations: [read] }
+      { allow: public, provider: iam, operations: [read] }
     ]
   ) {
   id: ID!

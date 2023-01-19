@@ -4,7 +4,7 @@ import styles from "./App.module.scss";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Amplify, Auth, AuthModeStrategyType } from "aws-amplify";
+import { Amplify, API, Auth, AuthModeStrategyType } from "aws-amplify";
 import {
   AmplifyProvider,
   Authenticator,
@@ -30,6 +30,8 @@ import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import getGroups from "./misc/Groups";
+import { getAdminSettings } from "./graphql";
+import { AdminSettings } from "./models";
 
 Amplify.configure({
   ...aws_exports,
@@ -90,33 +92,6 @@ const Components = {
   },
 };
 
-const Services = {
-  async validateCustomSignUp(formData: any) {
-    if (formData["custom:gtemail"] !== "") {
-      if (!formData["custom:gtemail"].endsWith("@gatech.edu")) {
-        return { "custom:gtemail": "Must be a valid GT email address" };
-      }
-    }
-  },
-  async handleSignUp(formData: any) {
-    let { username, password, attributes } = formData;
-    username = username.toLowerCase();
-    attributes.email = attributes.email.toLowerCase();
-
-    // check email in database
-
-    // if email in DB, register user
-    return Auth.signUp({
-      username,
-      password,
-      attributes,
-      autoSignIn: {
-        enabled: true,
-      },
-    });
-  },
-};
-
 const App = () => {
   const [theme, setTheme] = useState<Theme>(
     (localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics
@@ -127,6 +102,18 @@ const App = () => {
       | "light"
       | "dark") ?? "system"
   );
+
+  const Services = {
+    async validateCustomSignUp(formData: any) {
+      if (formData["custom:gtemail"] !== "") {
+        if (!formData["custom:gtemail"].endsWith("@gatech.edu")) {
+          return {
+            "custom:gtemail": "Must be a valid GT email address",
+          };
+        }
+      }
+    },
+  };
 
   useEffect(() => {
     let prevTheme = localStorage.getItem("hacklytics-theme") as Theme;

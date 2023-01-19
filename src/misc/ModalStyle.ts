@@ -22,7 +22,7 @@ const modalFormStyle = {
     transform: "translate(-50%, -50%)",
     maxWidth: "100%",
     maxHeight: "100%",
-    minWidth: "300px",
+    minWidth: "360px",
   },
 };
 

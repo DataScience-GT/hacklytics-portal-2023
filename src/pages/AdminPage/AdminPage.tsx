@@ -25,6 +25,7 @@ import {
   Pagination,
   SelectField,
   SearchField,
+  TextAreaField,
 } from "@aws-amplify/ui-react";
 import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
 import Status from "../../Types/Status";
@@ -44,6 +45,7 @@ interface AdminPageProps {
 
 const SettingTabMap = new Map<string, number>([
   ["/admin/settings/general", 0],
+  ["/admin/settings/participants", 1],
   ["/admin/settings/event", 1],
 ]);
 
@@ -89,6 +91,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     show: false,
   });
 
+  // participants
+  const [participantPage, setParticipantPage] = useState<number>(1);
+  const [participantPageSize, setParticipantPageSize] = useState<number>(5);
+
+  const [participantEmailsField, setParticipantEmailsField] =
+    useState<string>("");
+
   useEffect(() => {
     loadSettings(() => {
       setSettingsLoading(false);
@@ -122,10 +131,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     if (callback) callback();
   };
 
-  const saveSettings = async (
-    e: React.ChangeEvent,
-    newSettings: AdminSettings
-  ) => {
+  const saveSettings = async (newSettings: AdminSettings) => {
     // hide status alert
     setSettingStatus({ show: false });
     // attempt to update the graphql database
@@ -532,7 +538,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                       label="Hacklytics Open?"
                       isChecked={adminSettings?.hacklyticsOpen ?? false}
                       onChange={(e) => {
-                        saveSettings(e, {
+                        saveSettings({
                           ...adminSettings,
                           hacklyticsOpen: e.target.checked,
                         });
@@ -544,14 +550,161 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                   </Flex>
                 )}
               </TabItem>
-              <TabItem title="Event">
+              <TabItem title="Participants">
                 {settingsLoading ? (
                   <Flex direction={"column"} alignItems="center">
                     <Loader size="large" />
                   </Flex>
                 ) : (
                   <Flex direction={"column"} alignItems="center">
-                    <Text as="p">hello</Text>
+                    <Heading
+                      marginTop={"medium"}
+                      textAlign={"left"}
+                      width={"100%"}
+                    >
+                      Participant Emails
+                    </Heading>
+                    {/* show a list of participants (paginated) */}
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell as={"th"}>Email</TableCell>
+                          <TableCell as={"th"}>Action</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {!adminSettings?.participantEmails ||
+                        adminSettings?.participantEmails.length <= 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={2}>
+                              <Text textAlign={"center"}>
+                                No participant emails found
+                              </Text>
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          adminSettings?.participantEmails
+                            .slice(
+                              (participantPage - 1) * participantPageSize,
+                              (participantPage - 1) * participantPageSize +
+                                participantPageSize
+                            )
+                            .map((email) => (
+                              <TableRow key={email}>
+                                <TableCell>{email}</TableCell>
+                                <TableCell>
+                                  <Button
+                                    // variation="warning"
+                                    size="small"
+                                    onClick={(e) => {
+                                      // remove the email from the list
+                                      let newEmails =
+                                        adminSettings?.participantEmails?.filter(
+                                          (e) => e !== email
+                                        );
+                                      saveSettings({
+                                        ...adminSettings,
+                                        participantEmails: newEmails,
+                                      });
+                                    }}
+                                  >
+                                    Remove
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            ))
+                        )}
+                      </TableBody>
+                    </Table>
+                    <Pagination
+                      currentPage={participantPage}
+                      totalPages={Math.ceil(
+                        (adminSettings?.participantEmails?.length ?? 0) /
+                          participantPageSize
+                      )}
+                      siblingCount={1}
+                      onChange={(newPageIndex, previousPageIndex) => {
+                        setParticipantPage(newPageIndex);
+                      }}
+                      onNext={() => {
+                        setParticipantPage(participantPage + 1);
+                      }}
+                      onPrevious={() => {
+                        setParticipantPage(participantPage - 1);
+                      }}
+                    />
+                    <TextAreaField
+                      id="participantEmails"
+                      label="Emails"
+                      labelHidden={true}
+                      width={"100%"}
+                      placeholder={"Enter participant emails here"}
+                      onChange={(e) => {
+                        setParticipantEmailsField(e.currentTarget.value);
+                      }}
+                    />
+                    <Flex dir={"row"} justifyContent={"space-between"}>
+                      <Button
+                        onClick={(e) => {
+                          let field =
+                            document.getElementById("participantEmails");
+                          if (field) {
+                            (field as HTMLTextAreaElement).value = "";
+                          }
+                        }}
+                      >
+                        Clear
+                      </Button>
+                      <Button
+                        onClick={(e) => {
+                          if (!participantEmailsField) {
+                            setSettingStatus({
+                              show: true,
+                              type: "error",
+                              message: "No emails entered",
+                            });
+                            return;
+                          }
+
+                          let newEmails: string[] = [];
+                          // check if comma separated
+                          if (participantEmailsField.includes(",")) {
+                            // split by comma
+                            newEmails = participantEmailsField.split(",");
+                          } else {
+                            // split by new line
+                            newEmails = participantEmailsField.split("\n");
+                          }
+                          // remove empty strings
+                          newEmails = newEmails.filter((email) => email !== "");
+                          newEmails = newEmails.map((email) =>
+                            email.trim().toLowerCase()
+                          );
+
+                          // save the settings
+                          saveSettings({
+                            ...adminSettings,
+                            participantEmails: [
+                              ...(adminSettings?.participantEmails ?? []),
+                              ...newEmails,
+                            ],
+                          });
+
+                          // clear the field
+
+                          let field =
+                            document.getElementById("participantEmails");
+                          if (field) {
+                            (field as HTMLTextAreaElement).value = "";
+                          }
+                        }}
+                      >
+                        Add Participants
+                      </Button>
+                    </Flex>
+                    {settingStatus.show && (
+                      <StatusAlert status={settingStatus} />
+                    )}
                   </Flex>
                 )}
               </TabItem>

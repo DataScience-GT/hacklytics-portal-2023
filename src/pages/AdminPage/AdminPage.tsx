@@ -167,9 +167,32 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         >
           Open Settings
         </Button>
-        <Heading level={3} textAlign="center" margin={"1em"}>
+        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Events
         </Heading>
+        <Flex direction={"row"} gap={"medium"} marginBottom={"medium"}>
+          <Button
+            onClick={(e) => {
+              window.history.pushState({}, "Admin Settings", "/admin/settings");
+            }}
+          >
+            Create
+          </Button>
+          <Button
+            onClick={(e) => {
+              window.history.pushState({}, "Admin Settings", "/admin/settings");
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            onClick={(e) => {
+              window.history.pushState({}, "Admin Settings", "/admin/settings");
+            }}
+          >
+            Delete
+          </Button>
+        </Flex>
         {eventsLoading ? (
           <Flex
             direction={"row"}
@@ -279,9 +302,16 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
         {/* Applicant table */}
 
-        <Heading level={3} textAlign="center" margin={"1em"}>
+        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Applicants
         </Heading>
+        <Button
+          onClick={(e) => {
+            window.history.pushState({}, "Admin Settings", "/admin/settings");
+          }}
+        >
+          Add Applicants
+        </Button>
 
         {/* SETTINGS MODAL */}
 

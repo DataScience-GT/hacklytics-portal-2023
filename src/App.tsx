@@ -4,7 +4,7 @@ import styles from "./App.module.scss";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Amplify, API, Auth, AuthModeStrategyType } from "aws-amplify";
+import { Amplify, AuthModeStrategyType } from "aws-amplify";
 import {
   AmplifyProvider,
   Authenticator,
@@ -30,8 +30,8 @@ import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import getGroups from "./misc/Groups";
-import { getAdminSettings } from "./graphql";
-import { AdminSettings } from "./models";
+// import { getAdminSettings } from "./graphql";
+// import { AdminSettings } from "./models";
 import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
 
 Amplify.configure({

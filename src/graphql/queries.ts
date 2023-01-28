@@ -322,7 +322,6 @@ export const getScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
       createdAt
       updatedAt
       _version
@@ -344,7 +343,6 @@ export const listScavengerHunts = /* GraphQL */ `
         description
         status
         points
-        usersGotten
         createdAt
         updatedAt
         _version
@@ -375,7 +373,74 @@ export const syncScavengerHunts = /* GraphQL */ `
         description
         status
         points
-        usersGotten
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getScavengerHuntCheckin = /* GraphQL */ `
+  query GetScavengerHuntCheckin($id: ID!) {
+    getScavengerHuntCheckin(id: $id) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listScavengerHuntCheckins = /* GraphQL */ `
+  query ListScavengerHuntCheckins(
+    $filter: ModelScavengerHuntCheckinFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listScavengerHuntCheckins(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        checkpointID
+        userID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncScavengerHuntCheckins = /* GraphQL */ `
+  query SyncScavengerHuntCheckins(
+    $filter: ModelScavengerHuntCheckinFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncScavengerHuntCheckins(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        checkpointID
+        userID
         createdAt
         updatedAt
         _version

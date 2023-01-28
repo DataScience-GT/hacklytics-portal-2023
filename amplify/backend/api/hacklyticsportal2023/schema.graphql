@@ -98,5 +98,21 @@ type ScavengerHunt
   description: String
   status: Boolean
   points: Int
-  usersGotten: [String]
+}
+
+type ScavengerHuntCheckin
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read, create] }
+    ]
+  ) {
+  id: ID!
+  checkpointID: String!
+  userID: String!
 }

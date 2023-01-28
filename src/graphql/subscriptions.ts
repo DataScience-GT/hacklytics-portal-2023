@@ -270,7 +270,6 @@ export const onCreateScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
       createdAt
       updatedAt
       _version
@@ -289,7 +288,6 @@ export const onUpdateScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
       createdAt
       updatedAt
       _version
@@ -308,7 +306,54 @@ export const onDeleteScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateScavengerHuntCheckin = /* GraphQL */ `
+  subscription OnCreateScavengerHuntCheckin(
+    $filter: ModelSubscriptionScavengerHuntCheckinFilterInput
+  ) {
+    onCreateScavengerHuntCheckin(filter: $filter) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateScavengerHuntCheckin = /* GraphQL */ `
+  subscription OnUpdateScavengerHuntCheckin(
+    $filter: ModelSubscriptionScavengerHuntCheckinFilterInput
+  ) {
+    onUpdateScavengerHuntCheckin(filter: $filter) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteScavengerHuntCheckin = /* GraphQL */ `
+  subscription OnDeleteScavengerHuntCheckin(
+    $filter: ModelSubscriptionScavengerHuntCheckinFilterInput
+  ) {
+    onDeleteScavengerHuntCheckin(filter: $filter) {
+      id
+      checkpointID
+      userID
       createdAt
       updatedAt
       _version

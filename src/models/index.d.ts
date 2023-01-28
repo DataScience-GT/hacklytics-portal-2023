@@ -22,6 +22,10 @@ type ScavengerHuntMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type ScavengerHuntCheckinMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
@@ -136,7 +140,6 @@ type EagerScavengerHunt = {
   readonly description?: string | null;
   readonly status?: boolean | null;
   readonly points?: number | null;
-  readonly usersGotten?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -147,7 +150,6 @@ type LazyScavengerHunt = {
   readonly description?: string | null;
   readonly status?: boolean | null;
   readonly points?: number | null;
-  readonly usersGotten?: (string | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -156,4 +158,26 @@ export declare type ScavengerHunt = LazyLoading extends LazyLoadingDisabled ? Ea
 
 export declare const ScavengerHunt: (new (init: ModelInit<ScavengerHunt, ScavengerHuntMetaData>) => ScavengerHunt) & {
   copyOf(source: ScavengerHunt, mutator: (draft: MutableModel<ScavengerHunt, ScavengerHuntMetaData>) => MutableModel<ScavengerHunt, ScavengerHuntMetaData> | void): ScavengerHunt;
+}
+
+type EagerScavengerHuntCheckin = {
+  readonly id: string;
+  readonly checkpointID: string;
+  readonly userID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyScavengerHuntCheckin = {
+  readonly id: string;
+  readonly checkpointID: string;
+  readonly userID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ScavengerHuntCheckin = LazyLoading extends LazyLoadingDisabled ? EagerScavengerHuntCheckin : LazyScavengerHuntCheckin
+
+export declare const ScavengerHuntCheckin: (new (init: ModelInit<ScavengerHuntCheckin, ScavengerHuntCheckinMetaData>) => ScavengerHuntCheckin) & {
+  copyOf(source: ScavengerHuntCheckin, mutator: (draft: MutableModel<ScavengerHuntCheckin, ScavengerHuntCheckinMetaData>) => MutableModel<ScavengerHuntCheckin, ScavengerHuntCheckinMetaData> | void): ScavengerHuntCheckin;
 }

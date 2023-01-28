@@ -284,7 +284,6 @@ export type CreateScavengerHuntInput = {
   description?: string | null,
   status?: boolean | null,
   points?: number | null,
-  usersGotten?: Array< string | null > | null,
   _version?: number | null,
 };
 
@@ -293,7 +292,6 @@ export type ModelScavengerHuntConditionInput = {
   description?: ModelStringInput | null,
   status?: ModelBooleanInput | null,
   points?: ModelIntInput | null,
-  usersGotten?: ModelStringInput | null,
   and?: Array< ModelScavengerHuntConditionInput | null > | null,
   or?: Array< ModelScavengerHuntConditionInput | null > | null,
   not?: ModelScavengerHuntConditionInput | null,
@@ -306,7 +304,6 @@ export type ScavengerHunt = {
   description?: string | null,
   status?: boolean | null,
   points?: number | null,
-  usersGotten?: Array< string | null > | null,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -320,11 +317,49 @@ export type UpdateScavengerHuntInput = {
   description?: string | null,
   status?: boolean | null,
   points?: number | null,
-  usersGotten?: Array< string | null > | null,
   _version?: number | null,
 };
 
 export type DeleteScavengerHuntInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateScavengerHuntCheckinInput = {
+  id?: string | null,
+  checkpointID: string,
+  userID: string,
+  _version?: number | null,
+};
+
+export type ModelScavengerHuntCheckinConditionInput = {
+  checkpointID?: ModelStringInput | null,
+  userID?: ModelStringInput | null,
+  and?: Array< ModelScavengerHuntCheckinConditionInput | null > | null,
+  or?: Array< ModelScavengerHuntCheckinConditionInput | null > | null,
+  not?: ModelScavengerHuntCheckinConditionInput | null,
+};
+
+export type ScavengerHuntCheckin = {
+  __typename: "ScavengerHuntCheckin",
+  id: string,
+  checkpointID: string,
+  userID: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateScavengerHuntCheckinInput = {
+  id: string,
+  checkpointID?: string | null,
+  userID?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteScavengerHuntCheckinInput = {
   id: string,
   _version?: number | null,
 };
@@ -400,7 +435,6 @@ export type ModelScavengerHuntFilterInput = {
   description?: ModelStringInput | null,
   status?: ModelBooleanInput | null,
   points?: ModelIntInput | null,
-  usersGotten?: ModelStringInput | null,
   and?: Array< ModelScavengerHuntFilterInput | null > | null,
   or?: Array< ModelScavengerHuntFilterInput | null > | null,
   not?: ModelScavengerHuntFilterInput | null,
@@ -409,6 +443,22 @@ export type ModelScavengerHuntFilterInput = {
 export type ModelScavengerHuntConnection = {
   __typename: "ModelScavengerHuntConnection",
   items:  Array<ScavengerHunt | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelScavengerHuntCheckinFilterInput = {
+  id?: ModelIDInput | null,
+  checkpointID?: ModelStringInput | null,
+  userID?: ModelStringInput | null,
+  and?: Array< ModelScavengerHuntCheckinFilterInput | null > | null,
+  or?: Array< ModelScavengerHuntCheckinFilterInput | null > | null,
+  not?: ModelScavengerHuntCheckinFilterInput | null,
+};
+
+export type ModelScavengerHuntCheckinConnection = {
+  __typename: "ModelScavengerHuntCheckinConnection",
+  items:  Array<ScavengerHuntCheckin | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -505,9 +555,16 @@ export type ModelSubscriptionScavengerHuntFilterInput = {
   description?: ModelSubscriptionStringInput | null,
   status?: ModelSubscriptionBooleanInput | null,
   points?: ModelSubscriptionIntInput | null,
-  usersGotten?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
   or?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
+};
+
+export type ModelSubscriptionScavengerHuntCheckinFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  checkpointID?: ModelSubscriptionStringInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
+  or?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -841,7 +898,6 @@ export type CreateScavengerHuntMutation = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -863,7 +919,6 @@ export type UpdateScavengerHuntMutation = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -885,7 +940,63 @@ export type DeleteScavengerHuntMutation = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateScavengerHuntCheckinMutationVariables = {
+  input: CreateScavengerHuntCheckinInput,
+  condition?: ModelScavengerHuntCheckinConditionInput | null,
+};
+
+export type CreateScavengerHuntCheckinMutation = {
+  createScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateScavengerHuntCheckinMutationVariables = {
+  input: UpdateScavengerHuntCheckinInput,
+  condition?: ModelScavengerHuntCheckinConditionInput | null,
+};
+
+export type UpdateScavengerHuntCheckinMutation = {
+  updateScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteScavengerHuntCheckinMutationVariables = {
+  input: DeleteScavengerHuntCheckinInput,
+  condition?: ModelScavengerHuntCheckinConditionInput | null,
+};
+
+export type DeleteScavengerHuntCheckinMutation = {
+  deleteScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1242,7 +1353,6 @@ export type GetScavengerHuntQuery = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1267,7 +1377,6 @@ export type ListScavengerHuntsQuery = {
       description?: string | null,
       status?: boolean | null,
       points?: number | null,
-      usersGotten?: Array< string | null > | null,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1296,7 +1405,75 @@ export type SyncScavengerHuntsQuery = {
       description?: string | null,
       status?: boolean | null,
       points?: number | null,
-      usersGotten?: Array< string | null > | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetScavengerHuntCheckinQueryVariables = {
+  id: string,
+};
+
+export type GetScavengerHuntCheckinQuery = {
+  getScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListScavengerHuntCheckinsQueryVariables = {
+  filter?: ModelScavengerHuntCheckinFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListScavengerHuntCheckinsQuery = {
+  listScavengerHuntCheckins?:  {
+    __typename: "ModelScavengerHuntCheckinConnection",
+    items:  Array< {
+      __typename: "ScavengerHuntCheckin",
+      id: string,
+      checkpointID: string,
+      userID: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncScavengerHuntCheckinsQueryVariables = {
+  filter?: ModelScavengerHuntCheckinFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncScavengerHuntCheckinsQuery = {
+  syncScavengerHuntCheckins?:  {
+    __typename: "ModelScavengerHuntCheckinConnection",
+    items:  Array< {
+      __typename: "ScavengerHuntCheckin",
+      id: string,
+      checkpointID: string,
+      userID: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -1626,7 +1803,6 @@ export type OnCreateScavengerHuntSubscription = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1647,7 +1823,6 @@ export type OnUpdateScavengerHuntSubscription = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1668,7 +1843,60 @@ export type OnDeleteScavengerHuntSubscription = {
     description?: string | null,
     status?: boolean | null,
     points?: number | null,
-    usersGotten?: Array< string | null > | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateScavengerHuntCheckinSubscriptionVariables = {
+  filter?: ModelSubscriptionScavengerHuntCheckinFilterInput | null,
+};
+
+export type OnCreateScavengerHuntCheckinSubscription = {
+  onCreateScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateScavengerHuntCheckinSubscriptionVariables = {
+  filter?: ModelSubscriptionScavengerHuntCheckinFilterInput | null,
+};
+
+export type OnUpdateScavengerHuntCheckinSubscription = {
+  onUpdateScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteScavengerHuntCheckinSubscriptionVariables = {
+  filter?: ModelSubscriptionScavengerHuntCheckinFilterInput | null,
+};
+
+export type OnDeleteScavengerHuntCheckinSubscription = {
+  onDeleteScavengerHuntCheckin?:  {
+    __typename: "ScavengerHuntCheckin",
+    id: string,
+    checkpointID: string,
+    userID: string,
     createdAt: string,
     updatedAt: string,
     _version: number,

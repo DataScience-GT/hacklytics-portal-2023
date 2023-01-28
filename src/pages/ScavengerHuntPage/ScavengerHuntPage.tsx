@@ -295,7 +295,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                               {hunt.points ?? <Badge>Undefined</Badge>}
                             </TableCell>
                             <TableCell>
-                              {hunt.usersGotten?.length ?? 0}
+                              {/* {hunt.usersGotten?.length ?? 0} */}0
                             </TableCell>
                             <TableCell>
                               <CopyToClipboard

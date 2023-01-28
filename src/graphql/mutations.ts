@@ -301,7 +301,6 @@ export const createScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
       createdAt
       updatedAt
       _version
@@ -321,7 +320,6 @@ export const updateScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
       createdAt
       updatedAt
       _version
@@ -341,7 +339,57 @@ export const deleteScavengerHunt = /* GraphQL */ `
       description
       status
       points
-      usersGotten
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createScavengerHuntCheckin = /* GraphQL */ `
+  mutation CreateScavengerHuntCheckin(
+    $input: CreateScavengerHuntCheckinInput!
+    $condition: ModelScavengerHuntCheckinConditionInput
+  ) {
+    createScavengerHuntCheckin(input: $input, condition: $condition) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateScavengerHuntCheckin = /* GraphQL */ `
+  mutation UpdateScavengerHuntCheckin(
+    $input: UpdateScavengerHuntCheckinInput!
+    $condition: ModelScavengerHuntCheckinConditionInput
+  ) {
+    updateScavengerHuntCheckin(input: $input, condition: $condition) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteScavengerHuntCheckin = /* GraphQL */ `
+  mutation DeleteScavengerHuntCheckin(
+    $input: DeleteScavengerHuntCheckinInput!
+    $condition: ModelScavengerHuntCheckinConditionInput
+  ) {
+    deleteScavengerHuntCheckin(input: $input, condition: $condition) {
+      id
+      checkpointID
+      userID
       createdAt
       updatedAt
       _version

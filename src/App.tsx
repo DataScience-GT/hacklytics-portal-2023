@@ -176,7 +176,7 @@ const App = () => {
                         />
                       )}
                       <Route
-                        path="/checkpoint/*"
+                        path="/checkpoint/:checkpointId"
                         element={<CheckpointPage user={user} signOut={signOut} />}
                       />
                     </Routes>

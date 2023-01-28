@@ -3,9 +3,9 @@ import styles from "./ScavengerHuntPage.module.scss";
 
 import Modal from "react-modal";
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
-import { ScavengerHunt } from "../../models";
+import { EagerScavengerHunt, ScavengerHunt } from "../../models";
 import { listScavengerHunts } from "../../graphql";
-import { API } from "aws-amplify";
+import { API, DataStore } from "aws-amplify";
 import {
   Text,
   Badge,
@@ -28,6 +28,8 @@ import Status from "../../Types/Status";
 import { modalFormStyle } from "../../misc/ModalStyle";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 import CreateScavengerHunt from "../../ui-components/CreateScavengerHunt";
+import { toast } from "react-toastify";
+import EditScavengerHunt from "../../ui-components/EditScavengerHunt";
 
 interface ScavengerHuntPageProps {
   user?: AmplifyUser;
@@ -46,10 +48,24 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
   const [huntSearch, setHuntSearch] = React.useState<string>("");
 
   const [huntPage, setHuntPage] = React.useState<number>(1);
-  const [huntPageSize, setHuntPageSize] = React.useState<number>(10);
+  const [huntPageSize, setHuntPageSize] = React.useState<number>(
+    localStorage.getItem("huntPageSize")
+      ? parseInt(localStorage.getItem("huntPageSize") as string)
+      : 10
+  );
 
   const [createHuntModalOpen, setCreateHuntModalOpen] = React.useState(false);
   const [createHuntStatus, setCreateHuntStatus] = React.useState<Status>({
+    show: false,
+  });
+
+  const [huntAction, setHuntAction] = React.useState<string>("");
+
+  const [editHuntModalOpen, setEditHuntModalOpen] = React.useState(false);
+  const [huntEditing, setHuntEditing] = React.useState<EagerScavengerHunt>(
+    {} as EagerScavengerHunt
+  );
+  const [editHuntStatus, setEditHuntStatus] = React.useState<Status>({
     show: false,
   });
 
@@ -122,21 +138,21 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
             isDisabled={loading || scavengerHunts.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
-              // if (eventAction === "edit") {
-              //   setEventAction("");
-              //   return;
-              // }
-              // setEventAction("edit");
-              // toast.info("Select an event to edit", {
-              //   position: "top-center",
-              //   autoClose: 5000,
-              //   hideProgressBar: false,
-              //   closeOnClick: true,
-              //   pauseOnHover: true,
-              //   draggable: true,
-              //   progress: undefined,
-              //   theme: "light",
-              // });
+              if (huntAction === "edit") {
+                setHuntAction("");
+                return;
+              }
+              setHuntAction("edit");
+              toast.info("Select a checkpoint to edit", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
             }}
             // isPressed={eventAction === "edit"}
           >
@@ -146,21 +162,21 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
             isDisabled={loading || scavengerHunts.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
-              // if (eventAction === "delete") {
-              //   setEventAction("");
-              //   return;
-              // }
-              // setEventAction("delete");
-              // toast.info("Select an event to delete", {
-              //   position: "top-center",
-              //   autoClose: 5000,
-              //   hideProgressBar: false,
-              //   closeOnClick: true,
-              //   pauseOnHover: true,
-              //   draggable: true,
-              //   progress: undefined,
-              //   theme: "light",
-              // });
+              if (huntAction === "delete") {
+                setHuntAction("");
+                return;
+              }
+              setHuntAction("delete");
+              toast.info("Select a checkpoint to delete", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              });
             }}
             // isPressed={eventAction === "delete"}
           >
@@ -179,7 +195,9 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
           <Flex direction={"column"}>
             <View maxWidth={"100vw"} overflow={"auto"}>
               <Table
-              // highlightOnHover={events.length >= 1 && eventAction !== ""}
+                highlightOnHover={
+                  scavengerHunts.length >= 1 && huntAction !== ""
+                }
               >
                 <TableHead>
                   <TableRow>
@@ -190,14 +208,14 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                   </TableRow>
                 </TableHead>
                 <TableBody
-                // border={eventAction !== "" ? "2px solid red" : ""}
-                // boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}
+                  border={huntAction !== "" ? "2px solid red" : ""}
+                  boxShadow={huntAction !== "" ? "5px 5px 5px white" : "none"}
                 >
                   {scavengerHunts.length <= 0 ? (
                     <>
                       <TableRow>
                         <TableCell
-                          colSpan={6}
+                          colSpan={4}
                           onClick={() => {
                             // setCreateEventModalOpen(true);
                           }}
@@ -213,7 +231,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                       {!scavengerHunts.length && (
                         <TableRow>
                           <TableCell
-                            colSpan={7}
+                            colSpan={4}
                             // onClick={() => {
                             //   setCreateEventModalOpen(true);
                             // }}
@@ -233,26 +251,27 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                           <TableRow
                             key={hunt.id}
                             onClick={async () => {
-                              // if (eventAction === "") {
-                              //   return;
-                              // }
-                              // if (eventAction === "edit") {
-                              //   const ev = await DataStore.query(Event, (e) =>
-                              //     e.id("eq", event.id)
-                              //   );
-                              //   if (!ev) return;
-                              //   setEventEditing(ev[0]);
-                              //   setEditEventModalOpen(true);
-                              // } else if (eventAction === "delete") {
-                              //   // show delete modal
-                              //   // const ev = await DataStore.query(Event, (e) =>
-                              //   //   e.id("eq", event.id)
-                              //   // );
-                              //   // if (!ev) return;
-                              //   // setEventEditing(ev[0]);
-                              //   // setDeleteEventModalOpen(true);
-                              // }
-                              // setEventAction("");
+                              if (huntAction === "") {
+                                return;
+                              }
+                              if (huntAction === "edit") {
+                                const ev = await DataStore.query(
+                                  ScavengerHunt,
+                                  (e) => e.id("eq", hunt.id)
+                                );
+                                if (!ev) return;
+                                setHuntEditing(ev[0]);
+                                setEditHuntModalOpen(true);
+                              } else if (huntAction === "delete") {
+                                // show delete modal
+                                // const ev = await DataStore.query(Event, (e) =>
+                                //   e.id("eq", event.id)
+                                // );
+                                // if (!ev) return;
+                                // setEventEditing(ev[0]);
+                                // setDeleteEventModalOpen(true);
+                              }
+                              setHuntAction("");
                             }}
                           >
                             <TableCell>{hunt.name}</TableCell>
@@ -303,7 +322,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                   onChange={(e) => {
                     setHuntPageSize(parseInt(e.target.value));
                     // update local storage
-                    localStorage.setItem("eventPageSize", e.target.value);
+                    localStorage.setItem("huntPageSize", e.target.value);
                   }}
                   defaultValue={huntPageSize.toString()}
                   size={"small"}
@@ -366,6 +385,61 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                 show: true,
                 type: "error",
                 message: "Error creating scavenger hunt checkpoint",
+              });
+            }}
+          />
+        </Modal>
+
+        {/* EDIT SCAVENGER HUNT CHECKPOINT MODAL */}
+        <Modal
+          contentLabel="Edit Scavenger Hunt Checkpoint Modal"
+          isOpen={editHuntModalOpen}
+          onRequestClose={() => {
+            setEditHuntModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <StatusAlert status={editHuntStatus} />
+          <EditScavengerHunt
+            scavengerHunt={huntEditing}
+            onSubmit={(fields) => {
+              // Example function to trim all string inputs
+              // console.log(fields);
+              // return fields;
+              const updatedFields: any = {};
+              //foreach field that is a string, trim it
+              Object.keys(fields).forEach((key) => {
+                if (typeof fields[key as keyof typeof fields] === "string") {
+                  updatedFields[key] = (
+                    fields[key as keyof typeof fields] as string
+                  ).trim();
+                } else {
+                  updatedFields[key] = fields[key as keyof typeof fields];
+                }
+              });
+              return updatedFields;
+            }}
+            onCancel={() => {
+              setEditHuntModalOpen(false);
+            }}
+            onSuccess={(fields) => {
+              // create new hunt in database
+              // console.log(fields);
+              let newEvent = { ...huntEditing, ...fields };
+              setEditHuntModalOpen(false);
+              let x = [...scavengerHunts];
+              // remove huntEditing from hunts
+              x = x.map((e) => (e.id === huntEditing.id ? newEvent : e));
+              setScavengerHunts(x);
+            }}
+            onError={(error) => {
+              console.error(error);
+              setEditHuntStatus({
+                show: true,
+                type: "error",
+                message: "Error updating checkpoint",
               });
             }}
           />

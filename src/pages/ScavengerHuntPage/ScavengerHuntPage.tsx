@@ -36,6 +36,8 @@ interface ScavengerHuntPageProps {
   signOut?: (data?: AuthEventData | undefined) => void;
 }
 
+const CHECKPOINT_URL = process.env.REACT_APP_CHECKPOINT_URL;
+
 const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
   user,
   signOut,
@@ -205,6 +207,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                     <TableCell as="th">Description</TableCell>
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
+                    <TableCell as="th">URL</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody
@@ -215,7 +218,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                     <>
                       <TableRow>
                         <TableCell
-                          colSpan={4}
+                          colSpan={5}
                           onClick={() => {
                             // setCreateEventModalOpen(true);
                           }}
@@ -231,7 +234,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                       {!scavengerHunts.length && (
                         <TableRow>
                           <TableCell
-                            colSpan={4}
+                            colSpan={5}
                             // onClick={() => {
                             //   setCreateEventModalOpen(true);
                             // }}
@@ -287,6 +290,9 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                             </TableCell>
                             <TableCell>
                               {hunt.points ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              {`${CHECKPOINT_URL}${hunt.id}`}
                             </TableCell>
                           </TableRow>
                         ))}

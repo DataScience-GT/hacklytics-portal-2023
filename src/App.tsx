@@ -32,6 +32,7 @@ import AdminPage from "./pages/AdminPage/AdminPage";
 import getGroups from "./misc/Groups";
 import { getAdminSettings } from "./graphql";
 import { AdminSettings } from "./models";
+import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
 
 Amplify.configure({
   ...aws_exports,
@@ -165,6 +166,12 @@ const App = () => {
                         <Route
                           path="/admin/*"
                           element={<AdminPage user={user} signOut={signOut} />}
+                        />
+                      )}
+                      {user && (getGroups(user).includes("Administrator") || getGroups(user).includes("Scavenger")) && (
+                        <Route
+                          path="/scavengerhunts/*"
+                          element={<ScavengerHuntPage user={user} signOut={signOut} />}
                         />
                       )}
                     </Routes>

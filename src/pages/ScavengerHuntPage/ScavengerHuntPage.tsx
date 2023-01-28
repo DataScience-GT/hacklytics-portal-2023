@@ -31,6 +31,8 @@ import CreateScavengerHunt from "../../ui-components/CreateScavengerHunt";
 import { toast } from "react-toastify";
 import EditScavengerHunt from "../../ui-components/EditScavengerHunt";
 
+import { CopyToClipboard } from "react-copy-to-clipboard";
+
 interface ScavengerHuntPageProps {
   user?: AmplifyUser;
   signOut?: (data?: AuthEventData | undefined) => void;
@@ -207,7 +209,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                     <TableCell as="th">Description</TableCell>
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
-                    <TableCell as="th">URL</TableCell>
+                    <TableCell as="th">URL (Make into QR Code)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody
@@ -292,7 +294,16 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                               {hunt.points ?? <Badge>Undefined</Badge>}
                             </TableCell>
                             <TableCell>
-                              {`${CHECKPOINT_URL}${hunt.id}`}
+                              <CopyToClipboard
+                                text={`${CHECKPOINT_URL}${hunt.id}`}
+                                onCopy={() => {
+                                  alert("Copied to clipboard!");
+                                }}
+                              >
+                                <span style={{ cursor: "pointer" }}>
+                                  Copy to Clipboard
+                                </span>
+                              </CopyToClipboard>
                             </TableCell>
                           </TableRow>
                         ))}

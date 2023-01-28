@@ -14,6 +14,7 @@
     "@types/react-modal": "^3.13.1",
     "aws-amplify": "^4.3.43",
     "react": "^18.2.0",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.4.3",
@@ -46,5 +47,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-copy-to-clipboard": "^5.0.4"
   }
 }

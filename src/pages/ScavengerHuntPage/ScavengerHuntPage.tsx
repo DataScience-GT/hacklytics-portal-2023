@@ -25,6 +25,9 @@ import {
   Pagination,
 } from "@aws-amplify/ui-react";
 import Status from "../../Types/Status";
+import { modalFormStyle } from "../../misc/ModalStyle";
+import StatusAlert from "../../components/StatusAlert/StatusAlert";
+import CreateScavengerHunt from "../../ui-components/CreateScavengerHunt";
 
 interface ScavengerHuntPageProps {
   user?: AmplifyUser;
@@ -316,6 +319,57 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
             </Flex>
           </Flex>
         )}
+
+        {/* CREATE SCAVENGER HUNT MODAL */}
+        <Modal
+          contentLabel="Create Scavenger Hunt Checkpoint Modal"
+          isOpen={createHuntModalOpen}
+          onRequestClose={() => {
+            setCreateHuntModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <StatusAlert status={createHuntStatus} />
+          <CreateScavengerHunt
+            onSubmit={(fields) => {
+              // Example function to trim all string inputs
+              // console.log(fields);
+              // return fields;
+              const updatedFields: any = {};
+              //foreach field that is a string, trim it
+              Object.keys(fields).forEach((key) => {
+                if (typeof fields[key as keyof typeof fields] === "string") {
+                  updatedFields[key] = (
+                    fields[key as keyof typeof fields] as string
+                  ).trim();
+                } else {
+                  updatedFields[key] = fields[key as keyof typeof fields];
+                }
+              });
+              return updatedFields;
+            }}
+            onCancel={() => {
+              setCreateHuntModalOpen(false);
+            }}
+            onSuccess={(fields) => {
+              // create new scavenger hunt checkpoint in database
+              // console.log(fields);
+
+              setCreateHuntModalOpen(false);
+              setScavengerHunts([...scavengerHunts, fields as ScavengerHunt]);
+            }}
+            onError={(error) => {
+              console.error(error);
+              setCreateHuntStatus({
+                show: true,
+                type: "error",
+                message: "Error creating scavenger hunt checkpoint",
+              });
+            }}
+          />
+        </Modal>
       </View>
     </div>
   );

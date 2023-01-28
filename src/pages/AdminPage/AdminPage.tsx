@@ -35,7 +35,7 @@ import { getAdminSettings, listEvents } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
 import { AdminSettings, EagerEvent, Event } from "../../models/index";
 import { CreateEvent, UpdateEvent } from "../../ui-components";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 interface AdminPageProps {
   user?: AmplifyUser;

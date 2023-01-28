@@ -314,3 +314,73 @@ export const syncPoints = /* GraphQL */ `
     }
   }
 `;
+export const getScavengerHunt = /* GraphQL */ `
+  query GetScavengerHunt($id: ID!) {
+    getScavengerHunt(id: $id) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listScavengerHunts = /* GraphQL */ `
+  query ListScavengerHunts(
+    $filter: ModelScavengerHuntFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listScavengerHunts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        name
+        description
+        status
+        points
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncScavengerHunts = /* GraphQL */ `
+  query SyncScavengerHunts(
+    $filter: ModelScavengerHuntFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncScavengerHunts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        name
+        description
+        status
+        points
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;

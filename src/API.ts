@@ -278,6 +278,53 @@ export type DeletePointsInput = {
   _version?: number | null,
 };
 
+export type CreateScavengerHuntInput = {
+  id?: string | null,
+  name: string,
+  description?: string | null,
+  status?: boolean | null,
+  points?: number | null,
+  _version?: number | null,
+};
+
+export type ModelScavengerHuntConditionInput = {
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  status?: ModelBooleanInput | null,
+  points?: ModelIntInput | null,
+  and?: Array< ModelScavengerHuntConditionInput | null > | null,
+  or?: Array< ModelScavengerHuntConditionInput | null > | null,
+  not?: ModelScavengerHuntConditionInput | null,
+};
+
+export type ScavengerHunt = {
+  __typename: "ScavengerHunt",
+  id: string,
+  name: string,
+  description?: string | null,
+  status?: boolean | null,
+  points?: number | null,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateScavengerHuntInput = {
+  id: string,
+  name?: string | null,
+  description?: string | null,
+  status?: boolean | null,
+  points?: number | null,
+  _version?: number | null,
+};
+
+export type DeleteScavengerHuntInput = {
+  id: string,
+  _version?: number | null,
+};
+
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
@@ -339,6 +386,24 @@ export type ModelPointsFilterInput = {
 export type ModelPointsConnection = {
   __typename: "ModelPointsConnection",
   items:  Array<Points | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelScavengerHuntFilterInput = {
+  id?: ModelIDInput | null,
+  name?: ModelStringInput | null,
+  description?: ModelStringInput | null,
+  status?: ModelBooleanInput | null,
+  points?: ModelIntInput | null,
+  and?: Array< ModelScavengerHuntFilterInput | null > | null,
+  or?: Array< ModelScavengerHuntFilterInput | null > | null,
+  not?: ModelScavengerHuntFilterInput | null,
+};
+
+export type ModelScavengerHuntConnection = {
+  __typename: "ModelScavengerHuntConnection",
+  items:  Array<ScavengerHunt | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -427,6 +492,16 @@ export type ModelSubscriptionPointsFilterInput = {
   points?: ModelSubscriptionIntInput | null,
   and?: Array< ModelSubscriptionPointsFilterInput | null > | null,
   or?: Array< ModelSubscriptionPointsFilterInput | null > | null,
+};
+
+export type ModelSubscriptionScavengerHuntFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  name?: ModelSubscriptionStringInput | null,
+  description?: ModelSubscriptionStringInput | null,
+  status?: ModelSubscriptionBooleanInput | null,
+  points?: ModelSubscriptionIntInput | null,
+  and?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
+  or?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -739,6 +814,69 @@ export type DeletePointsMutation = {
     userName?: string | null,
     points: number,
     id: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateScavengerHuntMutationVariables = {
+  input: CreateScavengerHuntInput,
+  condition?: ModelScavengerHuntConditionInput | null,
+};
+
+export type CreateScavengerHuntMutation = {
+  createScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateScavengerHuntMutationVariables = {
+  input: UpdateScavengerHuntInput,
+  condition?: ModelScavengerHuntConditionInput | null,
+};
+
+export type UpdateScavengerHuntMutation = {
+  updateScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteScavengerHuntMutationVariables = {
+  input: DeleteScavengerHuntInput,
+  condition?: ModelScavengerHuntConditionInput | null,
+};
+
+export type DeleteScavengerHuntMutation = {
+  deleteScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1083,6 +1221,81 @@ export type SyncPointsQuery = {
   } | null,
 };
 
+export type GetScavengerHuntQueryVariables = {
+  id: string,
+};
+
+export type GetScavengerHuntQuery = {
+  getScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListScavengerHuntsQueryVariables = {
+  filter?: ModelScavengerHuntFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListScavengerHuntsQuery = {
+  listScavengerHunts?:  {
+    __typename: "ModelScavengerHuntConnection",
+    items:  Array< {
+      __typename: "ScavengerHunt",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      points?: number | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncScavengerHuntsQueryVariables = {
+  filter?: ModelScavengerHuntFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncScavengerHuntsQuery = {
+  syncScavengerHunts?:  {
+    __typename: "ModelScavengerHuntConnection",
+    items:  Array< {
+      __typename: "ScavengerHunt",
+      id: string,
+      name: string,
+      description?: string | null,
+      status?: boolean | null,
+      points?: number | null,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type OnCreateAdminSettingsSubscriptionVariables = {
   filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
@@ -1381,6 +1594,66 @@ export type OnDeletePointsSubscription = {
     userName?: string | null,
     points: number,
     id: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateScavengerHuntSubscriptionVariables = {
+  filter?: ModelSubscriptionScavengerHuntFilterInput | null,
+};
+
+export type OnCreateScavengerHuntSubscription = {
+  onCreateScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateScavengerHuntSubscriptionVariables = {
+  filter?: ModelSubscriptionScavengerHuntFilterInput | null,
+};
+
+export type OnUpdateScavengerHuntSubscription = {
+  onUpdateScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteScavengerHuntSubscriptionVariables = {
+  filter?: ModelSubscriptionScavengerHuntFilterInput | null,
+};
+
+export type OnDeleteScavengerHuntSubscription = {
+  onDeleteScavengerHunt?:  {
+    __typename: "ScavengerHunt",
+    id: string,
+    name: string,
+    description?: string | null,
+    status?: boolean | null,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     _version: number,

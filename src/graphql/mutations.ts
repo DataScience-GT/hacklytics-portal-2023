@@ -290,3 +290,60 @@ export const deletePoints = /* GraphQL */ `
     }
   }
 `;
+export const createScavengerHunt = /* GraphQL */ `
+  mutation CreateScavengerHunt(
+    $input: CreateScavengerHuntInput!
+    $condition: ModelScavengerHuntConditionInput
+  ) {
+    createScavengerHunt(input: $input, condition: $condition) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateScavengerHunt = /* GraphQL */ `
+  mutation UpdateScavengerHunt(
+    $input: UpdateScavengerHuntInput!
+    $condition: ModelScavengerHuntConditionInput
+  ) {
+    updateScavengerHunt(input: $input, condition: $condition) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteScavengerHunt = /* GraphQL */ `
+  mutation DeleteScavengerHunt(
+    $input: DeleteScavengerHuntInput!
+    $condition: ModelScavengerHuntConditionInput
+  ) {
+    deleteScavengerHunt(input: $input, condition: $condition) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

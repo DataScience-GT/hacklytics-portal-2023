@@ -260,3 +260,57 @@ export const onDeletePoints = /* GraphQL */ `
     }
   }
 `;
+export const onCreateScavengerHunt = /* GraphQL */ `
+  subscription OnCreateScavengerHunt(
+    $filter: ModelSubscriptionScavengerHuntFilterInput
+  ) {
+    onCreateScavengerHunt(filter: $filter) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateScavengerHunt = /* GraphQL */ `
+  subscription OnUpdateScavengerHunt(
+    $filter: ModelSubscriptionScavengerHuntFilterInput
+  ) {
+    onUpdateScavengerHunt(filter: $filter) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteScavengerHunt = /* GraphQL */ `
+  subscription OnDeleteScavengerHunt(
+    $filter: ModelSubscriptionScavengerHuntFilterInput
+  ) {
+    onDeleteScavengerHunt(filter: $filter) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

@@ -18,6 +18,10 @@ type PointsMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type ScavengerHuntMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
@@ -124,4 +128,30 @@ export declare type Points = LazyLoading extends LazyLoadingDisabled ? EagerPoin
 
 export declare const Points: (new (init: ModelInit<Points, PointsMetaData>) => Points) & {
   copyOf(source: Points, mutator: (draft: MutableModel<Points, PointsMetaData>) => MutableModel<Points, PointsMetaData> | void): Points;
+}
+
+type EagerScavengerHunt = {
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string | null;
+  readonly status?: boolean | null;
+  readonly points?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyScavengerHunt = {
+  readonly id: string;
+  readonly name: string;
+  readonly description?: string | null;
+  readonly status?: boolean | null;
+  readonly points?: number | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ScavengerHunt = LazyLoading extends LazyLoadingDisabled ? EagerScavengerHunt : LazyScavengerHunt
+
+export declare const ScavengerHunt: (new (init: ModelInit<ScavengerHunt, ScavengerHuntMetaData>) => ScavengerHunt) & {
+  copyOf(source: ScavengerHunt, mutator: (draft: MutableModel<ScavengerHunt, ScavengerHuntMetaData>) => MutableModel<ScavengerHunt, ScavengerHuntMetaData> | void): ScavengerHunt;
 }

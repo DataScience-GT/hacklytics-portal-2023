@@ -80,3 +80,22 @@ type Points
   userName: String
   points: Int!
 }
+
+type ScavengerHunt
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read] }
+    ]
+  ) {
+  id: ID!
+  name: String!
+  description: String
+  status: Boolean
+  points: Int
+}

@@ -209,6 +209,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                     <TableCell as="th">Description</TableCell>
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
+                    <TableCell as="th">Participants Collected</TableCell>
                     <TableCell as="th">URL (Make into QR Code)</TableCell>
                   </TableRow>
                 </TableHead>
@@ -220,7 +221,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                     <>
                       <TableRow>
                         <TableCell
-                          colSpan={5}
+                          colSpan={6}
                           onClick={() => {
                             // setCreateEventModalOpen(true);
                           }}
@@ -236,7 +237,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                       {!scavengerHunts.length && (
                         <TableRow>
                           <TableCell
-                            colSpan={5}
+                            colSpan={6}
                             // onClick={() => {
                             //   setCreateEventModalOpen(true);
                             // }}
@@ -292,6 +293,9 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                             </TableCell>
                             <TableCell>
                               {hunt.points ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>
+                              {hunt.usersGotten?.length ?? 0}
                             </TableCell>
                             <TableCell>
                               <CopyToClipboard

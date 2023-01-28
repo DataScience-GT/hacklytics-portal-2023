@@ -98,4 +98,5 @@ type ScavengerHunt
   description: String
   status: Boolean
   points: Int
+  usersGotten: [String]
 }

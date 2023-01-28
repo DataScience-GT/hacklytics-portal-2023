@@ -301,6 +301,7 @@ export const createScavengerHunt = /* GraphQL */ `
       description
       status
       points
+      usersGotten
       createdAt
       updatedAt
       _version
@@ -320,6 +321,7 @@ export const updateScavengerHunt = /* GraphQL */ `
       description
       status
       points
+      usersGotten
       createdAt
       updatedAt
       _version
@@ -339,6 +341,7 @@ export const deleteScavengerHunt = /* GraphQL */ `
       description
       status
       points
+      usersGotten
       createdAt
       updatedAt
       _version

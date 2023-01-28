@@ -322,6 +322,7 @@ export const getScavengerHunt = /* GraphQL */ `
       description
       status
       points
+      usersGotten
       createdAt
       updatedAt
       _version
@@ -343,6 +344,7 @@ export const listScavengerHunts = /* GraphQL */ `
         description
         status
         points
+        usersGotten
         createdAt
         updatedAt
         _version
@@ -373,6 +375,7 @@ export const syncScavengerHunts = /* GraphQL */ `
         description
         status
         points
+        usersGotten
         createdAt
         updatedAt
         _version

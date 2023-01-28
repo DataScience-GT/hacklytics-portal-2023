@@ -350,7 +350,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                   <option value={20}>20</option>
                   <option value={30}>30</option>
                 </SelectField>
-                <Text>events per page</Text>
+                <Text>checkpoints per page</Text>
               </Flex>
             </Flex>
           </Flex>

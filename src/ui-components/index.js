@@ -4,36 +4,14 @@
  * Any changes to this file will be overwritten when running amplify pull. *
  **************************************************************************/
 
-export { default as SocialPost } from "./SocialPost";
-export { default as Ampligram } from "./Ampligram";
-export { default as MyIcon } from "./MyIcon";
-export { default as FeaturesText2x2 } from "./FeaturesText2x2";
-export { default as HeroLayout2 } from "./HeroLayout2";
-export { default as ProductDetail } from "./ProductDetail";
-export { default as ItemCard } from "./ItemCard";
-export { default as ContactUs } from "./ContactUs";
-export { default as FAQItem } from "./FAQItem";
-export { default as FormCheckout } from "./FormCheckout";
-export { default as MarketingFooter } from "./MarketingFooter";
-export { default as MarketingPricing } from "./MarketingPricing";
-export { default as ReviewCard } from "./ReviewCard";
-export { default as HeroLayout1 } from "./HeroLayout1";
-export { default as Features2x2 } from "./Features2x2";
-export { default as Features4x1 } from "./Features4x1";
-export { default as TallCard } from "./TallCard";
-export { default as Features2x3 } from "./Features2x3";
-export { default as StandardCard } from "./StandardCard";
-export { default as HeroLayout4 } from "./HeroLayout4";
-export { default as ActionCard } from "./ActionCard";
-export { default as HeroLayout3 } from "./HeroLayout3";
-export { default as ProductCard } from "./ProductCard";
-export { default as EditProfile } from "./EditProfile";
-export { default as CommentCard } from "./CommentCard";
-export { default as ProfileCard } from "./ProfileCard";
-export { default as SideBar } from "./SideBar";
-export { default as NavBar } from "./NavBar";
 export { default as studioTheme } from "./studioTheme";
-export { default as CreateEvent } from "./CreateEvent";
-export { default as EditScavengerHunt } from "./EditScavengerHunt";
-export { default as UpdateEvent } from "./UpdateEvent";
-export { default as CreateScavengerHunt } from "./CreateScavengerHunt";
+export { default as AdminSettingsCreateForm } from "./AdminSettingsCreateForm";
+export { default as AdminSettingsUpdateForm } from "./AdminSettingsUpdateForm";
+export { default as EventCreateForm } from "./EventCreateForm";
+export { default as EventUpdateForm } from "./EventUpdateForm";
+export { default as PointsCreateForm } from "./PointsCreateForm";
+export { default as PointsUpdateForm } from "./PointsUpdateForm";
+export { default as ScavengerHuntCreateForm } from "./ScavengerHuntCreateForm";
+export { default as ScavengerHuntUpdateForm } from "./ScavengerHuntUpdateForm";
+export { default as ScavengerHuntCheckinCreateForm } from "./ScavengerHuntCheckinCreateForm";
+export { default as ScavengerHuntCheckinUpdateForm } from "./ScavengerHuntCheckinUpdateForm";

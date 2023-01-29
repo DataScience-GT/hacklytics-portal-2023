@@ -68,22 +68,6 @@
     }
   },
   "function": {
-    "hacklytics2023presignup": {
-      "build": true,
-      "dependsOn": [
-        {
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ],
-          "category": "api",
-          "resourceName": "hacklyticsportal2023"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "hacklyticsportal20232e32fd51": {
       "build": true,
       "dependsOn": [
@@ -114,22 +98,6 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_hacklytics2023presignup_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "hacklytics2023presignup"
-        }
-      ]
-    },
-    "AMPLIFY_function_hacklytics2023presignup_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "hacklytics2023presignup"
-        }
-      ]
-    },
     "AMPLIFY_function_hacklyticsportal20232e32fd51_deploymentBucketName": {
       "usedBy": [
         {

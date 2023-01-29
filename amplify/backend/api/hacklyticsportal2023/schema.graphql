@@ -73,7 +73,7 @@ type Points
         groups: ["Administrator"]
         operations: [read, create, update, delete]
       }
-      { allow: private, operations: [read] }
+      { allow: private, operations: [read, create, update] }
     ]
   ) {
   userID: String!

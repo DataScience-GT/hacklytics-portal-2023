@@ -387,7 +387,9 @@ export const schema = {
                             {
                                 "allow": "private",
                                 "operations": [
-                                    "read"
+                                    "read",
+                                    "create",
+                                    "update"
                                 ]
                             }
                         ]

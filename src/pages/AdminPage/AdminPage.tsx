@@ -325,7 +325,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     <>
                       <TableRow>
                         <TableCell
-                          colSpan={6}
+                          colSpan={7}
                           onClick={() => {
                             setCreateEventModalOpen(true);
                           }}

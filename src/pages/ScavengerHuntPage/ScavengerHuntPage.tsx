@@ -122,7 +122,6 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
     subscription.subscribe({
       next: (eventData: any) => {
         // add checkin to list
-        console.log(eventData);
         const newCheckin = eventData.value.data.onCreateScavengerHuntCheckin;
         setHuntCheckins((prev) => [...prev, newCheckin]);
       },

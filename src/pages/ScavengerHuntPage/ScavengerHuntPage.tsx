@@ -3,9 +3,17 @@ import styles from "./ScavengerHuntPage.module.scss";
 
 import Modal from "react-modal";
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
-import { EagerScavengerHunt, ScavengerHunt } from "../../models";
-import { listScavengerHunts } from "../../graphql";
-import { API, DataStore } from "aws-amplify";
+import {
+  EagerScavengerHunt,
+  ScavengerHunt,
+  ScavengerHuntCheckin,
+} from "../../models";
+import {
+  listScavengerHuntCheckins,
+  listScavengerHunts,
+  onCreateScavengerHuntCheckin,
+} from "../../graphql";
+import { API, DataStore, graphqlOperation } from "aws-amplify";
 import {
   Text,
   Badge,
@@ -73,10 +81,15 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
     show: false,
   });
 
+  const [huntCheckins, setHuntCheckins] = React.useState<
+    ScavengerHuntCheckin[]
+  >([]);
+
   useEffect(() => {
     loadScavengerHunts(() => {
       setLoading(false);
     });
+    loadScavengerHuntCheckins();
   }, []);
 
   useEffect(() => {
@@ -93,6 +106,27 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
     const hunts: any = await API.graphql({ query: listScavengerHunts });
     setScavengerHunts(hunts.data.listScavengerHunts.items);
     if (callback) callback();
+  };
+
+  const loadScavengerHuntCheckins = async (callback?: () => void) => {
+    // load existing checkins
+    const checkins: any = await API.graphql({
+      query: listScavengerHuntCheckins,
+    });
+    setHuntCheckins(checkins.data.listScavengerHuntCheckins.items);
+
+    // subscribe to new checkins
+    const subscription: any = API.graphql({
+      query: onCreateScavengerHuntCheckin,
+    });
+    subscription.subscribe({
+      next: (eventData: any) => {
+        // add checkin to list
+        console.log(eventData);
+        const newCheckin = eventData.value.data.onCreateScavengerHuntCheckin;
+        setHuntCheckins((prev) => [...prev, newCheckin]);
+      },
+    });
   };
 
   return (
@@ -295,7 +329,9 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                               {hunt.points ?? <Badge>Undefined</Badge>}
                             </TableCell>
                             <TableCell>
-                              {/* {hunt.usersGotten?.length ?? 0} */}0
+                              {huntCheckins.filter(
+                                (x) => x.checkpointID === hunt.id
+                              )?.length ?? 0}
                             </TableCell>
                             <TableCell>
                               <CopyToClipboard

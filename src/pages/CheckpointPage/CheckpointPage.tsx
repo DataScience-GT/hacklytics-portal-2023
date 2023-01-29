@@ -79,7 +79,18 @@ const CheckpointPage: FC<CheckpointPageProps> = ({ user, signOut }) => {
         type: "error",
       });
       setLoading(false);
+      return;
+    }
 
+    // check if the hunt is open
+    if (!hunt.status) {
+      // hunt is not open
+      setStatus({
+        show: true,
+        message: `Checkpoint is not open!`,
+        type: "error",
+      });
+      setLoading(false);
       return;
     }
 

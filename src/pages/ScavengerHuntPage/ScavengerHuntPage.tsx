@@ -336,7 +336,16 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                               <CopyToClipboard
                                 text={`${CHECKPOINT_URL}${hunt.id}`}
                                 onCopy={() => {
-                                  alert("Copied to clipboard!");
+                                  toast.success("Copied to clipboard!", {
+                                    position: "top-center",
+                                    autoClose: 3000,
+                                    hideProgressBar: false,
+                                    closeOnClick: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    progress: undefined,
+                                    theme: "light",
+                                  });
                                 }}
                               >
                                 <span style={{ cursor: "pointer" }}>

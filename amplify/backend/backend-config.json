@@ -1,76 +1,173 @@
 {
+  "api": {
+    "hacklyticsportal2023": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "hacklyticsportal2023"
+        }
+      ],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "apiKeyConfig": {
+                "apiKeyExpirationDate": "2022-12-11T03:26:24.343Z",
+                "apiKeyExpirationDays": 7,
+                "description": ""
+              },
+              "authenticationType": "API_KEY"
+            },
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+            "userPoolConfig": {
+              "userPoolId": "authhacklyticsportal2023"
+            }
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  },
   "auth": {
     "hacklyticsportal2023": {
-      "service": "Cognito",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [],
       "customAuth": false,
+      "dependsOn": [],
       "frontendAuthConfig": {
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
+        "mfaConfiguration": "OPTIONAL",
+        "mfaTypes": [
+          "TOTP"
         ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
         "signupAttributes": [
           "BIRTHDATE",
           "EMAIL",
           "NAME"
         ],
-        "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": []
-        },
-        "mfaConfiguration": "OPTIONAL",
-        "mfaTypes": [
-          "TOTP"
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
         ],
         "verificationMechanisms": [
           "EMAIL"
         ]
-      }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
     }
   },
-  "api": {
-    "hacklyticsportal2023": {
-      "service": "AppSync",
-      "providerPlugin": "awscloudformation",
+  "function": {
+    "hacklytics2023presignup": {
+      "build": true,
       "dependsOn": [
         {
-          "category": "auth",
-          "resourceName": "hacklyticsportal2023",
           "attributes": [
-            "UserPoolId"
-          ]
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "hacklyticsportal2023"
         }
       ],
-      "output": {
-        "authConfig": {
-          "defaultAuthentication": {
-            "authenticationType": "API_KEY",
-            "apiKeyConfig": {
-              "apiKeyExpirationDays": 30,
-              "description": "api key description"
-            }
-          },
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AWS_IAM"
-            },
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "authhacklyticsportal2023"
-              }
-            }
-          ]
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "hacklyticsportal20232e32fd51": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "hacklyticsportal2023"
         }
-      }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "hacklyticsportal2023listusers": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "hacklyticsportal2023"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_hacklytics2023presignup_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklytics2023presignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklytics2023presignup_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklytics2023presignup"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklyticsportal20232e32fd51_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklyticsportal20232e32fd51"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklyticsportal20232e32fd51_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklyticsportal20232e32fd51"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklyticsportal2023listusers_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklyticsportal2023listusers"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklyticsportal2023listusers_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklyticsportal2023listusers"
+        }
+      ]
     }
   },
   "storage": {
     "imagestorage": {
-      "service": "S3",
+      "dependsOn": [],
       "providerPlugin": "awscloudformation",
-      "dependsOn": []
+      "service": "S3"
     }
   }
 }

@@ -74,6 +74,13 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
             width="fit-content"
             grow={1}
           >
+            {/* {user &&
+              (getGroups(user).includes("Scavenger") ||
+                getGroups(user).includes("Administrator")) && (
+                <Link to="/scavengerhunts" style={{ textDecoration: "none" }}>
+                  <Button size="small">Scavenger Hunts</Button>
+                </Link>
+              )} */}
             {user && getGroups(user).includes("Administrator") && (
               <Link to="/admin" style={{ textDecoration: "none" }}>
                 <Button size="small">Admin Console</Button>
@@ -84,6 +91,13 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 <Link className={styles.MenuLink} to="/">
                   <MenuItem>Dashboard</MenuItem>
                 </Link>
+                {user &&
+                  (getGroups(user).includes("Scavenger") ||
+                    getGroups(user).includes("Administrator")) && (
+                    <Link className={styles.MenuLink} to="/scavengerhunts">
+                      <MenuItem>Scavenger Hunts</MenuItem>
+                    </Link>
+                  )}
                 <Link className={styles.MenuLink} to="/account">
                   <MenuItem>Account</MenuItem>
                 </Link>

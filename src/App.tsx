@@ -1,7 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styles from "./App.module.scss";
-import { Amplify } from "aws-amplify";
-import { AmplifyProvider, Authenticator, View } from "@aws-amplify/ui-react";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { Amplify, AuthModeStrategyType } from "aws-amplify";
+import {
+  AmplifyProvider,
+  Authenticator,
+  CheckboxField,
+  useAuthenticator,
+  View,
+} from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
 import "@aws-amplify/ui-react/styles.css";
@@ -20,8 +30,17 @@ import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import getGroups from "./misc/Groups";
+// import { getAdminSettings } from "./graphql";
+// import { AdminSettings } from "./models";
+import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
+import CheckpointPage from "./pages/CheckpointPage/CheckpointPage";
 
-Amplify.configure(aws_exports);
+Amplify.configure({
+  ...aws_exports,
+  DataStore: {
+    authModeStrategyType: AuthModeStrategyType.MULTI_AUTH,
+  },
+});
 
 const formFields = {
   signUp: {
@@ -54,6 +73,27 @@ const formFields = {
   },
 };
 
+const Components = {
+  SignUp: {
+    FormFields() {
+      const { validationErrors } = useAuthenticator();
+      return (
+        <>
+          <Authenticator.SignUp.FormFields />
+          <CheckboxField
+            errorMessage="You must agree to the Terms & Conditions"
+            hasError={!!validationErrors.terms1}
+            label={"I agree to the Terms & Conditions"}
+            name={"terms1"}
+            value={"yes"}
+            isRequired={true}
+          />
+        </>
+      );
+    },
+  },
+};
+
 const App = () => {
   const [theme, setTheme] = useState<Theme>(
     (localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics
@@ -64,6 +104,18 @@ const App = () => {
       | "light"
       | "dark") ?? "system"
   );
+
+  const Services = {
+    async validateCustomSignUp(formData: any) {
+      if (formData["custom:gtemail"] !== "") {
+        if (!formData["custom:gtemail"].endsWith("@gatech.edu")) {
+          return {
+            "custom:gtemail": "Must be a valid GT email address",
+          };
+        }
+      }
+    },
+  };
 
   useEffect(() => {
     let prevTheme = localStorage.getItem("hacklytics-theme") as Theme;
@@ -80,43 +132,63 @@ const App = () => {
   }, [colorMode, theme]);
 
   return (
-    <AmplifyProvider
-      theme={ThemeMap.get(theme) ?? hacklytics}
-      colorMode={colorMode}
-    >
-      <ThemeContext.Provider
-        value={{ theme, setTheme, colorMode, setColorMode }}
+    <>
+      <div className={styles.ToastContainer}>
+        <ToastContainer />
+      </div>
+      <AmplifyProvider
+        theme={ThemeMap.get(theme) ?? hacklytics}
+        colorMode={colorMode}
       >
-        <Authenticator formFields={formFields} variation="modal">
-          {({ signOut, user }) => {
-            return (
-              <BrowserRouter>
-                <div id="modal-container">
-                  <Navbar user={user} signOut={signOut} />
-                  <Routes>
-                    <Route
-                      path="/*"
-                      element={<HomePage user={user} signOut={signOut} />}
-                    />
-                    <Route
-                      path="/settings"
-                      element={<SettingsPage user={user} signOut={signOut} />}
-                    />
-                    {user && getGroups(user).includes("Administrator") && (
+        <ThemeContext.Provider
+          value={{ theme, setTheme, colorMode, setColorMode }}
+        >
+          <Authenticator
+            formFields={formFields}
+            services={Services}
+            components={Components}
+            variation="modal"
+          >
+            {({ signOut, user }) => {
+              return (
+                <BrowserRouter>
+                  <div id="modal-container">
+                    <Navbar user={user} signOut={signOut} />
+                    <Routes>
                       <Route
-                        path="/admin/*"
-                        element={<AdminPage user={user} signOut={signOut} />}
+                        path="/*"
+                        element={<HomePage user={user} signOut={signOut} />}
                       />
-                    )}
-                  </Routes>
-                </div>
-              </BrowserRouter>
-            );
-          }}
-        </Authenticator>
-        <View className={styles.Background}></View>
-      </ThemeContext.Provider>
-    </AmplifyProvider>
+                      <Route
+                        path="/settings"
+                        element={<SettingsPage user={user} signOut={signOut} />}
+                      />
+                      {user && getGroups(user).includes("Administrator") && (
+                        <Route
+                          path="/admin/*"
+                          element={<AdminPage user={user} signOut={signOut} />}
+                        />
+                      )}
+                      {user && (getGroups(user).includes("Administrator") || getGroups(user).includes("Scavenger")) && (
+                        <Route
+                          path="/scavengerhunts/*"
+                          element={<ScavengerHuntPage user={user} signOut={signOut} />}
+                        />
+                      )}
+                      <Route
+                        path="/checkpoint/:checkpointId"
+                        element={<CheckpointPage user={user} signOut={signOut} />}
+                      />
+                    </Routes>
+                  </div>
+                </BrowserRouter>
+              );
+            }}
+          </Authenticator>
+          <View className={styles.Background}></View>
+        </ThemeContext.Provider>
+      </AmplifyProvider>
+    </>
   );
 };
 

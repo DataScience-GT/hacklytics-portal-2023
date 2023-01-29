@@ -10,6 +10,7 @@ export const createAdminSettings = /* GraphQL */ `
     createAdminSettings(input: $input, condition: $condition) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -26,6 +27,7 @@ export const updateAdminSettings = /* GraphQL */ `
     updateAdminSettings(input: $input, condition: $condition) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -42,6 +44,7 @@ export const deleteAdminSettings = /* GraphQL */ `
     deleteAdminSettings(input: $input, condition: $condition) {
       id
       hacklyticsOpen
+      participantEmails
       createdAt
       updatedAt
       _version
@@ -59,8 +62,15 @@ export const createEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
+      points
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -78,8 +88,15 @@ export const updateEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
+      points
+      checkins {
+        nextToken
+        startedAt
+      }
       createdAt
       updatedAt
       _version
@@ -97,8 +114,282 @@ export const deleteEvent = /* GraphQL */ `
       id
       name
       description
+      status
       start
       end
+      location
+      points
+      checkins {
+        nextToken
+        startedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createCheckin = /* GraphQL */ `
+  mutation CreateCheckin(
+    $input: CreateCheckinInput!
+    $condition: ModelCheckinConditionInput
+  ) {
+    createCheckin(input: $input, condition: $condition) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        points
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const updateCheckin = /* GraphQL */ `
+  mutation UpdateCheckin(
+    $input: UpdateCheckinInput!
+    $condition: ModelCheckinConditionInput
+  ) {
+    updateCheckin(input: $input, condition: $condition) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        points
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const deleteCheckin = /* GraphQL */ `
+  mutation DeleteCheckin(
+    $input: DeleteCheckinInput!
+    $condition: ModelCheckinConditionInput
+  ) {
+    deleteCheckin(input: $input, condition: $condition) {
+      id
+      createdBy
+      createdByName
+      user
+      userName
+      event {
+        id
+        name
+        description
+        status
+        start
+        end
+        location
+        points
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      eventCheckinsId
+    }
+  }
+`;
+export const createPoints = /* GraphQL */ `
+  mutation CreatePoints(
+    $input: CreatePointsInput!
+    $condition: ModelPointsConditionInput
+  ) {
+    createPoints(input: $input, condition: $condition) {
+      userID
+      userName
+      points
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updatePoints = /* GraphQL */ `
+  mutation UpdatePoints(
+    $input: UpdatePointsInput!
+    $condition: ModelPointsConditionInput
+  ) {
+    updatePoints(input: $input, condition: $condition) {
+      userID
+      userName
+      points
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deletePoints = /* GraphQL */ `
+  mutation DeletePoints(
+    $input: DeletePointsInput!
+    $condition: ModelPointsConditionInput
+  ) {
+    deletePoints(input: $input, condition: $condition) {
+      userID
+      userName
+      points
+      id
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createScavengerHunt = /* GraphQL */ `
+  mutation CreateScavengerHunt(
+    $input: CreateScavengerHuntInput!
+    $condition: ModelScavengerHuntConditionInput
+  ) {
+    createScavengerHunt(input: $input, condition: $condition) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateScavengerHunt = /* GraphQL */ `
+  mutation UpdateScavengerHunt(
+    $input: UpdateScavengerHuntInput!
+    $condition: ModelScavengerHuntConditionInput
+  ) {
+    updateScavengerHunt(input: $input, condition: $condition) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteScavengerHunt = /* GraphQL */ `
+  mutation DeleteScavengerHunt(
+    $input: DeleteScavengerHuntInput!
+    $condition: ModelScavengerHuntConditionInput
+  ) {
+    deleteScavengerHunt(input: $input, condition: $condition) {
+      id
+      name
+      description
+      status
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createScavengerHuntCheckin = /* GraphQL */ `
+  mutation CreateScavengerHuntCheckin(
+    $input: CreateScavengerHuntCheckinInput!
+    $condition: ModelScavengerHuntCheckinConditionInput
+  ) {
+    createScavengerHuntCheckin(input: $input, condition: $condition) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateScavengerHuntCheckin = /* GraphQL */ `
+  mutation UpdateScavengerHuntCheckin(
+    $input: UpdateScavengerHuntCheckinInput!
+    $condition: ModelScavengerHuntCheckinConditionInput
+  ) {
+    updateScavengerHuntCheckin(input: $input, condition: $condition) {
+      id
+      checkpointID
+      userID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteScavengerHuntCheckin = /* GraphQL */ `
+  mutation DeleteScavengerHuntCheckin(
+    $input: DeleteScavengerHuntCheckinInput!
+    $condition: ModelScavengerHuntCheckinConditionInput
+  ) {
+    deleteScavengerHuntCheckin(input: $input, condition: $condition) {
+      id
+      checkpointID
+      userID
       createdAt
       updatedAt
       _version

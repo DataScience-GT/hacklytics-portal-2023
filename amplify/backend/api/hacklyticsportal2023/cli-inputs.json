@@ -4,9 +4,8 @@
     "apiName": "hacklyticsportal2023",
     "serviceName": "AppSync",
     "defaultAuthType": {
-      "mode": "API_KEY",
-      "keyDescription": "api key description",
-      "expirationTime": 30
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authhacklyticsportal2023"
     },
     "conflictResolution": {
       "defaultResolutionStrategy": {
@@ -15,11 +14,13 @@
     },
     "additionalAuthTypes": [
       {
-        "mode": "AWS_IAM"
+        "mode": "API_KEY",
+        "expirationTime": 7,
+        "apiKeyExpirationDate": "2022-12-11T03:26:24.343Z",
+        "keyDescription": ""
       },
       {
-        "mode": "AMAZON_COGNITO_USER_POOLS",
-        "cognitoUserPoolId": "authhacklyticsportal2023"
+        "mode": "AWS_IAM"
       }
     ]
   }

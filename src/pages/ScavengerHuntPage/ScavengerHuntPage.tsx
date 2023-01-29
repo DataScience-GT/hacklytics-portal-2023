@@ -13,7 +13,7 @@ import {
   listScavengerHunts,
   onCreateScavengerHuntCheckin,
 } from "../../graphql";
-import { API, DataStore, graphqlOperation } from "aws-amplify";
+import { API, DataStore } from "aws-amplify";
 import {
   Text,
   Badge,

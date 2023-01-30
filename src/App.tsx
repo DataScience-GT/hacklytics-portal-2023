@@ -9,6 +9,7 @@ import {
   AmplifyProvider,
   Authenticator,
   CheckboxField,
+  SwitchField,
   useAuthenticator,
   View,
 } from "@aws-amplify/ui-react";
@@ -80,6 +81,14 @@ const Components = {
       return (
         <>
           <Authenticator.SignUp.FormFields />
+          <SwitchField
+            name="custom:isInperson"
+            label="I will be attending in-person:"
+          />
+          <SwitchField
+            name="custom:isVegetarian"
+            label="I am a vegetarian:"
+          />
           <CheckboxField
             errorMessage="You must agree to the Terms & Conditions"
             hasError={!!validationErrors.terms1}
@@ -169,15 +178,24 @@ const App = () => {
                           element={<AdminPage user={user} signOut={signOut} />}
                         />
                       )}
-                      {user && (getGroups(user).includes("Administrator") || getGroups(user).includes("Scavenger")) && (
-                        <Route
-                          path="/scavengerhunts/*"
-                          element={<ScavengerHuntPage user={user} signOut={signOut} />}
-                        />
-                      )}
+                      {user &&
+                        (getGroups(user).includes("Administrator") ||
+                          getGroups(user).includes("Scavenger")) && (
+                          <Route
+                            path="/scavengerhunts/*"
+                            element={
+                              <ScavengerHuntPage
+                                user={user}
+                                signOut={signOut}
+                              />
+                            }
+                          />
+                        )}
                       <Route
                         path="/checkpoint/:checkpointId"
-                        element={<CheckpointPage user={user} signOut={signOut} />}
+                        element={
+                          <CheckpointPage user={user} signOut={signOut} />
+                        }
                       />
                     </Routes>
                   </div>

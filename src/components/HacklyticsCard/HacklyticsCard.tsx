@@ -11,7 +11,7 @@ const HacklyticsCard: FC<HacklyticsCardProps> = () => (
       <Heading level={4}>Hacklytics 2023</Heading>
       <Text>February 10-12</Text>
       <Text>
-        Your status: <Badge>Unprocessed</Badge>
+        Your status: <Badge variation="success">Confirmed</Badge>
       </Text>
     </Card>
   </div>

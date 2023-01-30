@@ -85,18 +85,23 @@ const Components = {
             name="custom:isInperson"
             label="I will be attending in-person:"
           />
-          <SwitchField
-            name="custom:isVegetarian"
-            label="I am a vegetarian:"
-          />
+          <SwitchField name="custom:isVegetarian" label="I am a vegetarian:" />
           <CheckboxField
             errorMessage="You must agree to the Terms & Conditions"
             hasError={!!validationErrors.terms1}
-            label={"I agree to the Terms & Conditions"}
+            label={"I agree to the Terms & Conditions below."}
             name={"terms1"}
             value={"yes"}
             isRequired={true}
           />
+          <a
+            target="_blank"
+            rel="noreferrer"
+            href="https://github.com/DataScience-GT/hacklytics-portal-2023/blob/main/waiver.md"
+            style={{ color: "var(--amplify-colors-font-active)" }}
+          >
+            Terms & Conditions
+          </a>
         </>
       );
     },

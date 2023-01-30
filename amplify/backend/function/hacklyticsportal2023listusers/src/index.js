@@ -13,7 +13,7 @@ exports.handler = async (event) => {
   try {
     var params = {
       UserPoolId: process.env.AUTH_HACKLYTICSPORTAL2023_USERPOOLID,
-      AttributesToGet: ["name", "email"],
+      AttributesToGet: [],
     };
 
     AWS.config.update({

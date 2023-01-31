@@ -65,6 +65,14 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
                   : "Virtual"}
               </TableCell>
             </TableRow>
+            <TableRow>
+              <TableCell>Dietary Restriction</TableCell>
+              <TableCell>
+                {(user?.attributes["custom:foodPreference"] &&
+                  user?.attributes["custom:foodPreference"]) ??
+                  "None"}
+              </TableCell>
+            </TableRow>
           </TableBody>
         )}
       </Table>

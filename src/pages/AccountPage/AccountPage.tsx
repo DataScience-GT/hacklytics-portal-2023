@@ -69,7 +69,7 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
               <TableCell>Dietary Restriction</TableCell>
               <TableCell>
                 {(user?.attributes["custom:foodPreference"] &&
-                  user?.attributes["custom:foodPreference"]) ??
+                  titleCaseWord(user?.attributes["custom:foodPreference"])) ??
                   "None"}
               </TableCell>
             </TableRow>
@@ -79,5 +79,10 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
     </View>
   </div>
 );
+
+function titleCaseWord(word: string) {
+  if (!word) return word;
+  return word[0].toUpperCase() + word.substr(1).toLowerCase();
+}
 
 export default AccountPage;

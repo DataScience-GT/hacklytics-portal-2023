@@ -14,6 +14,7 @@ import {
 import { AdminSettings, Event } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 import EventCard from "../../components/EventCard/EventCard";
+import getGroups from "../../misc/Groups";
 
 // import { listTodos } from "../../graphql";
 // import { API, graphqlOperation } from "aws-amplify";
@@ -34,6 +35,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
 
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
+
+  const [userAccess, setUserAccess] = useState<boolean>(false);
 
   useEffect(() => {
     loadSettings(() => {
@@ -56,6 +59,29 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     setAdminSettings(res.data.getAdminSettings);
+    let settings = res.data.getAdminSettings;
+    if (
+      settings &&
+      settings.participantEmails &&
+      user &&
+      user.attributes &&
+      user.attributes.email &&
+      settings.participantEmails.includes(user.attributes.email)
+    ) {
+      setUserAccess(true);
+    } else {
+      // check if admin
+      if (
+        user &&
+        (getGroups(user).includes("Administrator") ||
+          getGroups(user).includes("Volunteer"))
+      ) {
+        setUserAccess(true);
+      } else {
+        setUserAccess(false);
+      }
+    }
+
     if (callback) callback();
   };
 
@@ -115,7 +141,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           >
             <Loader size={"large"} />
           </Flex>
-        ) : adminSettings.hacklyticsOpen ? (
+        ) : adminSettings.hacklyticsOpen && userAccess ? (
           // hacklytics is open :D (started)
           <Flex direction={"column"} gap={"medium"}>
             <Card variation="outlined">
@@ -132,7 +158,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : (
           // hacklytics is closed :( (not started)
-          <HacklyticsCard />
+          <HacklyticsCard loading={settingsLoading} access={userAccess} />
         )}
       </View>
     </div>

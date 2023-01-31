@@ -9,6 +9,7 @@ import {
   AmplifyProvider,
   Authenticator,
   CheckboxField,
+  SelectField,
   SwitchField,
   useAuthenticator,
   View,
@@ -85,7 +86,12 @@ const Components = {
             name="custom:isInperson"
             label="I will be attending in-person:"
           />
-          <SwitchField name="custom:isVegetarian" label="I am a vegetarian:" />
+          {/* <SwitchField name="custom:isVegetarian" label="I am a vegetarian:" /> */}
+          <SelectField name="custom:foodPreference" label="Dietary Restrictions:">
+            <option value="none">None</option>
+            <option value="vegetarian">Vegetarian</option>
+            <option value="vegan">Vegan</option>
+          </SelectField>
           <CheckboxField
             errorMessage="You must agree to the Terms & Conditions"
             hasError={!!validationErrors.terms1}

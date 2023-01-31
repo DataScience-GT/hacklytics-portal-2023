@@ -36,6 +36,7 @@ import getGroups from "./misc/Groups";
 // import { AdminSettings } from "./models";
 import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
 import CheckpointPage from "./pages/CheckpointPage/CheckpointPage";
+import AccountPage from "./pages/AccountPage/AccountPage";
 
 Amplify.configure({
   ...aws_exports,
@@ -178,6 +179,10 @@ const App = () => {
                       <Route
                         path="/*"
                         element={<HomePage user={user} signOut={signOut} />}
+                      />
+                      <Route
+                        path="/account"
+                        element={<AccountPage user={user} signOut={signOut} />}
                       />
                       <Route
                         path="/settings"

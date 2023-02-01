@@ -66,7 +66,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       user &&
       user.attributes &&
       user.attributes.email &&
-      settings.participantEmails.includes(user.attributes.email)
+      settings.participantEmails
+        .map((x: String) => x.toLowerCase())
+        .includes(user.attributes.email.toLowerCase())
     ) {
       setUserAccess(true);
     } else {

@@ -72,6 +72,17 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     ) {
       setUserAccess(true);
     } else {
+      // check if gtemail is in participant emails
+      if (
+        user &&
+        user.attributes &&
+        user.attributes["custom:gtemail"] &&
+        settings.participantEmails
+          .map((x: String) => x.toLowerCase())
+          .includes(user.attributes["custom:gtemail"].toLowerCase())
+      ) {
+        setUserAccess(true);
+      }
       // check if admin
       if (
         user &&

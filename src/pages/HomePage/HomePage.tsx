@@ -1,7 +1,15 @@
 import React, { FC, useEffect, useState } from "react";
 import styles from "./HomePage.module.scss";
 
-import { View, Text, Loader, Flex, Card, Heading } from "@aws-amplify/ui-react";
+import {
+  View,
+  Text,
+  Loader,
+  Flex,
+  Card,
+  Heading,
+  Alert,
+} from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import { API } from "aws-amplify";
@@ -15,6 +23,7 @@ import { AdminSettings, Event } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 import EventCard from "../../components/EventCard/EventCard";
 import getGroups from "../../misc/Groups";
+import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
 // import { listTodos } from "../../graphql";
 // import { API, graphqlOperation } from "aws-amplify";
@@ -72,6 +81,18 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     ) {
       setUserAccess(true);
     } else {
+      // check if gtemail is in participant emails
+      if (
+        user &&
+        user.attributes &&
+        user.attributes["custom:gtemail"] &&
+        settings.participantEmails
+          .map((x: String) => x.toLowerCase())
+          .includes(user.attributes["custom:gtemail"].toLowerCase())
+      ) {
+        setUserAccess(true);
+        return;
+      }
       // check if admin
       if (
         user &&
@@ -160,7 +181,19 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : (
           // hacklytics is closed :( (not started)
-          <HacklyticsCard loading={settingsLoading} access={userAccess} />
+          <>
+            <HacklyticsCard loading={settingsLoading} access={userAccess} />
+            {!userAccess && (
+              <StatusAlert
+                status={{
+                  show: true,
+                  type: "error",
+                  message:
+                    "You currently have not been confirmed to participate in Hacklytics. Please contact us if you believe this is a mistake.",
+                }}
+              />
+            )}
+          </>
         )}
       </View>
     </div>

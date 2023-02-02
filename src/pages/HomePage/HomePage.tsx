@@ -91,10 +91,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           .includes(user.attributes["custom:gtemail"].toLowerCase())
       ) {
         setUserAccess(true);
-        return;
       }
       // check if admin
-      if (
+      else if (
         user &&
         (getGroups(user).includes("Administrator") ||
           getGroups(user).includes("Volunteer"))

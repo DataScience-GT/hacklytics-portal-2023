@@ -12,7 +12,7 @@ import {
 } from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
-import { API } from "aws-amplify";
+import { API, DataStore } from "aws-amplify";
 import {
   createEventRSVP,
   deleteEventRSVP,
@@ -163,18 +163,23 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
   };
 
   const loadEventRSVPs = async (callback: () => void) => {
-    const res: any = await API.graphql({
-      query: listEventRSVPS,
-      variables: {
-        userID: user?.attributes?.sub,
-      },
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    });
-    let items = res.data.listEventRSVPS.items;
+    const res = await DataStore.query(EventRSVP, (e) =>
+      e.userID("eq", user?.attributes?.sub ?? "")
+    );
 
-    if (items.length > 0) {
-      setEventRSVPs(items);
-    }
+    setEventRSVPs(res);
+    // const res: any = await API.graphql({
+    //   query: listEventRSVPS,
+    //   variables: {
+    //     userID: user?.attributes?.sub,
+    //   },
+    //   authMode: "AMAZON_COGNITO_USER_POOLS",
+    // });
+    // let items = res.data.listEventRSVPS.items;
+
+    // if (items.length > 0) {
+    //   setEventRSVPs(items);
+    // }
 
     if (callback) callback();
   };
@@ -231,18 +236,24 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               .length >= 1
                           ) {
                             // delete rsvp
-
-                            await API.graphql({
-                              query: deleteEventRSVP,
-                              variables: {
-                                input: {
-                                  id: eventRSVPs.filter(
-                                    (x) => x.eventID === event.id
-                                  )[0].id,
-                                },
-                              },
-                              authMode: "AMAZON_COGNITO_USER_POOLS",
-                            });
+                            let rsvp = eventRSVPs.find(
+                              (x) => x.eventID === event.id
+                            );
+                            const toDelete = await DataStore.query(
+                              EventRSVP,
+                              rsvp?.id ?? ""
+                            );
+                            if (toDelete) DataStore.delete(toDelete);
+                            // await API.graphql({
+                            //   query: deleteEventRSVP,
+                            //   variables: {
+                            //     input: {
+                            //       id: rsvp?.id,
+                            //       _version: 1,
+                            //     },
+                            //   },
+                            //   authMode: "AMAZON_COGNITO_USER_POOLS",
+                            // });
 
                             setEventRSVPs(
                               eventRSVPs.filter((x) => x.eventID !== event.id)

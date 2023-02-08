@@ -127,7 +127,7 @@ type EventRSVP
         groups: ["Administrator"]
         operations: [read, create, update, delete]
       }
-      { allow: private, operations: [read, create, update, delete] }
+      { allow: owner, operations: [read, create, update, delete] }
     ]
   ) {
   id: ID!

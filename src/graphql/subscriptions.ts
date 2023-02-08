@@ -57,6 +57,7 @@ export const onCreateEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -81,6 +82,7 @@ export const onUpdateEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -105,6 +107,7 @@ export const onDeleteEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -135,6 +138,7 @@ export const onCreateCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -168,6 +172,7 @@ export const onUpdateCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -201,6 +206,7 @@ export const onDeleteCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -371,8 +377,9 @@ export const onDeleteScavengerHuntCheckin = /* GraphQL */ `
 export const onCreateEventRSVP = /* GraphQL */ `
   subscription OnCreateEventRSVP(
     $filter: ModelSubscriptionEventRSVPFilterInput
+    $owner: String
   ) {
-    onCreateEventRSVP(filter: $filter) {
+    onCreateEventRSVP(filter: $filter, owner: $owner) {
       id
       userID
       userName
@@ -382,14 +389,16 @@ export const onCreateEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onUpdateEventRSVP = /* GraphQL */ `
   subscription OnUpdateEventRSVP(
     $filter: ModelSubscriptionEventRSVPFilterInput
+    $owner: String
   ) {
-    onUpdateEventRSVP(filter: $filter) {
+    onUpdateEventRSVP(filter: $filter, owner: $owner) {
       id
       userID
       userName
@@ -399,14 +408,16 @@ export const onUpdateEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
 export const onDeleteEventRSVP = /* GraphQL */ `
   subscription OnDeleteEventRSVP(
     $filter: ModelSubscriptionEventRSVPFilterInput
+    $owner: String
   ) {
-    onDeleteEventRSVP(filter: $filter) {
+    onDeleteEventRSVP(filter: $filter, owner: $owner) {
       id
       userID
       userName
@@ -416,6 +427,7 @@ export const onDeleteEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;

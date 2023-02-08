@@ -112,6 +112,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "requireRSVP": {
+                    "name": "requireRSVP",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "canRSVP": {
                     "name": "canRSVP",
                     "isArray": false,
@@ -652,13 +659,16 @@ export const schema = {
                                 ]
                             },
                             {
-                                "allow": "private",
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
                                 "operations": [
                                     "read",
                                     "create",
                                     "update",
                                     "delete"
-                                ]
+                                ],
+                                "identityClaim": "cognito:username"
                             }
                         ]
                     }
@@ -669,5 +679,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.4",
-    "version": "a74427d798f1ac110de57da6c7524d26"
+    "version": "b4aae938e90bcef4c9683ea82285c203"
 };

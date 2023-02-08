@@ -63,6 +63,7 @@ export const createEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -90,6 +91,7 @@ export const updateEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -117,6 +119,7 @@ export const deleteEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -150,6 +153,7 @@ export const createCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -186,6 +190,7 @@ export const updateCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -222,6 +227,7 @@ export const deleteCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -419,6 +425,7 @@ export const createEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -437,6 +444,7 @@ export const updateEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -455,6 +463,7 @@ export const deleteEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;

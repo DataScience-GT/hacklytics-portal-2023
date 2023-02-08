@@ -83,6 +83,7 @@ export const getEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
       canRSVP
       start
       end
@@ -112,6 +113,7 @@ export const listEvents = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -146,6 +148,7 @@ export const syncEvents = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -175,6 +178,7 @@ export const getCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
         canRSVP
         start
         end
@@ -468,6 +472,7 @@ export const getEventRSVP = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+      owner
     }
   }
 `;
@@ -488,6 +493,7 @@ export const listEventRSVPS = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
       nextToken
       startedAt
@@ -517,6 +523,7 @@ export const syncEventRSVPS = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+        owner
       }
       nextToken
       startedAt

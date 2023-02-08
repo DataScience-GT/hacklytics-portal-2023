@@ -4,7 +4,7 @@ import { schema } from './schema';
 
 
 
-const { AdminSettings, Event, Checkin, Points, ScavengerHunt, ScavengerHuntCheckin } = initSchema(schema);
+const { AdminSettings, Event, Checkin, Points, ScavengerHunt, ScavengerHuntCheckin, EventRSVP } = initSchema(schema);
 
 export {
   AdminSettings,
@@ -12,5 +12,6 @@ export {
   Checkin,
   Points,
   ScavengerHunt,
-  ScavengerHuntCheckin
+  ScavengerHuntCheckin,
+  EventRSVP
 };

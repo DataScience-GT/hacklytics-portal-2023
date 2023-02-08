@@ -364,6 +364,49 @@ export type DeleteScavengerHuntCheckinInput = {
   _version?: number | null,
 };
 
+export type CreateEventRSVPInput = {
+  id?: string | null,
+  userID: string,
+  userName: string,
+  eventID: string,
+  _version?: number | null,
+};
+
+export type ModelEventRSVPConditionInput = {
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  eventID?: ModelStringInput | null,
+  and?: Array< ModelEventRSVPConditionInput | null > | null,
+  or?: Array< ModelEventRSVPConditionInput | null > | null,
+  not?: ModelEventRSVPConditionInput | null,
+};
+
+export type EventRSVP = {
+  __typename: "EventRSVP",
+  id: string,
+  userID: string,
+  userName: string,
+  eventID: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateEventRSVPInput = {
+  id: string,
+  userID?: string | null,
+  userName?: string | null,
+  eventID?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteEventRSVPInput = {
+  id: string,
+  _version?: number | null,
+};
+
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
@@ -459,6 +502,23 @@ export type ModelScavengerHuntCheckinFilterInput = {
 export type ModelScavengerHuntCheckinConnection = {
   __typename: "ModelScavengerHuntCheckinConnection",
   items:  Array<ScavengerHuntCheckin | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelEventRSVPFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  eventID?: ModelStringInput | null,
+  and?: Array< ModelEventRSVPFilterInput | null > | null,
+  or?: Array< ModelEventRSVPFilterInput | null > | null,
+  not?: ModelEventRSVPFilterInput | null,
+};
+
+export type ModelEventRSVPConnection = {
+  __typename: "ModelEventRSVPConnection",
+  items:  Array<EventRSVP | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -565,6 +625,15 @@ export type ModelSubscriptionScavengerHuntCheckinFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
   or?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
+};
+
+export type ModelSubscriptionEventRSVPFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  userName?: ModelSubscriptionStringInput | null,
+  eventID?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
+  or?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -997,6 +1066,66 @@ export type DeleteScavengerHuntCheckinMutation = {
     id: string,
     checkpointID: string,
     userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateEventRSVPMutationVariables = {
+  input: CreateEventRSVPInput,
+  condition?: ModelEventRSVPConditionInput | null,
+};
+
+export type CreateEventRSVPMutation = {
+  createEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateEventRSVPMutationVariables = {
+  input: UpdateEventRSVPInput,
+  condition?: ModelEventRSVPConditionInput | null,
+};
+
+export type UpdateEventRSVPMutation = {
+  updateEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteEventRSVPMutationVariables = {
+  input: DeleteEventRSVPInput,
+  condition?: ModelEventRSVPConditionInput | null,
+};
+
+export type DeleteEventRSVPMutation = {
+  deleteEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1485,6 +1614,78 @@ export type SyncScavengerHuntCheckinsQuery = {
   } | null,
 };
 
+export type GetEventRSVPQueryVariables = {
+  id: string,
+};
+
+export type GetEventRSVPQuery = {
+  getEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListEventRSVPSQueryVariables = {
+  filter?: ModelEventRSVPFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListEventRSVPSQuery = {
+  listEventRSVPS?:  {
+    __typename: "ModelEventRSVPConnection",
+    items:  Array< {
+      __typename: "EventRSVP",
+      id: string,
+      userID: string,
+      userName: string,
+      eventID: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncEventRSVPSQueryVariables = {
+  filter?: ModelEventRSVPFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncEventRSVPSQuery = {
+  syncEventRSVPS?:  {
+    __typename: "ModelEventRSVPConnection",
+    items:  Array< {
+      __typename: "EventRSVP",
+      id: string,
+      userID: string,
+      userName: string,
+      eventID: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type OnCreateAdminSettingsSubscriptionVariables = {
   filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
@@ -1897,6 +2098,63 @@ export type OnDeleteScavengerHuntCheckinSubscription = {
     id: string,
     checkpointID: string,
     userID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateEventRSVPSubscriptionVariables = {
+  filter?: ModelSubscriptionEventRSVPFilterInput | null,
+};
+
+export type OnCreateEventRSVPSubscription = {
+  onCreateEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateEventRSVPSubscriptionVariables = {
+  filter?: ModelSubscriptionEventRSVPFilterInput | null,
+};
+
+export type OnUpdateEventRSVPSubscription = {
+  onUpdateEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteEventRSVPSubscriptionVariables = {
+  filter?: ModelSubscriptionEventRSVPFilterInput | null,
+};
+
+export type OnDeleteEventRSVPSubscription = {
+  onDeleteEventRSVP?:  {
+    __typename: "EventRSVP",
+    id: string,
+    userID: string,
+    userName: string,
+    eventID: string,
     createdAt: string,
     updatedAt: string,
     _version: number,

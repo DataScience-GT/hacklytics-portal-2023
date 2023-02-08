@@ -362,3 +362,54 @@ export const onDeleteScavengerHuntCheckin = /* GraphQL */ `
     }
   }
 `;
+export const onCreateEventRSVP = /* GraphQL */ `
+  subscription OnCreateEventRSVP(
+    $filter: ModelSubscriptionEventRSVPFilterInput
+  ) {
+    onCreateEventRSVP(filter: $filter) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateEventRSVP = /* GraphQL */ `
+  subscription OnUpdateEventRSVP(
+    $filter: ModelSubscriptionEventRSVPFilterInput
+  ) {
+    onUpdateEventRSVP(filter: $filter) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteEventRSVP = /* GraphQL */ `
+  subscription OnDeleteEventRSVP(
+    $filter: ModelSubscriptionEventRSVPFilterInput
+  ) {
+    onDeleteEventRSVP(filter: $filter) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

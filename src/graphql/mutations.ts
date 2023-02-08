@@ -398,3 +398,57 @@ export const deleteScavengerHuntCheckin = /* GraphQL */ `
     }
   }
 `;
+export const createEventRSVP = /* GraphQL */ `
+  mutation CreateEventRSVP(
+    $input: CreateEventRSVPInput!
+    $condition: ModelEventRSVPConditionInput
+  ) {
+    createEventRSVP(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateEventRSVP = /* GraphQL */ `
+  mutation UpdateEventRSVP(
+    $input: UpdateEventRSVPInput!
+    $condition: ModelEventRSVPConditionInput
+  ) {
+    updateEventRSVP(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteEventRSVP = /* GraphQL */ `
+  mutation DeleteEventRSVP(
+    $input: DeleteEventRSVPInput!
+    $condition: ModelEventRSVPConditionInput
+  ) {
+    deleteEventRSVP(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

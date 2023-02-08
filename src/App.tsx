@@ -37,6 +37,7 @@ import getGroups from "./misc/Groups";
 import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
 import CheckpointPage from "./pages/CheckpointPage/CheckpointPage";
 import AccountPage from "./pages/AccountPage/AccountPage";
+import DatasetPage from "./pages/DatasetPage/DatasetPage";
 
 Amplify.configure({
   ...aws_exports,
@@ -88,7 +89,10 @@ const Components = {
             label="I will be attending in-person:"
           />
           {/* <SwitchField name="custom:isVegetarian" label="I am a vegetarian:" /> */}
-          <SelectField name="custom:foodPreference" label="Dietary Restrictions:">
+          <SelectField
+            name="custom:foodPreference"
+            label="Dietary Restrictions:"
+          >
             <option value="none">None</option>
             <option value="vegetarian">Vegetarian</option>
             <option value="vegan">Vegan</option>
@@ -183,6 +187,10 @@ const App = () => {
                       <Route
                         path="/account"
                         element={<AccountPage user={user} signOut={signOut} />}
+                      />
+                      <Route
+                        path="/datasets"
+                        element={<DatasetPage user={user} signOut={signOut} />}
                       />
                       <Route
                         path="/settings"

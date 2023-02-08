@@ -83,6 +83,7 @@ export const getEvent = /* GraphQL */ `
       name
       description
       status
+      canRSVP
       start
       end
       location
@@ -111,6 +112,7 @@ export const listEvents = /* GraphQL */ `
         name
         description
         status
+        canRSVP
         start
         end
         location
@@ -144,6 +146,7 @@ export const syncEvents = /* GraphQL */ `
         name
         description
         status
+        canRSVP
         start
         end
         location
@@ -172,6 +175,7 @@ export const getCheckin = /* GraphQL */ `
         name
         description
         status
+        canRSVP
         start
         end
         location

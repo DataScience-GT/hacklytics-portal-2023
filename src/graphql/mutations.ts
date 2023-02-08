@@ -63,6 +63,7 @@ export const createEvent = /* GraphQL */ `
       name
       description
       status
+      canRSVP
       start
       end
       location
@@ -89,6 +90,7 @@ export const updateEvent = /* GraphQL */ `
       name
       description
       status
+      canRSVP
       start
       end
       location
@@ -115,6 +117,7 @@ export const deleteEvent = /* GraphQL */ `
       name
       description
       status
+      canRSVP
       start
       end
       location
@@ -147,6 +150,7 @@ export const createCheckin = /* GraphQL */ `
         name
         description
         status
+        canRSVP
         start
         end
         location
@@ -182,6 +186,7 @@ export const updateCheckin = /* GraphQL */ `
         name
         description
         status
+        canRSVP
         start
         end
         location
@@ -217,6 +222,7 @@ export const deleteCheckin = /* GraphQL */ `
         name
         description
         status
+        canRSVP
         start
         end
         location

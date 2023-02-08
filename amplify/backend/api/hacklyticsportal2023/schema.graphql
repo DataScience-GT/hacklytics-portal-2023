@@ -31,6 +31,7 @@ type Event
   name: String!
   description: String
   status: Boolean
+  canRSVP: Boolean
   start: AWSDateTime
   end: AWSDateTime
   location: String

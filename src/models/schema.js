@@ -112,6 +112,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "canRSVP": {
+                    "name": "canRSVP",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "start": {
                     "name": "start",
                     "isArray": false,
@@ -662,5 +669,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.4",
-    "version": "d723c660efc5cd735a67695851daef12"
+    "version": "a74427d798f1ac110de57da6c7524d26"
 };

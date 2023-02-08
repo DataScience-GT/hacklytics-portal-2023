@@ -57,6 +57,7 @@ type EagerEvent = {
   readonly name: string;
   readonly description?: string | null;
   readonly status?: boolean | null;
+  readonly canRSVP?: boolean | null;
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
@@ -71,6 +72,7 @@ type LazyEvent = {
   readonly name: string;
   readonly description?: string | null;
   readonly status?: boolean | null;
+  readonly canRSVP?: boolean | null;
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;

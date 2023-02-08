@@ -83,6 +83,8 @@ export const getEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
+      canRSVP
       start
       end
       location
@@ -111,6 +113,8 @@ export const listEvents = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
+        canRSVP
         start
         end
         location
@@ -144,6 +148,8 @@ export const syncEvents = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
+        canRSVP
         start
         end
         location
@@ -172,6 +178,8 @@ export const getCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
+        canRSVP
         start
         end
         location
@@ -446,6 +454,76 @@ export const syncScavengerHuntCheckins = /* GraphQL */ `
         _version
         _deleted
         _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getEventRSVP = /* GraphQL */ `
+  query GetEventRSVP($id: ID!) {
+    getEventRSVP(id: $id) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const listEventRSVPS = /* GraphQL */ `
+  query ListEventRSVPS(
+    $filter: ModelEventRSVPFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listEventRSVPS(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        userName
+        eventID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncEventRSVPS = /* GraphQL */ `
+  query SyncEventRSVPS(
+    $filter: ModelEventRSVPFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncEventRSVPS(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userID
+        userName
+        eventID
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+        owner
       }
       nextToken
       startedAt

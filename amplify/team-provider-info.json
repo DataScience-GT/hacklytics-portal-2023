@@ -64,7 +64,7 @@
         },
         "hacklyticsportal2023listusers": {
           "deploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
-          "s3Key": "amplify-builds/hacklyticsportal2023listusers-714a504c51374c32626a-build.zip"
+          "s3Key": "amplify-builds/hacklyticsportal2023listusers-3768654f6b65734e6168-build.zip"
         }
       }
     }

@@ -63,6 +63,8 @@ export const createEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
+      canRSVP
       start
       end
       location
@@ -89,6 +91,8 @@ export const updateEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
+      canRSVP
       start
       end
       location
@@ -115,6 +119,8 @@ export const deleteEvent = /* GraphQL */ `
       name
       description
       status
+      requireRSVP
+      canRSVP
       start
       end
       location
@@ -147,6 +153,8 @@ export const createCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
+        canRSVP
         start
         end
         location
@@ -182,6 +190,8 @@ export const updateCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
+        canRSVP
         start
         end
         location
@@ -217,6 +227,8 @@ export const deleteCheckin = /* GraphQL */ `
         name
         description
         status
+        requireRSVP
+        canRSVP
         start
         end
         location
@@ -395,6 +407,63 @@ export const deleteScavengerHuntCheckin = /* GraphQL */ `
       _version
       _deleted
       _lastChangedAt
+    }
+  }
+`;
+export const createEventRSVP = /* GraphQL */ `
+  mutation CreateEventRSVP(
+    $input: CreateEventRSVPInput!
+    $condition: ModelEventRSVPConditionInput
+  ) {
+    createEventRSVP(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const updateEventRSVP = /* GraphQL */ `
+  mutation UpdateEventRSVP(
+    $input: UpdateEventRSVPInput!
+    $condition: ModelEventRSVPConditionInput
+  ) {
+    updateEventRSVP(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
+    }
+  }
+`;
+export const deleteEventRSVP = /* GraphQL */ `
+  mutation DeleteEventRSVP(
+    $input: DeleteEventRSVPInput!
+    $condition: ModelEventRSVPConditionInput
+  ) {
+    deleteEventRSVP(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      eventID
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      owner
     }
   }
 `;

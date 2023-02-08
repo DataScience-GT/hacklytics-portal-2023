@@ -1,1 +1,7 @@
 .EventCard {}
+
+@media screen and (max-width: 500px) {
+  .EventCard {
+    width: 100%;
+  }
+}

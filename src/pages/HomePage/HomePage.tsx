@@ -12,14 +12,17 @@ import {
 } from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
-import { API } from "aws-amplify";
+import { API, DataStore } from "aws-amplify";
 import {
+  createEventRSVP,
+  deleteEventRSVP,
   getAdminSettings,
   getPoints,
+  listEventRSVPS,
   listEvents,
   listPoints,
 } from "../../graphql";
-import { AdminSettings, Event } from "../../models/index";
+import { AdminSettings, Event, EventRSVP } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 import EventCard from "../../components/EventCard/EventCard";
 import getGroups from "../../misc/Groups";
@@ -45,6 +48,10 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
+  const [eventRSVPs, setEventRSVPs] = useState<EventRSVP[]>([]);
+  const [eventRSVPsLoading, setEventRSVPsLoading] = useState(true);
+  const [currentlyRSVPing, setCurrentlyRSVPing] = useState(false);
+
   const [userAccess, setUserAccess] = useState<boolean>(false);
 
   useEffect(() => {
@@ -56,6 +63,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
     loadEvents(() => {
       setEventsLoading(false);
+    });
+    loadEventRSVPs(() => {
+      setEventRSVPsLoading(false);
     });
   }, []);
 
@@ -152,10 +162,35 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     if (callback) callback();
   };
 
+  const loadEventRSVPs = async (callback: () => void) => {
+    const res = await DataStore.query(EventRSVP, (e) =>
+      e.userID("eq", user?.attributes?.sub ?? "")
+    );
+
+    setEventRSVPs(res);
+    // const res: any = await API.graphql({
+    //   query: listEventRSVPS,
+    //   variables: {
+    //     userID: user?.attributes?.sub,
+    //   },
+    //   authMode: "AMAZON_COGNITO_USER_POOLS",
+    // });
+    // let items = res.data.listEventRSVPS.items;
+
+    // if (items.length > 0) {
+    //   setEventRSVPs(items);
+    // }
+
+    if (callback) callback();
+  };
+
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-        {settingsLoading || pointsLoading || eventsLoading ? (
+        {settingsLoading ||
+        pointsLoading ||
+        eventsLoading ||
+        eventRSVPsLoading ? (
           <Flex
             direction={"column"}
             justifyContent={"center"}
@@ -172,9 +207,83 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 You have {points} points{points > 0 ? "!" : " :("}
               </Text>
             </Card>
-            <Flex direction={"row"} gap={"medium"}>
+            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
+              Events
+            </Heading>
+            <Flex direction={"row"} gap={"medium"} wrap="wrap">
               {events.map((event, i) => (
-                <EventCard event={event} key={i} />
+                <EventCard
+                  event={event}
+                  key={i}
+                  currentlyRSVPing={currentlyRSVPing}
+                  isRSVPed={
+                    eventRSVPs.filter((x) => x.eventID === event.id).length >= 1
+                  }
+                  onRSVP={
+                    event.canRSVP
+                      ? async () => {
+                          setCurrentlyRSVPing(true);
+                          // create event rsvp
+                          // let rsvp: EventRSVP = {
+                          //   id: "",
+                          //   userID: user?.attributes?.sub ?? "undefined",
+                          //   userName: user?.attributes?.name ?? "undefined",
+                          //   eventID: event.id,
+                          // };
+
+                          if (
+                            eventRSVPs.filter((x) => x.eventID === event.id)
+                              .length >= 1
+                          ) {
+                            // delete rsvp
+                            let rsvp = eventRSVPs.find(
+                              (x) => x.eventID === event.id
+                            );
+                            const toDelete = await DataStore.query(
+                              EventRSVP,
+                              rsvp?.id ?? ""
+                            );
+                            if (toDelete) DataStore.delete(toDelete);
+                            // await API.graphql({
+                            //   query: deleteEventRSVP,
+                            //   variables: {
+                            //     input: {
+                            //       id: rsvp?.id,
+                            //       _version: 1,
+                            //     },
+                            //   },
+                            //   authMode: "AMAZON_COGNITO_USER_POOLS",
+                            // });
+
+                            setEventRSVPs(
+                              eventRSVPs.filter((x) => x.eventID !== event.id)
+                            );
+                            setCurrentlyRSVPing(false);
+                          } else {
+                            // create rsvp
+
+                            let rsvp: any = await API.graphql({
+                              query: createEventRSVP,
+                              variables: {
+                                input: {
+                                  userID: user?.attributes?.sub,
+                                  userName: user?.attributes?.name,
+                                  eventID: event.id,
+                                },
+                              },
+                              authMode: "AMAZON_COGNITO_USER_POOLS",
+                            });
+
+                            setEventRSVPs([
+                              ...eventRSVPs,
+                              rsvp.data.createEventRSVP,
+                            ]);
+                            setCurrentlyRSVPing(false);
+                          }
+                        }
+                      : undefined
+                  }
+                />
               ))}
             </Flex>
           </Flex>

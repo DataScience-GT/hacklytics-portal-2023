@@ -26,6 +26,10 @@ type ScavengerHuntCheckinMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type EventRSVPMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
@@ -53,6 +57,8 @@ type EagerEvent = {
   readonly name: string;
   readonly description?: string | null;
   readonly status?: boolean | null;
+  readonly requireRSVP?: boolean | null;
+  readonly canRSVP?: boolean | null;
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
@@ -67,6 +73,8 @@ type LazyEvent = {
   readonly name: string;
   readonly description?: string | null;
   readonly status?: boolean | null;
+  readonly requireRSVP?: boolean | null;
+  readonly canRSVP?: boolean | null;
   readonly start?: string | null;
   readonly end?: string | null;
   readonly location?: string | null;
@@ -180,4 +188,28 @@ export declare type ScavengerHuntCheckin = LazyLoading extends LazyLoadingDisabl
 
 export declare const ScavengerHuntCheckin: (new (init: ModelInit<ScavengerHuntCheckin, ScavengerHuntCheckinMetaData>) => ScavengerHuntCheckin) & {
   copyOf(source: ScavengerHuntCheckin, mutator: (draft: MutableModel<ScavengerHuntCheckin, ScavengerHuntCheckinMetaData>) => MutableModel<ScavengerHuntCheckin, ScavengerHuntCheckinMetaData> | void): ScavengerHuntCheckin;
+}
+
+type EagerEventRSVP = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly eventID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyEventRSVP = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly eventID: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type EventRSVP = LazyLoading extends LazyLoadingDisabled ? EagerEventRSVP : LazyEventRSVP
+
+export declare const EventRSVP: (new (init: ModelInit<EventRSVP, EventRSVPMetaData>) => EventRSVP) & {
+  copyOf(source: EventRSVP, mutator: (draft: MutableModel<EventRSVP, EventRSVPMetaData>) => MutableModel<EventRSVP, EventRSVPMetaData> | void): EventRSVP;
 }

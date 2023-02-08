@@ -112,6 +112,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "requireRSVP": {
+                    "name": "requireRSVP",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "canRSVP": {
+                    "name": "canRSVP",
+                    "isArray": false,
+                    "type": "Boolean",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "start": {
                     "name": "start",
                     "isArray": false,
@@ -303,7 +317,10 @@ export const schema = {
                             {
                                 "allow": "private",
                                 "operations": [
-                                    "read"
+                                    "create",
+                                    "read",
+                                    "update",
+                                    "delete"
                                 ]
                             }
                         ]
@@ -468,7 +485,8 @@ export const schema = {
                                 "provider": "userPools",
                                 "allow": "groups",
                                 "groups": [
-                                    "Administrator"
+                                    "Administrator",
+                                    "Scavenger"
                                 ],
                                 "operations": [
                                     "read",
@@ -545,7 +563,8 @@ export const schema = {
                                 "provider": "userPools",
                                 "allow": "groups",
                                 "groups": [
-                                    "Administrator"
+                                    "Administrator",
+                                    "Scavenger"
                                 ],
                                 "operations": [
                                     "read",
@@ -565,10 +584,100 @@ export const schema = {
                     }
                 }
             ]
+        },
+        "EventRSVP": {
+            "name": "EventRSVP",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userID": {
+                    "name": "userID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "userName": {
+                    "name": "userName",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "eventID": {
+                    "name": "eventID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "EventRSVPS",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                },
+                {
+                    "type": "auth",
+                    "properties": {
+                        "rules": [
+                            {
+                                "groupClaim": "cognito:groups",
+                                "provider": "userPools",
+                                "allow": "groups",
+                                "groups": [
+                                    "Administrator"
+                                ],
+                                "operations": [
+                                    "read",
+                                    "create",
+                                    "update",
+                                    "delete"
+                                ]
+                            },
+                            {
+                                "provider": "userPools",
+                                "ownerField": "owner",
+                                "allow": "owner",
+                                "operations": [
+                                    "read",
+                                    "create",
+                                    "update",
+                                    "delete"
+                                ],
+                                "identityClaim": "cognito:username"
+                            }
+                        ]
+                    }
+                }
+            ]
         }
     },
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.3.4",
-    "version": "011fd582fc955d92c04e4469c7437e23"
+    "version": "b4aae938e90bcef4c9683ea82285c203"
 };

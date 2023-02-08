@@ -47,7 +47,7 @@ type Checkin
         groups: ["Administrator"]
         operations: [read, create, update, delete]
       }
-      { allow: private, operations: [read] }
+      { allow: private, operations: [create, read, update, delete] }
     ]
   ) {
   id: ID!
@@ -87,7 +87,7 @@ type ScavengerHunt
     rules: [
       {
         allow: groups
-        groups: ["Administrator"]
+        groups: ["Administrator", "Scavenger"]
         operations: [read, create, update, delete]
       }
       { allow: private, operations: [read] }
@@ -106,7 +106,7 @@ type ScavengerHuntCheckin
     rules: [
       {
         allow: groups
-        groups: ["Administrator"]
+        groups: ["Administrator", "Scavenger"]
         operations: [read, create, update, delete]
       }
       { allow: private, operations: [read, create] }

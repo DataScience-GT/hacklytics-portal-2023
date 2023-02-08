@@ -39,6 +39,7 @@ export default function CreateEvent(props) {
     start: "",
     end: "",
     points: "",
+    canRSVP: false,
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -49,6 +50,7 @@ export default function CreateEvent(props) {
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
   const [points, setPoints] = React.useState(initialValues.points);
+  const [canRSVP, setCanRSVP] = React.useState(initialValues.canRSVP);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setName(initialValues.name);
@@ -58,6 +60,7 @@ export default function CreateEvent(props) {
     setStart(initialValues.start);
     setEnd(initialValues.end);
     setPoints(initialValues.points);
+    setCanRSVP(initialValues.canRSVP);
     setErrors({});
   };
   const validations = {
@@ -68,6 +71,7 @@ export default function CreateEvent(props) {
     start: [],
     end: [],
     points: [],
+    canRSVP: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -118,6 +122,7 @@ export default function CreateEvent(props) {
           start,
           end,
           points,
+          canRSVP,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -183,6 +188,7 @@ export default function CreateEvent(props) {
               start,
               end,
               points,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -212,6 +218,7 @@ export default function CreateEvent(props) {
               start,
               end,
               points,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -242,6 +249,7 @@ export default function CreateEvent(props) {
               start,
               end,
               points,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.location ?? value;
@@ -272,6 +280,7 @@ export default function CreateEvent(props) {
               start,
               end,
               points,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -304,6 +313,7 @@ export default function CreateEvent(props) {
               start: value,
               end,
               points,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -336,6 +346,7 @@ export default function CreateEvent(props) {
               start,
               end: value,
               points,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -370,6 +381,7 @@ export default function CreateEvent(props) {
               start,
               end,
               points: value,
+              canRSVP,
             };
             const result = onChange(modelFields);
             value = result?.points ?? value;
@@ -384,6 +396,37 @@ export default function CreateEvent(props) {
         hasError={errors.points?.hasError}
         {...getOverrideProps(overrides, "points")}
       ></TextField>
+      <SwitchField
+        label="Allow users to RSVP?"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={canRSVP}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              location,
+              status,
+              start,
+              end,
+              points,
+              canRSVP: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.canRSVP ?? value;
+          }
+          if (errors.canRSVP?.hasError) {
+            runValidationTasks("canRSVP", value);
+          }
+          setCanRSVP(value);
+        }}
+        onBlur={() => runValidationTasks("canRSVP", canRSVP)}
+        errorMessage={errors.canRSVP?.errorMessage}
+        hasError={errors.canRSVP?.hasError}
+        {...getOverrideProps(overrides, "canRSVP")}
+      ></SwitchField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

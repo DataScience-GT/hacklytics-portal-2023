@@ -97,40 +97,6 @@
       "service": "Lambda"
     }
   },
-  "parameters": {
-    "AMPLIFY_function_hacklyticsportal20232e32fd51_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "hacklyticsportal20232e32fd51"
-        }
-      ]
-    },
-    "AMPLIFY_function_hacklyticsportal20232e32fd51_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "hacklyticsportal20232e32fd51"
-        }
-      ]
-    },
-    "AMPLIFY_function_hacklyticsportal2023listusers_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "hacklyticsportal2023listusers"
-        }
-      ]
-    },
-    "AMPLIFY_function_hacklyticsportal2023listusers_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "hacklyticsportal2023listusers"
-        }
-      ]
-    }
-  },
   "storage": {
     "imagestorage": {
       "dependsOn": [],

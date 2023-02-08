@@ -16,12 +16,14 @@ interface EventCardProps {
   isRSVPed?: boolean;
   onRSVP?: () => void;
   onCancelRSVP?: () => void;
+  currentlyRSVPing?: boolean;
 }
 
 const EventCard: FC<EventCardProps> = ({
   event,
   isRSVPed,
   onRSVP,
+  currentlyRSVPing,
 }: EventCardProps) => {
   const start = event?.start
     ? new Date(event?.start ?? "").toLocaleString(undefined, {
@@ -99,6 +101,7 @@ const EventCard: FC<EventCardProps> = ({
             marginTop="medium"
             borderRadius={"100px"}
             onClick={onRSVP}
+            isLoading={currentlyRSVPing}
           >
             {isRSVPed ? "Cancel RSVP" : "RSVP"}
           </Button>

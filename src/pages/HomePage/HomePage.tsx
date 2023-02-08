@@ -14,6 +14,8 @@ import {
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import { API } from "aws-amplify";
 import {
+  createEventRSVP,
+  deleteEventRSVP,
   getAdminSettings,
   getPoints,
   listEventRSVPS,
@@ -48,6 +50,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
 
   const [eventRSVPs, setEventRSVPs] = useState<EventRSVP[]>([]);
   const [eventRSVPsLoading, setEventRSVPsLoading] = useState(true);
+  const [currentlyRSVPing, setCurrentlyRSVPing] = useState(false);
 
   const [userAccess, setUserAccess] = useState<boolean>(false);
 
@@ -207,9 +210,67 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 <EventCard
                   event={event}
                   key={i}
-                  onRSVP={event.canRSVP ? () => {} : undefined}
+                  currentlyRSVPing={currentlyRSVPing}
                   isRSVPed={
                     eventRSVPs.filter((x) => x.eventID === event.id).length >= 1
+                  }
+                  onRSVP={
+                    event.canRSVP
+                      ? async () => {
+                          setCurrentlyRSVPing(true);
+                          // create event rsvp
+                          // let rsvp: EventRSVP = {
+                          //   id: "",
+                          //   userID: user?.attributes?.sub ?? "undefined",
+                          //   userName: user?.attributes?.name ?? "undefined",
+                          //   eventID: event.id,
+                          // };
+
+                          if (
+                            eventRSVPs.filter((x) => x.eventID === event.id)
+                              .length >= 1
+                          ) {
+                            // delete rsvp
+
+                            await API.graphql({
+                              query: deleteEventRSVP,
+                              variables: {
+                                input: {
+                                  id: eventRSVPs.filter(
+                                    (x) => x.eventID === event.id
+                                  )[0].id,
+                                },
+                              },
+                              authMode: "AMAZON_COGNITO_USER_POOLS",
+                            });
+
+                            setEventRSVPs(
+                              eventRSVPs.filter((x) => x.eventID !== event.id)
+                            );
+                            setCurrentlyRSVPing(false);
+                          } else {
+                            // create rsvp
+
+                            let rsvp: any = await API.graphql({
+                              query: createEventRSVP,
+                              variables: {
+                                input: {
+                                  userID: user?.attributes?.sub,
+                                  userName: user?.attributes?.name,
+                                  eventID: event.id,
+                                },
+                              },
+                              authMode: "AMAZON_COGNITO_USER_POOLS",
+                            });
+
+                            setEventRSVPs([
+                              ...eventRSVPs,
+                              rsvp.data.createEventRSVP,
+                            ]);
+                            setCurrentlyRSVPing(false);
+                          }
+                        }
+                      : undefined
                   }
                 />
               ))}

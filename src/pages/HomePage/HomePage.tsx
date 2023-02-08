@@ -180,9 +180,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 <EventCard
                   event={event}
                   key={i}
-                  onRSVP={() => {
-                    alert("RSVP'd! :D");
-                  }}
+                  onRSVP={event.canRSVP ? () => {
+                    
+                  } : undefined}
                 />
               ))}
             </Flex>

@@ -13,10 +13,16 @@ import { DayOfWeek } from "../../misc/DaysOfWeek";
 
 interface EventCardProps {
   event?: Event;
+  isRSVPed?: boolean;
   onRSVP?: () => void;
+  onCancelRSVP?: () => void;
 }
 
-const EventCard: FC<EventCardProps> = ({ event, onRSVP }: EventCardProps) => {
+const EventCard: FC<EventCardProps> = ({
+  event,
+  isRSVPed,
+  onRSVP,
+}: EventCardProps) => {
   const start = event?.start
     ? new Date(event?.start ?? "").toLocaleString(undefined, {
         // month: "short",
@@ -94,7 +100,7 @@ const EventCard: FC<EventCardProps> = ({ event, onRSVP }: EventCardProps) => {
             borderRadius={"100px"}
             onClick={onRSVP}
           >
-            RSVP
+            {isRSVPed ? "Cancel RSVP" : "RSVP"}
           </Button>
         )}
       </Card>

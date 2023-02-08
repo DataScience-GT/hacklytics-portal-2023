@@ -116,3 +116,21 @@ type ScavengerHuntCheckin
   checkpointID: String!
   userID: String!
 }
+
+type EventRSVP
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read, create, update, delete] }
+    ]
+  ) {
+  id: ID!
+  userID: String!
+  userName: String!
+  eventID: String!
+}

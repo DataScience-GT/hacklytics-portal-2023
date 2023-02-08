@@ -16,10 +16,11 @@ import { API } from "aws-amplify";
 import {
   getAdminSettings,
   getPoints,
+  listEventRSVPS,
   listEvents,
   listPoints,
 } from "../../graphql";
-import { AdminSettings, Event } from "../../models/index";
+import { AdminSettings, Event, EventRSVP } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 import EventCard from "../../components/EventCard/EventCard";
 import getGroups from "../../misc/Groups";
@@ -45,6 +46,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
+  const [eventRSVPs, setEventRSVPs] = useState<EventRSVP[]>([]);
+  const [eventRSVPsLoading, setEventRSVPsLoading] = useState(true);
+
   const [userAccess, setUserAccess] = useState<boolean>(false);
 
   useEffect(() => {
@@ -56,6 +60,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
     loadEvents(() => {
       setEventsLoading(false);
+    });
+    loadEventRSVPs(() => {
+      setEventRSVPsLoading(false);
     });
   }, []);
 
@@ -152,10 +159,30 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     if (callback) callback();
   };
 
+  const loadEventRSVPs = async (callback: () => void) => {
+    const res: any = await API.graphql({
+      query: listEventRSVPS,
+      variables: {
+        userID: user?.attributes?.sub,
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    let items = res.data.listEventRSVPS.items;
+
+    if (items.length > 0) {
+      setEventRSVPs(items);
+    }
+
+    if (callback) callback();
+  };
+
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-        {settingsLoading || pointsLoading || eventsLoading ? (
+        {settingsLoading ||
+        pointsLoading ||
+        eventsLoading ||
+        eventRSVPsLoading ? (
           <Flex
             direction={"column"}
             justifyContent={"center"}
@@ -177,13 +204,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
             </Heading>
             <Flex direction={"row"} gap={"medium"} wrap="wrap">
               {events.map((event, i) => (
-                <EventCard
-                  event={event}
-                  key={i}
-                  onRSVP={event.canRSVP ? () => {
-                    
-                  } : undefined}
-                />
+                <EventCard event={event} key={i} />
               ))}
             </Flex>
           </Flex>

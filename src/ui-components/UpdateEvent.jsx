@@ -40,6 +40,7 @@ export default function UpdateEvent(props) {
     start: "",
     end: "",
     points: "",
+    requireRSVP: false,
     canRSVP: false,
   };
   const [name, setName] = React.useState(initialValues.name);
@@ -51,6 +52,9 @@ export default function UpdateEvent(props) {
   const [start, setStart] = React.useState(initialValues.start);
   const [end, setEnd] = React.useState(initialValues.end);
   const [points, setPoints] = React.useState(initialValues.points);
+  const [requireRSVP, setRequireRSVP] = React.useState(
+    initialValues.requireRSVP
+  );
   const [canRSVP, setCanRSVP] = React.useState(initialValues.canRSVP);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
@@ -64,6 +68,7 @@ export default function UpdateEvent(props) {
     setStart(cleanValues.start);
     setEnd(cleanValues.end);
     setPoints(cleanValues.points);
+    setRequireRSVP(cleanValues.requireRSVP);
     setCanRSVP(cleanValues.canRSVP);
     setErrors({});
   };
@@ -84,6 +89,7 @@ export default function UpdateEvent(props) {
     start: [],
     end: [],
     points: [],
+    requireRSVP: [],
     canRSVP: [],
   };
   const runValidationTasks = async (
@@ -135,6 +141,7 @@ export default function UpdateEvent(props) {
           start,
           end,
           points,
+          requireRSVP,
           canRSVP,
         };
         const validationResponses = await Promise.all(
@@ -202,6 +209,7 @@ export default function UpdateEvent(props) {
               start,
               end,
               points,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -233,6 +241,7 @@ export default function UpdateEvent(props) {
               start,
               end,
               points,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -264,6 +273,7 @@ export default function UpdateEvent(props) {
               start,
               end,
               points,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -295,6 +305,7 @@ export default function UpdateEvent(props) {
               start,
               end,
               points,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -328,6 +339,7 @@ export default function UpdateEvent(props) {
               start: value,
               end,
               points,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -361,6 +373,7 @@ export default function UpdateEvent(props) {
               start,
               end: value,
               points,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -396,6 +409,7 @@ export default function UpdateEvent(props) {
               start,
               end,
               points: value,
+              requireRSVP,
               canRSVP,
             };
             const result = onChange(modelFields);
@@ -412,6 +426,38 @@ export default function UpdateEvent(props) {
         {...getOverrideProps(overrides, "points")}
       ></TextField>
       <SwitchField
+        label="Require RSVP"
+        defaultChecked={false}
+        isDisabled={false}
+        isChecked={requireRSVP}
+        onChange={(e) => {
+          let value = e.target.checked;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              location,
+              status,
+              start,
+              end,
+              points,
+              requireRSVP: value,
+              canRSVP,
+            };
+            const result = onChange(modelFields);
+            value = result?.requireRSVP ?? value;
+          }
+          if (errors.requireRSVP?.hasError) {
+            runValidationTasks("requireRSVP", value);
+          }
+          setRequireRSVP(value);
+        }}
+        onBlur={() => runValidationTasks("requireRSVP", requireRSVP)}
+        errorMessage={errors.requireRSVP?.errorMessage}
+        hasError={errors.requireRSVP?.hasError}
+        {...getOverrideProps(overrides, "requireRSVP")}
+      ></SwitchField>
+      <SwitchField
         label="Allow users to RSVP?"
         defaultChecked={false}
         isDisabled={false}
@@ -427,6 +473,7 @@ export default function UpdateEvent(props) {
               start,
               end,
               points,
+              requireRSVP,
               canRSVP: value,
             };
             const result = onChange(modelFields);

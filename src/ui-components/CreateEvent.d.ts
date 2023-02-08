@@ -20,6 +20,7 @@ export declare type CreateEventInputValues = {
     start?: string;
     end?: string;
     points?: number;
+    requireRSVP?: boolean;
     canRSVP?: boolean;
 };
 export declare type CreateEventValidationValues = {
@@ -30,6 +31,7 @@ export declare type CreateEventValidationValues = {
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
     points?: ValidationFunction<number>;
+    requireRSVP?: ValidationFunction<boolean>;
     canRSVP?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
@@ -43,6 +45,7 @@ export declare type CreateEventOverridesProps = {
     start?: PrimitiveOverrideProps<TextFieldProps>;
     end?: PrimitiveOverrideProps<TextFieldProps>;
     points?: PrimitiveOverrideProps<TextFieldProps>;
+    requireRSVP?: PrimitiveOverrideProps<SwitchFieldProps>;
     canRSVP?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type CreateEventProps = React.PropsWithChildren<{

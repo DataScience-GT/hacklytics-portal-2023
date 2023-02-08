@@ -102,6 +102,7 @@ const EventCard: FC<EventCardProps> = ({
             borderRadius={"100px"}
             onClick={onRSVP}
             isLoading={currentlyRSVPing}
+            loadingText={isRSVPed ? "Cancelling RSVP" : "RSVPing"}
           >
             {isRSVPed ? "Cancel RSVP" : "RSVP"}
           </Button>

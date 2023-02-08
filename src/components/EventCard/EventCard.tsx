@@ -1,4 +1,4 @@
-import { Badge, Card, Heading, Text } from "@aws-amplify/ui-react";
+import { Badge, Button, Card, Heading, Text } from "@aws-amplify/ui-react";
 import React, { FC } from "react";
 import styles from "./EventCard.module.scss";
 import { Event } from "../../models";
@@ -6,9 +6,10 @@ import { DayOfWeek } from "../../misc/DaysOfWeek";
 
 interface EventCardProps {
   event?: Event;
+  onRSVP?: () => void;
 }
 
-const EventCard: FC<EventCardProps> = ({ event }: EventCardProps) => {
+const EventCard: FC<EventCardProps> = ({ event, onRSVP }: EventCardProps) => {
   const start = event?.start
     ? new Date(event?.start ?? "").toLocaleString(undefined, {
         // month: "short",
@@ -55,16 +56,27 @@ const EventCard: FC<EventCardProps> = ({ event }: EventCardProps) => {
   return (
     <div className={styles.EventCard} data-testid="EventCard">
       <Card variation="outlined" padding={"medium"}>
-        <Heading level={4}>
-          {event?.name}{" "}
-          <Badge variation={event?.status ? "success" : "error"}>
+        <Text fontWeight={400} style={{filter: "invert(0.3)"}} fontSize="small">{timeframe}</Text>
+        <Heading level={4} paddingTop="2px" paddingBottom={"2px"}>
+          {event?.name}
+          {/* {" "} */}
+          {/* <Badge variation={event?.status ? "success" : "error"}>
             {event?.status ? "Open" : "Closed"}
-          </Badge>
+          </Badge> */}
         </Heading>
-        <Text fontWeight={400}>{timeframe}</Text>
         <Text>{event?.location}</Text>
         <Text>{event?.description}</Text>
-        {event?.points && <Text>Points: {event?.points}</Text>}
+        {/* {event?.points && <Text>Points: {event?.points}</Text>} */}
+        {onRSVP && (
+          <Button
+            width={"100%"}
+            marginTop="medium"
+            borderRadius={"100px"}
+            onClick={onRSVP}
+          >
+            RSVP
+          </Button>
+        )}
       </Card>
     </div>
   );

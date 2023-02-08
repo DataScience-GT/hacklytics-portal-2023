@@ -172,9 +172,15 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 You have {points} points{points > 0 ? "!" : " :("}
               </Text>
             </Card>
-            <Flex direction={"row"} gap={"medium"}>
+            <Flex direction={"row"} gap={"medium"} wrap="wrap">
               {events.map((event, i) => (
-                <EventCard event={event} key={i} />
+                <EventCard
+                  event={event}
+                  key={i}
+                  onRSVP={() => {
+                    alert("RSVP'd! :D");
+                  }}
+                />
               ))}
             </Flex>
           </Flex>

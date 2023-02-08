@@ -1,4 +1,11 @@
-import { Badge, Button, Card, Heading, Text } from "@aws-amplify/ui-react";
+import {
+  Badge,
+  Button,
+  Card,
+  Divider,
+  Heading,
+  Text,
+} from "@aws-amplify/ui-react";
 import React, { FC } from "react";
 import styles from "./EventCard.module.scss";
 import { Event } from "../../models";
@@ -56,7 +63,13 @@ const EventCard: FC<EventCardProps> = ({ event, onRSVP }: EventCardProps) => {
   return (
     <div className={styles.EventCard} data-testid="EventCard">
       <Card variation="outlined" padding={"medium"}>
-        <Text fontWeight={400} style={{filter: "invert(0.3)"}} fontSize="small">{timeframe}</Text>
+        <Text
+          fontWeight={400}
+          style={{ filter: "invert(0.2)" }}
+          fontSize="small"
+        >
+          {timeframe}
+        </Text>
         <Heading level={4} paddingTop="2px" paddingBottom={"2px"}>
           {event?.name}
           {/* {" "} */}
@@ -64,7 +77,14 @@ const EventCard: FC<EventCardProps> = ({ event, onRSVP }: EventCardProps) => {
             {event?.status ? "Open" : "Closed"}
           </Badge> */}
         </Heading>
-        <Text>{event?.location}</Text>
+        <Text
+          fontWeight={400}
+          style={{ filter: "invert(0.2)" }}
+          fontSize="small"
+        >
+          {event?.location}
+        </Text>
+        <Divider marginTop={"medium"} marginBottom={"medium"} />
         <Text>{event?.description}</Text>
         {/* {event?.points && <Text>Points: {event?.points}</Text>} */}
         {onRSVP && (

@@ -172,6 +172,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 You have {points} points{points > 0 ? "!" : " :("}
               </Text>
             </Card>
+            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
+              Events
+            </Heading>
             <Flex direction={"row"} gap={"medium"} wrap="wrap">
               {events.map((event, i) => (
                 <EventCard

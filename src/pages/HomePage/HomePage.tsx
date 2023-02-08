@@ -204,7 +204,14 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
             </Heading>
             <Flex direction={"row"} gap={"medium"} wrap="wrap">
               {events.map((event, i) => (
-                <EventCard event={event} key={i} />
+                <EventCard
+                  event={event}
+                  key={i}
+                  onRSVP={event.canRSVP ? () => {} : undefined}
+                  isRSVPed={
+                    eventRSVPs.filter((x) => x.eventID === event.id).length >= 1
+                  }
+                />
               ))}
             </Flex>
           </Flex>

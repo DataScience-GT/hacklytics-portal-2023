@@ -208,7 +208,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
               </Text>
             </Card>
             <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
-              Events
+              Schedule
             </Heading>
             <Flex direction={"row"} gap={"medium"} wrap="wrap">
               {events.map((event, i) => (

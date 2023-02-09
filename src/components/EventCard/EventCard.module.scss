@@ -1,5 +1,12 @@
 .EventCard {
-  max-width: 30vw;
+  // width: 33%;
+  max-width: 35%;
+  flex-grow: 1;
+  align-self: stretch;
+  height: unset;
+  > div {
+    height: 100%;
+  }
 }
 
 @media screen and (max-width: 500px) {

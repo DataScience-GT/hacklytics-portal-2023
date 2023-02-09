@@ -92,7 +92,9 @@ const EventCard: FC<EventCardProps> = ({
         >
           {event?.location}
         </Text>
-        <Divider marginTop={"medium"} marginBottom={"medium"} />
+        {event?.description && (
+          <Divider marginTop={"medium"} marginBottom={"medium"} />
+        )}
         <Text>{event?.description}</Text>
         {/* {event?.points && <Text>Points: {event?.points}</Text>} */}
         {onRSVP && (

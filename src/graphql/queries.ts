@@ -530,3 +530,140 @@ export const syncEventRSVPS = /* GraphQL */ `
     }
   }
 `;
+export const getLog = /* GraphQL */ `
+  query GetLog($id: ID!) {
+    getLog(id: $id) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listLogs = /* GraphQL */ `
+  query ListLogs(
+    $filter: ModelLogFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listLogs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        userName
+        type
+        message
+        timestamp
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncLogs = /* GraphQL */ `
+  query SyncLogs(
+    $filter: ModelLogFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncLogs(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userID
+        userName
+        type
+        message
+        timestamp
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const getClaimShirt = /* GraphQL */ `
+  query GetClaimShirt($id: ID!) {
+    getClaimShirt(id: $id) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const listClaimShirts = /* GraphQL */ `
+  query ListClaimShirts(
+    $filter: ModelClaimShirtFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listClaimShirts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        userID
+        userName
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+export const syncClaimShirts = /* GraphQL */ `
+  query SyncClaimShirts(
+    $filter: ModelClaimShirtFilterInput
+    $limit: Int
+    $nextToken: String
+    $lastSync: AWSTimestamp
+  ) {
+    syncClaimShirts(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+      lastSync: $lastSync
+    ) {
+      items {
+        id
+        userID
+        userName
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;

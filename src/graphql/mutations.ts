@@ -467,3 +467,114 @@ export const deleteEventRSVP = /* GraphQL */ `
     }
   }
 `;
+export const createLog = /* GraphQL */ `
+  mutation CreateLog(
+    $input: CreateLogInput!
+    $condition: ModelLogConditionInput
+  ) {
+    createLog(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateLog = /* GraphQL */ `
+  mutation UpdateLog(
+    $input: UpdateLogInput!
+    $condition: ModelLogConditionInput
+  ) {
+    updateLog(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteLog = /* GraphQL */ `
+  mutation DeleteLog(
+    $input: DeleteLogInput!
+    $condition: ModelLogConditionInput
+  ) {
+    deleteLog(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const createClaimShirt = /* GraphQL */ `
+  mutation CreateClaimShirt(
+    $input: CreateClaimShirtInput!
+    $condition: ModelClaimShirtConditionInput
+  ) {
+    createClaimShirt(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const updateClaimShirt = /* GraphQL */ `
+  mutation UpdateClaimShirt(
+    $input: UpdateClaimShirtInput!
+    $condition: ModelClaimShirtConditionInput
+  ) {
+    updateClaimShirt(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const deleteClaimShirt = /* GraphQL */ `
+  mutation DeleteClaimShirt(
+    $input: DeleteClaimShirtInput!
+    $condition: ModelClaimShirtConditionInput
+  ) {
+    deleteClaimShirt(input: $input, condition: $condition) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

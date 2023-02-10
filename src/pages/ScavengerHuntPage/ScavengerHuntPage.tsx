@@ -11,6 +11,7 @@ import {
 import {
   listScavengerHuntCheckins,
   listScavengerHunts,
+  onCreateScavengerHunt,
   onCreateScavengerHuntCheckin,
 } from "../../graphql";
 import { API, DataStore } from "aws-amplify";
@@ -105,6 +106,18 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
   const loadScavengerHunts = async (callback?: () => void) => {
     const hunts: any = await API.graphql({ query: listScavengerHunts });
     setScavengerHunts(hunts.data.listScavengerHunts.items);
+    // subscribe to new hunts
+    const subscription: any = API.graphql({
+      query: onCreateScavengerHunt,
+    });
+    subscription.subscribe({
+      next: (eventData: any) => {
+        // add hunt to list
+        const newHunt = eventData.value.data.onCreateScavengerHunt;
+        setScavengerHunts((prev) => [...prev, newHunt]);
+      },
+    });
+
     if (callback) callback();
   };
 
@@ -195,7 +208,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
           >
             Edit
           </ToggleButton>
-          <ToggleButton
+          {/* <ToggleButton
             isDisabled={loading || scavengerHunts.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
@@ -218,7 +231,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
             // isPressed={eventAction === "delete"}
           >
             Delete
-          </ToggleButton>
+          </ToggleButton> */}
         </Flex>
         {loading ? (
           <Flex
@@ -442,7 +455,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
               // console.log(fields);
 
               setCreateHuntModalOpen(false);
-              setScavengerHunts([...scavengerHunts, fields as ScavengerHunt]);
+              // setScavengerHunts([...scavengerHunts, fields as ScavengerHunt]);
             }}
             onError={(error) => {
               console.error(error);

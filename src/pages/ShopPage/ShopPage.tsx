@@ -15,6 +15,8 @@ import {
   TableRow,
   View,
   Text,
+  SearchField,
+  Flex,
 } from "@aws-amplify/ui-react";
 
 interface ShopPageProps {
@@ -33,6 +35,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const [tryingToClaimShirt, setTryingToClaimShirt] =
     React.useState<boolean>(false);
 
+  const [shopSearch, setShopSearch] = React.useState<string>("");
+  const [filteredPoints, setFilteredPoints] = React.useState<Points[]>([]);
+
   useEffect(() => {
     loadPoints(() => {
       setLoadingPoints(false);
@@ -41,6 +46,14 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       setLoadingShirtsClaimed(false);
     });
   }, []);
+
+  useEffect(() => {
+    setFilteredPoints(
+      points.filter((x) =>
+        (x.userName ?? "").toLowerCase().includes(shopSearch)
+      )
+    );
+  }, [points, shopSearch]);
 
   const loadPoints = async (callback?: () => void) => {
     const res: any = await API.graphql({
@@ -103,6 +116,36 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Points Shop
         </Heading>
+        <Flex
+          direction={"row"}
+          gap={"medium"}
+          marginBottom={"medium"}
+          wrap={"wrap"}
+        >
+          <SearchField
+            label=""
+            labelHidden={true}
+            placeholder={"Search"}
+            onChange={(e) => {
+              setShopSearch(e.target.value.toLowerCase());
+              // let maxPages = Math.ceil(filteredEvents.length / eventPageSize);
+              // if (eventPage > maxPages && maxPages !== 0) {
+              //   setEventPage(maxPages);
+              // }
+
+              // if (eventPage < 1) {
+              //   setEventPage(1);
+              // }
+            }}
+            onClear={() => {
+              setShopSearch("");
+              // if (eventPage < 1) {
+              //   setEventPage(1);
+              // }
+            }}
+            isDisabled={loadingPoints || points.length === 0}
+          />
+        </Flex>
         {loadingPoints || loadingShirtsClaimed ? (
           <Text>Loading...</Text>
         ) : points.length <= 0 ? (
@@ -130,7 +173,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {points.map((point) => (
+              {filteredPoints.map((point) => (
                 <TableRow key={point.id}>
                   <TableCell>{point.userName}</TableCell>
                   <TableCell>{point.points}</TableCell>

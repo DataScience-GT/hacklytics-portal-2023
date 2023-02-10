@@ -31,9 +31,13 @@ import Status from "../../Types/Status";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
 import { API, DataStore } from "aws-amplify";
-import { getAdminSettings, listEvents } from "../../graphql/queries";
+import {
+  getAdminSettings,
+  listCheckins,
+  listEvents,
+} from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
-import { AdminSettings, EagerEvent, Event } from "../../models/index";
+import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
 import { CreateEvent, UpdateEvent } from "../../ui-components";
 import { toast } from "react-toastify";
 
@@ -63,6 +67,11 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   //events --------------------
   const [events, setEvents] = useState<Event[]>([]);
+  const [eventCheckins, setEventCheckins] = useState<Map<String, number>>(
+    new Map()
+  );
+  const [loadingEventCheckins, setLoadingEventCheckins] =
+    useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
@@ -103,6 +112,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     });
     loadEvents(() => {
       setEventsLoading(false);
+    });
+    loadEventCheckins(() => {
+      setLoadingEventCheckins(false);
     });
   }, []);
 
@@ -191,6 +203,59 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     if (callback) callback();
   };
 
+  const loadEventCheckins = async (callback?: () => void) => {
+    const query = `query ListCheckins {
+      listCheckins {
+        items {
+
+          event {
+            id
+          }
+        }
+      }
+    }
+    `;
+    const res: any = await API.graphql({
+      query: query,
+      variables: {
+        id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    let checkins1 = res.data.listCheckins.items;
+    for (var c in checkins1) {
+      // get the current value of c.eventID in the map
+
+      let checkin: Checkin = checkins1[c];
+      let count = eventCheckins.get(checkin.event.id) ?? 0;
+      setEventCheckins(new Map(eventCheckins.set(checkin.event.id, count + 1)));
+    }
+    // subscribe to new checkins
+    const sub_query = `
+    subscription OnCreateCheckin {
+      onCreateCheckin {
+        event {
+          id
+        }
+      }
+    }
+    `;
+    const subscription: any = API.graphql({
+      query: sub_query,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    subscription.subscribe({
+      next: (eventData: any) => {
+        let checkin: Checkin = eventData.value.data.onCreateCheckin;
+        let count = eventCheckins.get(checkin.event.id) ?? 0;
+        setEventCheckins(
+          new Map(eventCheckins.set(checkin.event.id, count + 1))
+        );
+      },
+    });
+    if (callback) callback();
+  };
+
   return (
     <div className={styles.AdminPage}>
       <View padding="medium">
@@ -267,7 +332,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           >
             Edit
           </ToggleButton>
-          <ToggleButton
+          {/* <ToggleButton
             isDisabled={eventsLoading || events.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
@@ -290,7 +355,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             isPressed={eventAction === "delete"}
           >
             Delete
-          </ToggleButton>
+          </ToggleButton> */}
         </Flex>
         {eventsLoading ? (
           <Flex
@@ -315,6 +380,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     <TableCell as="th">End</TableCell>
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
+                    <TableCell as="th">Check-ins</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody
@@ -429,6 +495,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                             <TableCell>
                               {event.points ?? <Badge>Undefined</Badge>}
                             </TableCell>
+                            <TableCell>
+                              {!loadingEventCheckins ? (
+                                eventCheckins.get(event.id) ?? 0
+                              ) : (
+                                <Loader size="small" />
+                              )}
+                            </TableCell>
                           </TableRow>
                         ))}
                     </>
@@ -482,7 +555,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
         {/* Applicant table */}
 
-        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
+        {/* <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Applicants
         </Heading>
         <Button
@@ -491,7 +564,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           }}
         >
           Add Applicants
-        </Button>
+        </Button> */}
 
         {/* SETTINGS MODAL */}
 

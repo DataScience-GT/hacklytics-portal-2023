@@ -136,3 +136,40 @@ type EventRSVP
   userName: String!
   eventID: String!
 }
+
+type Log
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read, create] }
+    ]
+  ) {
+  id: ID!
+  userID: String!
+  userName: String!
+  type: String!
+  message: String!
+  timestamp: AWSDateTime!
+}
+
+type ClaimShirt 
+  @model
+  @auth(
+    rules: [
+      {
+        allow: groups
+        groups: ["Administrator"]
+        operations: [read, create, update, delete]
+      }
+      { allow: private, operations: [read, create] }
+    ]
+  ) {
+  id: ID!
+  userID: String!
+  userName: String!
+}

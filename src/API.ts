@@ -416,6 +416,96 @@ export type DeleteEventRSVPInput = {
   _version?: number | null,
 };
 
+export type CreateLogInput = {
+  id?: string | null,
+  userID: string,
+  userName: string,
+  type: string,
+  message: string,
+  timestamp: string,
+  _version?: number | null,
+};
+
+export type ModelLogConditionInput = {
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  type?: ModelStringInput | null,
+  message?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
+  and?: Array< ModelLogConditionInput | null > | null,
+  or?: Array< ModelLogConditionInput | null > | null,
+  not?: ModelLogConditionInput | null,
+};
+
+export type Log = {
+  __typename: "Log",
+  id: string,
+  userID: string,
+  userName: string,
+  type: string,
+  message: string,
+  timestamp: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateLogInput = {
+  id: string,
+  userID?: string | null,
+  userName?: string | null,
+  type?: string | null,
+  message?: string | null,
+  timestamp?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteLogInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateClaimShirtInput = {
+  id?: string | null,
+  userID: string,
+  userName: string,
+  _version?: number | null,
+};
+
+export type ModelClaimShirtConditionInput = {
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  and?: Array< ModelClaimShirtConditionInput | null > | null,
+  or?: Array< ModelClaimShirtConditionInput | null > | null,
+  not?: ModelClaimShirtConditionInput | null,
+};
+
+export type ClaimShirt = {
+  __typename: "ClaimShirt",
+  id: string,
+  userID: string,
+  userName: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateClaimShirtInput = {
+  id: string,
+  userID?: string | null,
+  userName?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteClaimShirtInput = {
+  id: string,
+  _version?: number | null,
+};
+
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
@@ -534,6 +624,41 @@ export type ModelEventRSVPConnection = {
   startedAt?: number | null,
 };
 
+export type ModelLogFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  type?: ModelStringInput | null,
+  message?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
+  and?: Array< ModelLogFilterInput | null > | null,
+  or?: Array< ModelLogFilterInput | null > | null,
+  not?: ModelLogFilterInput | null,
+};
+
+export type ModelLogConnection = {
+  __typename: "ModelLogConnection",
+  items:  Array<Log | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelClaimShirtFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  and?: Array< ModelClaimShirtFilterInput | null > | null,
+  or?: Array< ModelClaimShirtFilterInput | null > | null,
+  not?: ModelClaimShirtFilterInput | null,
+};
+
+export type ModelClaimShirtConnection = {
+  __typename: "ModelClaimShirtConnection",
+  items:  Array<ClaimShirt | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
 export type ModelSubscriptionAdminSettingsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   hacklyticsOpen?: ModelSubscriptionBooleanInput | null,
@@ -647,6 +772,25 @@ export type ModelSubscriptionEventRSVPFilterInput = {
   eventID?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
+};
+
+export type ModelSubscriptionLogFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  userName?: ModelSubscriptionStringInput | null,
+  type?: ModelSubscriptionStringInput | null,
+  message?: ModelSubscriptionStringInput | null,
+  timestamp?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionLogFilterInput | null > | null,
+  or?: Array< ModelSubscriptionLogFilterInput | null > | null,
+};
+
+export type ModelSubscriptionClaimShirtFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  userName?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
+  or?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -1159,6 +1303,129 @@ export type DeleteEventRSVPMutation = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     owner?: string | null,
+  } | null,
+};
+
+export type CreateLogMutationVariables = {
+  input: CreateLogInput,
+  condition?: ModelLogConditionInput | null,
+};
+
+export type CreateLogMutation = {
+  createLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateLogMutationVariables = {
+  input: UpdateLogInput,
+  condition?: ModelLogConditionInput | null,
+};
+
+export type UpdateLogMutation = {
+  updateLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteLogMutationVariables = {
+  input: DeleteLogInput,
+  condition?: ModelLogConditionInput | null,
+};
+
+export type DeleteLogMutation = {
+  deleteLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateClaimShirtMutationVariables = {
+  input: CreateClaimShirtInput,
+  condition?: ModelClaimShirtConditionInput | null,
+};
+
+export type CreateClaimShirtMutation = {
+  createClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateClaimShirtMutationVariables = {
+  input: UpdateClaimShirtInput,
+  condition?: ModelClaimShirtConditionInput | null,
+};
+
+export type UpdateClaimShirtMutation = {
+  updateClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteClaimShirtMutationVariables = {
+  input: DeleteClaimShirtInput,
+  condition?: ModelClaimShirtConditionInput | null,
+};
+
+export type DeleteClaimShirtMutation = {
+  deleteClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };
 
@@ -1725,6 +1992,153 @@ export type SyncEventRSVPSQuery = {
   } | null,
 };
 
+export type GetLogQueryVariables = {
+  id: string,
+};
+
+export type GetLogQuery = {
+  getLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListLogsQueryVariables = {
+  filter?: ModelLogFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListLogsQuery = {
+  listLogs?:  {
+    __typename: "ModelLogConnection",
+    items:  Array< {
+      __typename: "Log",
+      id: string,
+      userID: string,
+      userName: string,
+      type: string,
+      message: string,
+      timestamp: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncLogsQueryVariables = {
+  filter?: ModelLogFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncLogsQuery = {
+  syncLogs?:  {
+    __typename: "ModelLogConnection",
+    items:  Array< {
+      __typename: "Log",
+      id: string,
+      userID: string,
+      userName: string,
+      type: string,
+      message: string,
+      timestamp: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetClaimShirtQueryVariables = {
+  id: string,
+};
+
+export type GetClaimShirtQuery = {
+  getClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListClaimShirtsQueryVariables = {
+  filter?: ModelClaimShirtFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListClaimShirtsQuery = {
+  listClaimShirts?:  {
+    __typename: "ModelClaimShirtConnection",
+    items:  Array< {
+      __typename: "ClaimShirt",
+      id: string,
+      userID: string,
+      userName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncClaimShirtsQueryVariables = {
+  filter?: ModelClaimShirtFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncClaimShirtsQuery = {
+  syncClaimShirts?:  {
+    __typename: "ModelClaimShirtConnection",
+    items:  Array< {
+      __typename: "ClaimShirt",
+      id: string,
+      userID: string,
+      userName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type OnCreateAdminSettingsSubscriptionVariables = {
   filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
@@ -2217,5 +2631,122 @@ export type OnDeleteEventRSVPSubscription = {
     _deleted?: boolean | null,
     _lastChangedAt: number,
     owner?: string | null,
+  } | null,
+};
+
+export type OnCreateLogSubscriptionVariables = {
+  filter?: ModelSubscriptionLogFilterInput | null,
+};
+
+export type OnCreateLogSubscription = {
+  onCreateLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateLogSubscriptionVariables = {
+  filter?: ModelSubscriptionLogFilterInput | null,
+};
+
+export type OnUpdateLogSubscription = {
+  onUpdateLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteLogSubscriptionVariables = {
+  filter?: ModelSubscriptionLogFilterInput | null,
+};
+
+export type OnDeleteLogSubscription = {
+  onDeleteLog?:  {
+    __typename: "Log",
+    id: string,
+    userID: string,
+    userName: string,
+    type: string,
+    message: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateClaimShirtSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimShirtFilterInput | null,
+};
+
+export type OnCreateClaimShirtSubscription = {
+  onCreateClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateClaimShirtSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimShirtFilterInput | null,
+};
+
+export type OnUpdateClaimShirtSubscription = {
+  onUpdateClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteClaimShirtSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimShirtFilterInput | null,
+};
+
+export type OnDeleteClaimShirtSubscription = {
+  onDeleteClaimShirt?:  {
+    __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
   } | null,
 };

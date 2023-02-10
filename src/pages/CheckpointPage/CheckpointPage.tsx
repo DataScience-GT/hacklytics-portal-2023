@@ -108,57 +108,33 @@ const CheckpointPage: FC<CheckpointPageProps> = ({ user, signOut }) => {
     // if success
     if (res.data.createScavengerHuntCheckin) {
       // add points to users
-      // check if user's points already exist
-      let pointsResult: any = await API.graphql({
-        query: listPoints,
-        variables: { userID: user?.username },
+      // create new points
+      let points: any = await API.graphql({
+        query: createPoints,
+        variables: {
+          input: {
+            userID: user?.username,
+            userName: user?.attributes?.name,
+            points: hunt.points,
+          },
+        },
       });
-
-      var points = pointsResult.data.listPoints.items;
-
-      if (points.length <= 0) {
-        // create points
-        let res: any = await API.graphql({
-          query: createPoints,
-          variables: {
-            input: {
-              userID: user?.username,
-              points: hunt.points,
-              userName: user?.attributes?.name ?? "",
-            },
-          },
+      if (points.errors) {
+        setStatus({
+          show: true,
+          message: `Error claiming points!`,
+          type: "error",
         });
-        if (res.data.createPoints) {
-          setStatus({
-            show: true,
-            message: `You have claimed ${hunt.points} points!`,
-            type: "success",
-          });
-          setLoading(false);
-        }
+        setLoading(false);
+        return;
       } else {
-        points[0].points += hunt.points;
-        // update points
-        let res: any = await API.graphql({
-          query: updatePoints,
-          variables: {
-            input: {
-              ...points[0],
-              createdAt: undefined,
-              updatedAt: undefined,
-              _deleted: undefined,
-              _lastChangedAt: undefined,
-            },
-          },
+        setStatus({
+          show: true,
+          message: `You have claimed ${hunt.points} points!`,
+          type: "success",
         });
-        if (res.data.updatePoints) {
-          setStatus({
-            show: true,
-            message: `You have claimed ${hunt.points} points!`,
-            type: "success",
-          });
-          setLoading(false);
-        }
+        setLoading(false);
+        return;
       }
     }
   };

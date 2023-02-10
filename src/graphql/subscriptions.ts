@@ -431,3 +431,102 @@ export const onDeleteEventRSVP = /* GraphQL */ `
     }
   }
 `;
+export const onCreateLog = /* GraphQL */ `
+  subscription OnCreateLog($filter: ModelSubscriptionLogFilterInput) {
+    onCreateLog(filter: $filter) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateLog = /* GraphQL */ `
+  subscription OnUpdateLog($filter: ModelSubscriptionLogFilterInput) {
+    onUpdateLog(filter: $filter) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteLog = /* GraphQL */ `
+  subscription OnDeleteLog($filter: ModelSubscriptionLogFilterInput) {
+    onDeleteLog(filter: $filter) {
+      id
+      userID
+      userName
+      type
+      message
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onCreateClaimShirt = /* GraphQL */ `
+  subscription OnCreateClaimShirt(
+    $filter: ModelSubscriptionClaimShirtFilterInput
+  ) {
+    onCreateClaimShirt(filter: $filter) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onUpdateClaimShirt = /* GraphQL */ `
+  subscription OnUpdateClaimShirt(
+    $filter: ModelSubscriptionClaimShirtFilterInput
+  ) {
+    onUpdateClaimShirt(filter: $filter) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;
+export const onDeleteClaimShirt = /* GraphQL */ `
+  subscription OnDeleteClaimShirt(
+    $filter: ModelSubscriptionClaimShirtFilterInput
+  ) {
+    onDeleteClaimShirt(filter: $filter) {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+    }
+  }
+`;

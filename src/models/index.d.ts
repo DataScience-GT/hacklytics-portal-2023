@@ -30,6 +30,14 @@ type EventRSVPMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type LogMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+type ClaimShirtMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
@@ -212,4 +220,54 @@ export declare type EventRSVP = LazyLoading extends LazyLoadingDisabled ? EagerE
 
 export declare const EventRSVP: (new (init: ModelInit<EventRSVP, EventRSVPMetaData>) => EventRSVP) & {
   copyOf(source: EventRSVP, mutator: (draft: MutableModel<EventRSVP, EventRSVPMetaData>) => MutableModel<EventRSVP, EventRSVPMetaData> | void): EventRSVP;
+}
+
+type EagerLog = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly type: string;
+  readonly message: string;
+  readonly timestamp: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyLog = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly type: string;
+  readonly message: string;
+  readonly timestamp: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Log = LazyLoading extends LazyLoadingDisabled ? EagerLog : LazyLog
+
+export declare const Log: (new (init: ModelInit<Log, LogMetaData>) => Log) & {
+  copyOf(source: Log, mutator: (draft: MutableModel<Log, LogMetaData>) => MutableModel<Log, LogMetaData> | void): Log;
+}
+
+type EagerClaimShirt = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyClaimShirt = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ClaimShirt = LazyLoading extends LazyLoadingDisabled ? EagerClaimShirt : LazyClaimShirt
+
+export declare const ClaimShirt: (new (init: ModelInit<ClaimShirt, ClaimShirtMetaData>) => ClaimShirt) & {
+  copyOf(source: ClaimShirt, mutator: (draft: MutableModel<ClaimShirt, ClaimShirtMetaData>) => MutableModel<ClaimShirt, ClaimShirtMetaData> | void): ClaimShirt;
 }

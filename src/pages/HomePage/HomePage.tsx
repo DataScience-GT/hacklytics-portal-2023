@@ -22,7 +22,7 @@ import {
   listEvents,
   listPoints,
 } from "../../graphql";
-import { AdminSettings, Event, EventRSVP } from "../../models/index";
+import { AdminSettings, Event, EventRSVP, Points } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 import EventCard from "../../components/EventCard/EventCard";
 import getGroups from "../../misc/Groups";
@@ -122,7 +122,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
-        userID: user?.attributes?.sub,
+        userID: user?.username,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -130,11 +130,16 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     let items = res.data.listPoints.items;
 
     if (items.length > 0) {
-      setPoints(items[0].points);
-      console.log(`you have ${items[0].points} points!`);
+      let points = 0;
+      items.forEach((item: Points) => {
+        if (item.userID === user?.username) points += item.points;
+      });
+
+      setPoints(points);
+      // console.log(`you have ${points} points!`);
     } else {
       setPoints(0);
-      console.log(`you have 0 points :(`);
+      // console.log(`you have 0 points :(`);
     }
 
     if (callback) callback();

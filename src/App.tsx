@@ -38,6 +38,7 @@ import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
 import CheckpointPage from "./pages/CheckpointPage/CheckpointPage";
 import AccountPage from "./pages/AccountPage/AccountPage";
 import DatasetPage from "./pages/DatasetPage/DatasetPage";
+import ShopPage from "./pages/ShopPage/ShopPage";
 
 Amplify.configure({
   ...aws_exports,
@@ -196,6 +197,16 @@ const App = () => {
                         path="/settings"
                         element={<SettingsPage user={user} signOut={signOut} />}
                       />
+                      {user &&
+                        (getGroups(user).includes("Administrator") ||
+                          getGroups(user).includes("Volunteer")) && (
+                          <Route
+                            path="/shop/*"
+                            element={
+                              <ShopPage user={user} signOut={signOut} />
+                            }
+                          />
+                        )}
                       {user && getGroups(user).includes("Administrator") && (
                         <Route
                           path="/admin/*"

@@ -99,6 +99,13 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                       <MenuItem>Scavenger Hunts</MenuItem>
                     </Link>
                   )}
+                {user &&
+                  (getGroups(user).includes("Volunteer") ||
+                    getGroups(user).includes("Administrator")) && (
+                    <Link className={styles.MenuLink} to="/shop">
+                      <MenuItem>Points Shop</MenuItem>
+                    </Link>
+                  )}
                 <Link className={styles.MenuLink} to="/datasets">
                   <MenuItem>Datasets</MenuItem>
                 </Link>

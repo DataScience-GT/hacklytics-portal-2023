@@ -160,9 +160,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
 
     // sort events by start time
     items.sort((a: Event, b: Event) => {
-      // if no start time, set to really far in the future
-      let a1 = new Date(a.start ?? "june 2029");
-      let b1 = new Date(b.start ?? "june 2029");
+      // if no start time, set to really far in the past
+      let a1 = new Date(a.start ?? "june 2000");
+      let b1 = new Date(b.start ?? "june 2000");
       return a1.getTime() - b1.getTime();
     });
 
@@ -221,7 +221,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
             <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
               Schedule
             </Heading>
-            <Flex direction={"row"} gap={"medium"} wrap="wrap">
+            <Flex direction={"row"} gap={"medium"} wrap="wrap" justifyContent={"space-evenly"}>
               {events.map((event, i) => (
                 <EventCard
                   event={event}

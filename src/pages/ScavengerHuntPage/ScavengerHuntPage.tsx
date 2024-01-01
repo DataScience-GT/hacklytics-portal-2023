@@ -350,7 +350,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                             </TableCell>
                             <TableCell>
                               <CopyToClipboard
-                                text={`${window.location.origin}/checkpoint/${hunt.id}`}
+                                text={`${CHECKPOINT_URL}${hunt.id}`}
                                 onCopy={() => {
                                   toast.success("Copied to clipboard!", {
                                     position: "top-center",

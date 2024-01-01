@@ -2,11 +2,12 @@
   "AppSyncApiName": "hacklyticsportal2023",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2022-12-04T03:26:25.344Z",
+  "AuthModeLastUpdated": "2024-01-01T05:54:30.468Z",
   "AuthCognitoUserPoolId": {
     "Fn::GetAtt": [
       "authhacklyticsportal2023",
       "Outputs.UserPoolId"
     ]
-  }
+  },
+  "CreateAPIKey": 0
 }

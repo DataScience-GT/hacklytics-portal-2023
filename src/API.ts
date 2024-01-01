@@ -15,6 +15,7 @@ export type ModelAdminSettingsConditionInput = {
   and?: Array< ModelAdminSettingsConditionInput | null > | null,
   or?: Array< ModelAdminSettingsConditionInput | null > | null,
   not?: ModelAdminSettingsConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelBooleanInput = {
@@ -115,6 +116,7 @@ export type ModelEventConditionInput = {
   and?: Array< ModelEventConditionInput | null > | null,
   or?: Array< ModelEventConditionInput | null > | null,
   not?: ModelEventConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelIntInput = {
@@ -209,6 +211,7 @@ export type ModelCheckinConditionInput = {
   and?: Array< ModelCheckinConditionInput | null > | null,
   or?: Array< ModelCheckinConditionInput | null > | null,
   not?: ModelCheckinConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
   eventCheckinsId?: ModelIDInput | null,
 };
 
@@ -258,6 +261,7 @@ export type ModelPointsConditionInput = {
   and?: Array< ModelPointsConditionInput | null > | null,
   or?: Array< ModelPointsConditionInput | null > | null,
   not?: ModelPointsConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type Points = {
@@ -303,6 +307,7 @@ export type ModelScavengerHuntConditionInput = {
   and?: Array< ModelScavengerHuntConditionInput | null > | null,
   or?: Array< ModelScavengerHuntConditionInput | null > | null,
   not?: ModelScavengerHuntConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ScavengerHunt = {
@@ -346,6 +351,7 @@ export type ModelScavengerHuntCheckinConditionInput = {
   and?: Array< ModelScavengerHuntCheckinConditionInput | null > | null,
   or?: Array< ModelScavengerHuntCheckinConditionInput | null > | null,
   not?: ModelScavengerHuntCheckinConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ScavengerHuntCheckin = {
@@ -387,6 +393,7 @@ export type ModelEventRSVPConditionInput = {
   and?: Array< ModelEventRSVPConditionInput | null > | null,
   or?: Array< ModelEventRSVPConditionInput | null > | null,
   not?: ModelEventRSVPConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type EventRSVP = {
@@ -435,6 +442,7 @@ export type ModelLogConditionInput = {
   and?: Array< ModelLogConditionInput | null > | null,
   or?: Array< ModelLogConditionInput | null > | null,
   not?: ModelLogConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type Log = {
@@ -480,6 +488,7 @@ export type ModelClaimShirtConditionInput = {
   and?: Array< ModelClaimShirtConditionInput | null > | null,
   or?: Array< ModelClaimShirtConditionInput | null > | null,
   not?: ModelClaimShirtConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ClaimShirt = {
@@ -513,6 +522,7 @@ export type ModelAdminSettingsFilterInput = {
   and?: Array< ModelAdminSettingsFilterInput | null > | null,
   or?: Array< ModelAdminSettingsFilterInput | null > | null,
   not?: ModelAdminSettingsFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelAdminSettingsConnection = {
@@ -536,6 +546,7 @@ export type ModelEventFilterInput = {
   and?: Array< ModelEventFilterInput | null > | null,
   or?: Array< ModelEventFilterInput | null > | null,
   not?: ModelEventFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelEventConnection = {
@@ -554,6 +565,7 @@ export type ModelCheckinFilterInput = {
   and?: Array< ModelCheckinFilterInput | null > | null,
   or?: Array< ModelCheckinFilterInput | null > | null,
   not?: ModelCheckinFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
   eventCheckinsId?: ModelIDInput | null,
 };
 
@@ -564,6 +576,7 @@ export type ModelPointsFilterInput = {
   and?: Array< ModelPointsFilterInput | null > | null,
   or?: Array< ModelPointsFilterInput | null > | null,
   not?: ModelPointsFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelPointsConnection = {
@@ -582,6 +595,7 @@ export type ModelScavengerHuntFilterInput = {
   and?: Array< ModelScavengerHuntFilterInput | null > | null,
   or?: Array< ModelScavengerHuntFilterInput | null > | null,
   not?: ModelScavengerHuntFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelScavengerHuntConnection = {
@@ -598,6 +612,7 @@ export type ModelScavengerHuntCheckinFilterInput = {
   and?: Array< ModelScavengerHuntCheckinFilterInput | null > | null,
   or?: Array< ModelScavengerHuntCheckinFilterInput | null > | null,
   not?: ModelScavengerHuntCheckinFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelScavengerHuntCheckinConnection = {
@@ -615,6 +630,7 @@ export type ModelEventRSVPFilterInput = {
   and?: Array< ModelEventRSVPFilterInput | null > | null,
   or?: Array< ModelEventRSVPFilterInput | null > | null,
   not?: ModelEventRSVPFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelEventRSVPConnection = {
@@ -634,6 +650,7 @@ export type ModelLogFilterInput = {
   and?: Array< ModelLogFilterInput | null > | null,
   or?: Array< ModelLogFilterInput | null > | null,
   not?: ModelLogFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelLogConnection = {
@@ -650,6 +667,7 @@ export type ModelClaimShirtFilterInput = {
   and?: Array< ModelClaimShirtFilterInput | null > | null,
   or?: Array< ModelClaimShirtFilterInput | null > | null,
   not?: ModelClaimShirtFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelClaimShirtConnection = {
@@ -665,6 +683,7 @@ export type ModelSubscriptionAdminSettingsFilterInput = {
   participantEmails?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
   or?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionIDInput = {
@@ -715,6 +734,7 @@ export type ModelSubscriptionEventFilterInput = {
   points?: ModelSubscriptionIntInput | null,
   and?: Array< ModelSubscriptionEventFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionIntInput = {
@@ -737,6 +757,7 @@ export type ModelSubscriptionCheckinFilterInput = {
   userName?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
   or?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionPointsFilterInput = {
@@ -745,6 +766,7 @@ export type ModelSubscriptionPointsFilterInput = {
   points?: ModelSubscriptionIntInput | null,
   and?: Array< ModelSubscriptionPointsFilterInput | null > | null,
   or?: Array< ModelSubscriptionPointsFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionScavengerHuntFilterInput = {
@@ -755,6 +777,7 @@ export type ModelSubscriptionScavengerHuntFilterInput = {
   points?: ModelSubscriptionIntInput | null,
   and?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
   or?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionScavengerHuntCheckinFilterInput = {
@@ -763,6 +786,7 @@ export type ModelSubscriptionScavengerHuntCheckinFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
   or?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionEventRSVPFilterInput = {
@@ -772,6 +796,7 @@ export type ModelSubscriptionEventRSVPFilterInput = {
   eventID?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionLogFilterInput = {
@@ -783,6 +808,7 @@ export type ModelSubscriptionLogFilterInput = {
   timestamp?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionLogFilterInput | null > | null,
   or?: Array< ModelSubscriptionLogFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type ModelSubscriptionClaimShirtFilterInput = {
@@ -791,6 +817,7 @@ export type ModelSubscriptionClaimShirtFilterInput = {
   userName?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
 };
 
 export type CreateAdminSettingsMutationVariables = {
@@ -1437,8 +1464,19 @@ export type GetUserByIdQuery = {
   getUserById?: string | null,
 };
 
+export type ListUsersQueryVariables = {
+};
+
 export type ListUsersQuery = {
   listUsers?: string | null,
+};
+
+export type GetUserByNameQueryVariables = {
+  userName?: string | null,
+};
+
+export type GetUserByNameQuery = {
+  getUserByName?: string | null,
 };
 
 export type GetAdminSettingsQueryVariables = {

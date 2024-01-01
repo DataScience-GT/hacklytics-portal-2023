@@ -1,7 +1,9 @@
 .EventCard {
   // width: 33%;
-  max-width: 35%;
-  flex-grow: 1;
+  width: 22%;
+  box-sizing: border-box;
+  // max-width: 35%;
+  // flex-grow: 1;
   align-self: stretch;
   height: unset;
   > div {
@@ -9,7 +11,13 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 1400px) {
+  .EventCard {
+    width: 45%;
+  }
+}
+
+@media screen and (max-width: 800px) {
   .EventCard {
     width: 100%;
     max-width: 100%;

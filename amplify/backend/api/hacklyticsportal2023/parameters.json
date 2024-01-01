@@ -8,5 +8,6 @@
       "authhacklyticsportal2023",
       "Outputs.UserPoolId"
     ]
-  }
+  },
+  "APIKeyExpirationEpoch": -1, "CreateAPIKey": -1
 }

@@ -38,7 +38,7 @@ import {
 } from "../../graphql/queries";
 import { updateAdminSettings } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
-import { CreateEvent, UpdateEvent } from "../../ui-components";
+import { EventCreateForm, EventRSVPUpdateForm, EventUpdateForm } from "../../ui-components";
 import { toast } from "react-toastify";
 
 interface AdminPageProps {
@@ -196,6 +196,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       query: listEvents,
       variables: {
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+        limit: 1000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -219,6 +220,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       query: query,
       variables: {
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+        limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -806,7 +808,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           style={modalFormStyle}
         >
           <StatusAlert status={createEventStatus} />
-          <CreateEvent
+          <EventCreateForm
             onSubmit={(fields) => {
               // Example function to trim all string inputs
               // console.log(fields);
@@ -824,9 +826,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               });
               return updatedFields;
             }}
-            onCancel={() => {
-              setCreateEventModalOpen(false);
-            }}
+            // onCancel={() => {
+            //   setCreateEventModalOpen(false);
+            // }}
             onSuccess={(fields) => {
               // create new event in database
               // console.log(fields);
@@ -857,7 +859,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           style={modalFormStyle}
         >
           <StatusAlert status={editEventStatus} />
-          <UpdateEvent
+          <EventUpdateForm
             event={eventEditing}
             onSubmit={(fields) => {
               // Example function to trim all string inputs
@@ -876,9 +878,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               });
               return updatedFields;
             }}
-            onCancel={() => {
-              setEditEventModalOpen(false);
-            }}
+            // onCancel={() => {
+            //   setEditEventModalOpen(false);
+            // }}
             onSuccess={(fields) => {
               // create new event in database
               // console.log(fields);

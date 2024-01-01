@@ -1,4 +1,42 @@
 {
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-hacklyticsportal2023-prod-221126-authRole",
+      "UnauthRoleArn": "arn:aws:iam::521654603461:role/amplify-hacklyticsportal2023-prod-221126-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::521654603461:role/amplify-hacklyticsportal2023-prod-221126-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
+      "UnauthRoleName": "amplify-hacklyticsportal2023-prod-221126-unauthRole",
+      "StackName": "amplify-hacklyticsportal2023-prod-221126",
+      "StackId": "arn:aws:cloudformation:us-east-1:521654603461:stack/amplify-hacklyticsportal2023-prod-221126/ddeab610-6300-11ed-b68d-0a2e7833040d",
+      "AmplifyAppId": "d1nefwyjdgyk10"
+    },
+    "categories": {
+      "auth": {
+        "hacklyticsportal2023": {}
+      },
+      "api": {
+        "hacklyticsportal2023": {}
+      },
+      "storage": {
+        "imagestorage": {}
+      },
+      "function": {
+        "hacklyticsportal20232e32fd51": {
+          "deploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
+          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-6841616a6172616d5537-build.zip"
+        },
+        "hacklyticsportal2023listusers": {
+          "deploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
+          "s3Key": "amplify-builds/hacklyticsportal2023listusers-3768654f6b65734e6168-build.zip"
+        },
+        "hacklyticsportalGetUserByName": {
+          "deploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
+          "s3Key": "amplify-builds/hacklyticsportalGetUserByName-5847415145532f666b63-build.zip"
+        }
+      }
+    }
+  },
   "staging": {
     "awscloudformation": {
       "AuthRoleName": "amplify-amplify0f0acd1e2a0b4-staging-14346-authRole",
@@ -30,40 +68,6 @@
         },
         "hacklyticsportal2023listusers": {
           "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
-          "s3Key": "amplify-builds/hacklyticsportal2023listusers-3768654f6b65734e6168-build.zip"
-        }
-      }
-    }
-  },
-  "prod": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-hacklyticsportal2023-prod-221126-authRole",
-      "UnauthRoleArn": "arn:aws:iam::521654603461:role/amplify-hacklyticsportal2023-prod-221126-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::521654603461:role/amplify-hacklyticsportal2023-prod-221126-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
-      "UnauthRoleName": "amplify-hacklyticsportal2023-prod-221126-unauthRole",
-      "StackName": "amplify-hacklyticsportal2023-prod-221126",
-      "StackId": "arn:aws:cloudformation:us-east-1:521654603461:stack/amplify-hacklyticsportal2023-prod-221126/ddeab610-6300-11ed-b68d-0a2e7833040d",
-      "AmplifyAppId": "d1nefwyjdgyk10"
-    },
-    "categories": {
-      "auth": {
-        "hacklyticsportal2023": {}
-      },
-      "api": {
-        "hacklyticsportal2023": {}
-      },
-      "storage": {
-        "imagestorage": {}
-      },
-      "function": {
-        "hacklyticsportal20232e32fd51": {
-          "deploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
-          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-7769506364764973302b-build.zip"
-        },
-        "hacklyticsportal2023listusers": {
-          "deploymentBucketName": "amplify-hacklyticsportal2023-prod-221126-deployment",
           "s3Key": "amplify-builds/hacklyticsportal2023listusers-3768654f6b65734e6168-build.zip"
         }
       }

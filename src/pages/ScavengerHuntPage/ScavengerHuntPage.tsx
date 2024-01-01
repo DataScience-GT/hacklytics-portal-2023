@@ -125,6 +125,9 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
     // load existing checkins
     const checkins: any = await API.graphql({
       query: listScavengerHuntCheckins,
+      variables: {
+        limit: 10000,
+      }
     });
     setHuntCheckins(checkins.data.listScavengerHuntCheckins.items);
 
@@ -347,7 +350,7 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
                             </TableCell>
                             <TableCell>
                               <CopyToClipboard
-                                text={`${CHECKPOINT_URL}${hunt.id}`}
+                                text={`${window.location.origin}/checkpoint/${hunt.id}`}
                                 onCopy={() => {
                                   toast.success("Copied to clipboard!", {
                                     position: "top-center",

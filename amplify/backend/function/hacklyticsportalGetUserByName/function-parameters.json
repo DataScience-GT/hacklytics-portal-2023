@@ -1,0 +1,10 @@
+{
+  "lambdaLayers": [],
+  "permissions": {
+    "auth": {
+      "hacklyticsportal2023": [
+        "read"
+      ]
+    }
+  }
+}

@@ -15,8 +15,8 @@
           "additionalAuthenticationProviders": [
             {
               "apiKeyConfig": {
-                "apiKeyExpirationDate": "2022-12-11T03:26:24.343Z",
-                "apiKeyExpirationDays": 7,
+                "apiKeyExpirationDate": "2024-12-31T05:54:28.507Z",
+                "apiKeyExpirationDays": 365,
                 "description": ""
               },
               "authenticationType": "API_KEY"
@@ -95,6 +95,20 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "hacklyticsportalGetUserByName": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "hacklyticsportal2023"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
@@ -127,6 +141,22 @@
         {
           "category": "function",
           "resourceName": "hacklyticsportal2023listusers"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklyticsportalGetUserByName_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklyticsportalGetUserByName"
+        }
+      ]
+    },
+    "AMPLIFY_function_hacklyticsportalGetUserByName_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "hacklyticsportalGetUserByName"
         }
       ]
     }

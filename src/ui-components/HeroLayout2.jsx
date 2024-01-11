@@ -6,7 +6,7 @@
 
 /* eslint-disable */
 import * as React from "react";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { getOverrideProps } from "./utils";
 import { Image, View } from "@aws-amplify/ui-react";
 import HeroLayout3 from "./HeroLayout3";
 export default function HeroLayout2(props) {

@@ -26,11 +26,15 @@
       "function": {
         "hacklyticsportal20232e32fd51": {
           "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
-          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-7769506364764973302b-build.zip"
+          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-74346a3754752f4e3248-build.zip"
         },
         "hacklyticsportal2023listusers": {
           "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
           "s3Key": "amplify-builds/hacklyticsportal2023listusers-3768654f6b65734e6168-build.zip"
+        },
+        "hacklyticsportalGetUserByName": {
+          "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
+          "s3Key": "amplify-builds/hacklyticsportalGetUserByName-5847415145532f666b63-build.zip"
         }
       }
     }

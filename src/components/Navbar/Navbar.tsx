@@ -17,7 +17,7 @@ import {
 import { Link } from "react-router-dom";
 
 // import logo from "../../assets/images/DSGT/square-logo.png";
-import logo from "../../assets/images/Hacklytics/logo.svg";
+import logo from "../../assets/images/Hacklytics/hacklytics2024.png";
 import getGroups from "../../misc/Groups";
 
 interface NavbarProps {
@@ -61,7 +61,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
               >
                 <Image className={styles.Logo} alt="DSGT Logo" src={logo} />
                 <Heading className={styles.DSGT} level={4}>
-                  Hacklytics 2023
+                  Hacklytics 2024
                 </Heading>
               </Flex>
             </Link>

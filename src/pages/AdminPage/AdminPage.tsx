@@ -36,9 +36,9 @@ import {
   listCheckins,
   listEvents,
 } from "../../graphql/queries";
-import { updateAdminSettings } from "../../graphql/mutations";
+import { updateAdminSettings, deleteEvent } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
-import { CreateEvent, UpdateEvent } from "../../ui-components";
+import { CreateEvent, UpdateEvent, DeleteEvent } from "../../ui-components";
 import { toast } from "react-toastify";
 
 interface AdminPageProps {
@@ -86,6 +86,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [createEventStatus, setCreateEventStatus] = useState<Status>({
+    show: false,
+  });
+  const [deleteEventModalOpen, setDeleteEventModalOpen] = useState(false);
+  const [deleteEventStatus, setDeleteEventStatus] = useState<Status>({
     show: false,
   });
 
@@ -191,6 +195,20 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   };
 
   // events --------------------
+  const deleteMyEvent = async (callback?: () => void) => {
+    const res: any = await API.graphql({
+      query: deleteEvent,
+      variables: {
+        input: {
+          id: eventEditing.id,
+          _version: (eventEditing as any)._version
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    window.location.reload();
+  }
+
   const loadEvents = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: listEvents,
@@ -332,7 +350,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           >
             Edit
           </ToggleButton>
-          {/* <ToggleButton
+          <ToggleButton
             isDisabled={eventsLoading || events.length === 0}
             onClick={(e) => {
               // window.history.pushState({}, "Admin Settings", "/admin/settings");
@@ -355,7 +373,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             isPressed={eventAction === "delete"}
           >
             Delete
-          </ToggleButton> */}
+          </ToggleButton>
         </Flex>
         {eventsLoading ? (
           <Flex
@@ -381,10 +399,11 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
                     <TableCell as="th">Check-ins</TableCell>
+                    <TableCell as="th">Requires RSVP</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody
-                  border={eventAction !== "" ? "2px solid red" : ""}
+                  border={eventAction !== "" ? "2px solid gray" : ""}
                   boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}
                 >
                   {events.length <= 0 ? (
@@ -437,15 +456,17 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                                 if (!ev) return;
 
                                 setEventEditing(ev[0]);
+                                console.log(ev);
                                 setEditEventModalOpen(true);
                               } else if (eventAction === "delete") {
                                 // show delete modal
-                                // const ev = await DataStore.query(Event, (e) =>
-                                //   e.id("eq", event.id)
-                                // );
-                                // if (!ev) return;
-                                // setEventEditing(ev[0]);
-                                // setDeleteEventModalOpen(true);
+                                const ev = await DataStore.query(Event, (e) =>
+                                  e.id("eq", event.id)
+                                );
+                                if (!ev) return;
+                                setEventEditing(ev[0]);
+                                console.log(ev);
+                                setDeleteEventModalOpen(true);
                               }
                               setEventAction("");
                             }}
@@ -501,6 +522,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                               ) : (
                                 <Loader size="small" />
                               )}
+                            </TableCell>
+                            <TableCell>
+                              {event.requireRSVP ? "True" : "False"}
                             </TableCell>
                           </TableRow>
                         ))}
@@ -809,7 +833,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           <CreateEvent
             onSubmit={(fields) => {
               // Example function to trim all string inputs
-              // console.log(fields);
+              // console.log(fields);o
               // return fields;
               const updatedFields: any = {};
               //foreach field that is a string, trim it
@@ -896,6 +920,28 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 type: "error",
                 message: "Error updating event",
               });
+            }}
+          />
+        </Modal>
+
+        {/* DELETE EVENT MODAL */}
+        <Modal
+          contentLabel="Delete Event Modal"
+          isOpen={deleteEventModalOpen}
+          onRequestClose={() => {
+            setDeleteEventModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <DeleteEvent 
+            onSubmit={() => {
+              deleteMyEvent();
+              setDeleteEventModalOpen(false);
+            }}
+            onCancel={() => {
+              setDeleteEventModalOpen(false);
             }}
           />
         </Modal>

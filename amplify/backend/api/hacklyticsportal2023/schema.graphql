@@ -64,6 +64,8 @@ type Query {
   getUserById(user_uuid: String): String
     @function(name: "hacklyticsportal20232e32fd51-${env}")
   listUsers: String @function(name: "hacklyticsportal2023listusers-${env}")
+  getUserByName(userName: String):String
+    @function(name: "hacklyticsportalGetUserByName-${env}")
 }
 
 type Points

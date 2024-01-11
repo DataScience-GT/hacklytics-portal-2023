@@ -15,14 +15,13 @@ import {
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { ScavengerHunt } from "../models";
-import { fetchByPath, validateField } from "./utils";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function EditScavengerHunt(props) {
   const {
     id: idProp,
-    scavengerHunt,
+    scavengerHunt: scavengerHuntModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -55,17 +54,18 @@ export default function EditScavengerHunt(props) {
     setPoints(cleanValues.points);
     setErrors({});
   };
-  const [scavengerHuntRecord, setScavengerHuntRecord] =
-    React.useState(scavengerHunt);
+  const [scavengerHuntRecord, setScavengerHuntRecord] = React.useState(
+    scavengerHuntModelProp
+  );
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
         ? await DataStore.query(ScavengerHunt, idProp)
-        : scavengerHunt;
+        : scavengerHuntModelProp;
       setScavengerHuntRecord(record);
     };
     queryData();
-  }, [idProp, scavengerHunt]);
+  }, [idProp, scavengerHuntModelProp]);
   React.useEffect(resetStateValues, [scavengerHuntRecord]);
   const validations = {
     name: [{ type: "Required" }],
@@ -78,9 +78,10 @@ export default function EditScavengerHunt(props) {
     currentValue,
     getDisplayValue
   ) => {
-    const value = getDisplayValue
-      ? getDisplayValue(currentValue)
-      : currentValue;
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -127,8 +128,8 @@ export default function EditScavengerHunt(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -275,7 +276,7 @@ export default function EditScavengerHunt(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || scavengerHunt)}
+          isDisabled={!(idProp || scavengerHuntModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -295,7 +296,7 @@ export default function EditScavengerHunt(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || scavengerHunt) ||
+              !(idProp || scavengerHuntModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

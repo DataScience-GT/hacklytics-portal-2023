@@ -134,12 +134,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       items.forEach((item: Points) => {
         if (item.userID === user?.username) points += item.points;
       });
-
-      setPoints(points);
-      // console.log(`you have ${points} points!`);
     } else {
       setPoints(0);
-      // console.log(`you have 0 points :(`);
     }
 
     if (callback) callback();
@@ -209,7 +205,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
             <Card variation="outlined">
               <Heading level={4}>Points</Heading>
               <Text>
-                You have {points} points{points > 0 ? "!" : " :("}
+                You have {points} points.
               </Text>
             </Card>
             <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>

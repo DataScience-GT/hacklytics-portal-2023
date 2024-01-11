@@ -15,14 +15,13 @@ import {
   TextAreaField,
   TextField,
 } from "@aws-amplify/ui-react";
-import { getOverrideProps } from "@aws-amplify/ui-react/internal";
 import { Event } from "../models";
-import { fetchByPath, validateField } from "./utils";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
 export default function UpdateEvent(props) {
   const {
     id: idProp,
-    event,
+    event: eventModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -72,14 +71,16 @@ export default function UpdateEvent(props) {
     setCanRSVP(cleanValues.canRSVP);
     setErrors({});
   };
-  const [eventRecord, setEventRecord] = React.useState(event);
+  const [eventRecord, setEventRecord] = React.useState(eventModelProp);
   React.useEffect(() => {
     const queryData = async () => {
-      const record = idProp ? await DataStore.query(Event, idProp) : event;
+      const record = idProp
+        ? await DataStore.query(Event, idProp)
+        : eventModelProp;
       setEventRecord(record);
     };
     queryData();
-  }, [idProp, event]);
+  }, [idProp, eventModelProp]);
   React.useEffect(resetStateValues, [eventRecord]);
   const validations = {
     name: [{ type: "Required" }],
@@ -97,9 +98,10 @@ export default function UpdateEvent(props) {
     currentValue,
     getDisplayValue
   ) => {
-    const value = getDisplayValue
-      ? getDisplayValue(currentValue)
-      : currentValue;
+    const value =
+      currentValue && getDisplayValue
+        ? getDisplayValue(currentValue)
+        : currentValue;
     let validationResponse = validateField(value, validations[fieldName]);
     const customValidator = fetchByPath(onValidate, fieldName);
     if (customValidator) {
@@ -117,7 +119,7 @@ export default function UpdateEvent(props) {
       minute: "2-digit",
       calendar: "iso8601",
       numberingSystem: "latn",
-      hour12: false,
+      hourCycle: "h23",
     });
     const parts = df.formatToParts(date).reduce((acc, part) => {
       acc[part.type] = part.value;
@@ -168,8 +170,8 @@ export default function UpdateEvent(props) {
         }
         try {
           Object.entries(modelFields).forEach(([key, value]) => {
-            if (typeof value === "string" && value.trim() === "") {
-              modelFields[key] = undefined;
+            if (typeof value === "string" && value === "") {
+              modelFields[key] = null;
             }
           });
           await DataStore.save(
@@ -500,7 +502,7 @@ export default function UpdateEvent(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || event)}
+          isDisabled={!(idProp || eventModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -520,7 +522,7 @@ export default function UpdateEvent(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || event) ||
+              !(idProp || eventModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

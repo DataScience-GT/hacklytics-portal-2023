@@ -103,11 +103,18 @@ export const getEvent = /* GraphQL */ `
 `;
 export const listEvents = /* GraphQL */ `
   query ListEvents(
-    $filter: ModelEventFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listEvents(
+      limit: $limit
+      nextToken: $nextToken
+      filter: {
+        _deleted: {
+          ne:true
+        }
+      }
+    ) {
       items {
         id
         name

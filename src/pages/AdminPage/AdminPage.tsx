@@ -214,6 +214,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       query: listEvents,
       variables: {
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+        limit: 1000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -237,6 +238,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       query: query,
       variables: {
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+        limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -848,9 +850,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               });
               return updatedFields;
             }}
-            onCancel={() => {
-              setCreateEventModalOpen(false);
-            }}
+            // onCancel={() => {
+            //   setCreateEventModalOpen(false);
+            // }}
             onSuccess={(fields) => {
               // create new event in database
               // console.log(fields);
@@ -900,9 +902,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               });
               return updatedFields;
             }}
-            onCancel={() => {
-              setEditEventModalOpen(false);
-            }}
+            // onCancel={() => {
+            //   setEditEventModalOpen(false);
+            // }}
             onSuccess={(fields) => {
               // create new event in database
               // console.log(fields);

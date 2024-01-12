@@ -125,6 +125,9 @@ const ScavengerHuntPage: FC<ScavengerHuntPageProps> = ({
     // load existing checkins
     const checkins: any = await API.graphql({
       query: listScavengerHuntCheckins,
+      variables: {
+        limit: 10000,
+      }
     });
     setHuntCheckins(checkins.data.listScavengerHuntCheckins.items);
 

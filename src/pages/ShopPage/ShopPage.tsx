@@ -58,25 +58,30 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const loadPoints = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: listPoints,
+      variables: {
+        limit: 10000
+      },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let points: Points[] = res.data.listPoints.items;
     // merge the points by user id
-    let finalPoints: Points[] = [];
+    let finalpoints: Map<String, Points> = new Map()
     for (var p in points) {
       let point = points[p];
-      let existingPoint = finalPoints.find((p) => p.userID === point.userID);
-      if (existingPoint) {
-        existingPoint = new Points({
-          userID: existingPoint.userID,
-          userName: existingPoint.userName,
-          points: existingPoint.points + point.points,
-        });
+      let existing = finalpoints.get(point.userID);
+      if (existing) {
+        finalpoints.set(point.userID, new Points(
+          {
+            userID: point.userID,
+            userName: point.userName,
+            points: existing.points + point.points
+          }
+        ))
       } else {
-        finalPoints.push(point);
+        finalpoints.set(point.userID, point)
       }
     }
-    setPoints(finalPoints);
+    setPoints(Array.from(finalpoints.values()));
 
     if (callback) {
       callback();

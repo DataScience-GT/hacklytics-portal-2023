@@ -122,7 +122,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
-        userID: user?.username,
+        filter: {userID: {eq: user?.username}},
+        limit: 1000
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -132,7 +133,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     if (items.length > 0) {
       let points = 0;
       items.forEach((item: Points) => {
-        if (item.userID === user?.username) points += item.points;
+        points += item.points;
       });
     } else {
       setPoints(0);
@@ -144,15 +145,18 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
   const loadEvents = async (callback: () => void) => {
     const res: any = await API.graphql({
       query: listEvents,
+      variables: {
+        limit: 1000,
+      },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let items = res.data.listEvents.items;
 
     // sort events by start time
     items.sort((a: Event, b: Event) => {
-      // if no start time, set to really far in the future
-      let a1 = new Date(a.start ?? "june 2029");
-      let b1 = new Date(b.start ?? "june 2029");
+      // if no start time, set to really far in the past
+      let a1 = new Date(a.start ?? "june 2000");
+      let b1 = new Date(b.start ?? "june 2000");
       return a1.getTime() - b1.getTime();
     });
 

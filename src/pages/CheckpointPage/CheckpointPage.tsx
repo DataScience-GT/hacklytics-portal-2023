@@ -42,8 +42,12 @@ const CheckpointPage: FC<CheckpointPageProps> = ({ user, signOut }) => {
     // get checkpoint from db
     var checkpoint: any = await API.graphql({
       query: listScavengerHuntCheckins,
-      variables: { userId: user?.username },
+       variables: {
+        filter: {userID: {eq: user?.username}},
+        limit: 1000
+      },
     });
+    console.log(checkpoint)
     var oldCheckpoints = checkpoint.data.listScavengerHuntCheckins.items;
     var currentCheckpoints = oldCheckpoints.filter(
       (c: ScavengerHuntCheckin) =>

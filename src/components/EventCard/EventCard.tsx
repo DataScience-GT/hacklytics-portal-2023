@@ -6,7 +6,7 @@ import {
   Heading,
   Text,
 } from "@aws-amplify/ui-react";
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./EventCard.module.scss";
 import { Event } from "../../models";
 import { DayOfWeek } from "../../misc/DaysOfWeek";
@@ -68,16 +68,59 @@ const EventCard: FC<EventCardProps> = ({
     // after ex: "Monday 12:00 PM - 1:00 PM"
     timeframe = timeframe.replace(` ${day}`, "");
   }
+
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    let x = setInterval(() => {
+      setNow(new Date());
+    }, 10 * 1000);
+    return () => {
+      clearInterval(x);
+    };
+  });
+
+  let until = -1;
+  let untilUnit = "";
+  let inProgress = false;
+  if (event?.start) {
+    let diff = new Date(event.start).getTime() - now.getTime();
+    let x = Math.round(diff / (60 * 1000));
+    if (Math.abs(x) > 0) {
+      until = x;
+      untilUnit = Math.abs(x) == 1 ? "minute" : "minutes";
+    }
+    if (x < 0 && event.end) {
+      // check if in progress
+      let dur = new Date(event.end).getTime() - now.getTime();
+      if (dur > 0) {
+        inProgress = true;
+      }
+    }
+    x = Math.round(diff / (60 * 60 * 1000));
+    if (Math.abs(x) > 0) {
+      until = x;
+      untilUnit = Math.abs(x) == 1 ? "hour" : "hours";
+    }
+    x = Math.round(diff / (24 * 60 * 60 * 1000));
+    if (Math.abs(x) > 0) {
+      until = x;
+      untilUnit = Math.abs(x) == 1 ? "day" : "days";
+    }
+  }
+
   return (
     <div className={styles.EventCard} data-testid="EventCard">
       <Card variation="outlined" padding={"medium"}>
-        <Text
-          fontWeight={400}
-          style={{ filter: "invert(0.2)" }}
-          fontSize="small"
-        >
-          {timeframe}
-        </Text>
+        {event?.start && (
+          <Text
+            fontWeight={400}
+            style={{ filter: "invert(0.2)" }}
+            fontSize="small"
+          >
+            {timeframe} {until > 0 ? <Badge size="small" variation="info">In {until} {untilUnit}</Badge> : (inProgress ? <Badge size="small" variation="success">In Progress</Badge> : <Badge size="small">Past</Badge>)}
+          </Text>
+        )}
         <Heading level={4} paddingTop="2px" paddingBottom={"2px"}>
           {event?.name}
           {/* {" "} */}

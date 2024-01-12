@@ -57,8 +57,8 @@ const HacklyticsCard: FC<HacklyticsCardProps> = ({ loading, access }) => {
   return (
     <div className={styles.HacklyticsCard} data-testid="HacklyticsCard">
       <Card padding="medium" variation="outlined">
-        <Heading level={4}>Hacklytics 2023</Heading>
-        <Text>February 10-12</Text>
+        <Heading level={4}>Hacklytics 2024</Heading>
+        <Text>February 9-11</Text>
         <Text>
           Your status:{" "}
           {loading ? (

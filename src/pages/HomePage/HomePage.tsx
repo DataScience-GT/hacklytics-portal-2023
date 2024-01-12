@@ -91,14 +91,14 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     ) {
       setUserAccess(true);
     } else {
-      // check if gtemail is in participant emails
+      // check if school email is in participant emails
       if (
         user &&
         user.attributes &&
-        user.attributes["custom:gtemail"] &&
+        user.attributes["custom:schoolEmail"] &&
         settings.participantEmails
           .map((x: String) => x.toLowerCase())
-          .includes(user.attributes["custom:gtemail"].toLowerCase())
+          .includes(user.attributes["custom:schoolEmail"].toLowerCase())
       ) {
         setUserAccess(true);
       }
@@ -173,19 +173,6 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     );
 
     setEventRSVPs(res);
-    // const res: any = await API.graphql({
-    //   query: listEventRSVPS,
-    //   variables: {
-    //     userID: user?.attributes?.sub,
-    //   },
-    //   authMode: "AMAZON_COGNITO_USER_POOLS",
-    // });
-    // let items = res.data.listEventRSVPS.items;
-
-    // if (items.length > 0) {
-    //   setEventRSVPs(items);
-    // }
-
     if (callback) callback();
   };
 
@@ -206,7 +193,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
         ) : adminSettings.hacklyticsOpen && userAccess ? (
           // hacklytics is open :D (started)
           <Flex direction={"column"} gap={"medium"}>
-            <Card variation="outlined">
+            <Card variation="outlined" borderRadius="1em">
               <Heading level={4}>Points</Heading>
               <Text>
                 You have {points} points.
@@ -228,19 +215,10 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                     event.canRSVP
                       ? async () => {
                           setCurrentlyRSVPing(true);
-                          // create event rsvp
-                          // let rsvp: EventRSVP = {
-                          //   id: "",
-                          //   userID: user?.attributes?.sub ?? "undefined",
-                          //   userName: user?.attributes?.name ?? "undefined",
-                          //   eventID: event.id,
-                          // };
-
                           if (
                             eventRSVPs.filter((x) => x.eventID === event.id)
                               .length >= 1
                           ) {
-                            // delete rsvp
                             let rsvp = eventRSVPs.find(
                               (x) => x.eventID === event.id
                             );
@@ -249,24 +227,11 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               rsvp?.id ?? ""
                             );
                             if (toDelete) DataStore.delete(toDelete);
-                            // await API.graphql({
-                            //   query: deleteEventRSVP,
-                            //   variables: {
-                            //     input: {
-                            //       id: rsvp?.id,
-                            //       _version: 1,
-                            //     },
-                            //   },
-                            //   authMode: "AMAZON_COGNITO_USER_POOLS",
-                            // });
-
                             setEventRSVPs(
                               eventRSVPs.filter((x) => x.eventID !== event.id)
                             );
                             setCurrentlyRSVPing(false);
                           } else {
-                            // create rsvp
-
                             let rsvp: any = await API.graphql({
                               query: createEventRSVP,
                               variables: {
@@ -278,7 +243,6 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               },
                               authMode: "AMAZON_COGNITO_USER_POOLS",
                             });
-
                             setEventRSVPs([
                               ...eventRSVPs,
                               rsvp.data.createEventRSVP,
@@ -293,7 +257,6 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
             </Flex>
           </Flex>
         ) : (
-          // hacklytics is closed :( (not started)
           <>
             <HacklyticsCard loading={settingsLoading} access={userAccess} />
             {!userAccess && (
@@ -302,7 +265,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                   show: true,
                   type: "error",
                   message:
-                    "You currently have not been confirmed to participate in Hacklytics. Please contact us if you believe this is a mistake.",
+                    "You currently have not been confirmed to participate in Hacklytics. " 
+                    + "Please contact us at info@hacklytics.io if you believe this is a mistake.",
                 }}
               />
             )}

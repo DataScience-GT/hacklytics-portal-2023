@@ -38,12 +38,14 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
                 <TableCell>{user?.attributes?.email}</TableCell>
               </TableRow>
             )}
-            {user.attributes["custom:gtemail"] && (
-              <TableRow>
-                <TableCell>Georgia Tech Email</TableCell>
-                <TableCell>{user?.attributes["custom:gtemail"]}</TableCell>
+            <TableRow>
+                <TableCell>School Email</TableCell>
+                <TableCell>
+                {(user?.attributes["custom:schoolEmail"] &&
+                  titleCaseWord(user?.attributes["custom:schoolEmail"])) ??
+                  "None"}
+              </TableCell>
               </TableRow>
-            )}
             {user.attributes?.name && (
               <TableRow>
                 <TableCell>Name</TableCell>
@@ -56,15 +58,6 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
                 <TableCell>{user?.attributes?.birthdate}</TableCell>
               </TableRow>
             )}
-            <TableRow>
-              <TableCell>Event Type</TableCell>
-              <TableCell>
-                {user?.attributes["custom:isInperson"] &&
-                user?.attributes["custom:isInperson"] === "on"
-                  ? "In Person"
-                  : "Virtual"}
-              </TableCell>
-            </TableRow>
             <TableRow>
               <TableCell>Dietary Restriction</TableCell>
               <TableCell>

@@ -1,13 +1,3 @@
-.Background {
-    display: block;
-    position: fixed;
-    z-index: -100;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background: var(--amplify-colors-background-primary);
-}
 
 .ToastContainer {
     display: block;

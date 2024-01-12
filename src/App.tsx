@@ -4,7 +4,7 @@ import styles from "./App.module.scss";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-import { Amplify, AuthModeStrategyType } from "aws-amplify";
+import { Amplify, Auth, AuthModeStrategyType } from "aws-amplify";
 import {
   AmplifyProvider,
   Authenticator,
@@ -13,6 +13,10 @@ import {
   SwitchField,
   useAuthenticator,
   View,
+  Image,
+  useTheme,
+  Text,
+  Heading
 } from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
@@ -20,6 +24,7 @@ import "@aws-amplify/ui-react/styles.css";
 
 import { Theme, ThemeMap, ThemeContext } from "./context/ThemeContext";
 import hacklytics from "./theme";
+import logo from "./assets/images/Hacklytics/hacklytics2024.png";
 
 // import logo from "./logo.svg";
 
@@ -32,13 +37,16 @@ import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import Navbar from "./components/Navbar/Navbar";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import getGroups from "./misc/Groups";
-// import { getAdminSettings } from "./graphql";
-// import { AdminSettings } from "./models";
 import ScavengerHuntPage from "./pages/ScavengerHuntPage/ScavengerHuntPage";
 import CheckpointPage from "./pages/CheckpointPage/CheckpointPage";
 import AccountPage from "./pages/AccountPage/AccountPage";
 import DatasetPage from "./pages/DatasetPage/DatasetPage";
 import ShopPage from "./pages/ShopPage/ShopPage";
+
+import { I18n } from 'aws-amplify';
+import { translations } from '@aws-amplify/ui-react';
+I18n.putVocabularies(translations);
+I18n.setLanguage('en');
 
 Amplify.configure({
   ...aws_exports,
@@ -47,49 +55,80 @@ Amplify.configure({
   },
 });
 
+I18n.putVocabulariesForLanguage('en', {
+  'Sign In': 'Login', // Tab header
+  'Sign in': 'Log in', // Button label
+  'Sign in to your account': 'Welcome Back!',
+  Username: 'Enter your username', // Username label
+  Password: 'Enter your password', // Password label
+  'Forgot your password?': 'Reset Password',
+});
+
 const formFields = {
   signUp: {
     email: {
       order: 1,
+      isRequired: true,
     },
-    gtemail: {
+    schoolEmail: {
       order: 2,
-      placeholder: "GT Email (optional)",
+      placeholder: "School email (optional)",
       isRequired: false,
-      name: "custom:gtemail",
+      name: "custom:schoolEmail",
       type: "email",
-      // errorMessage: "",
-      // onChange: (e: React.ChangeEvent<HTMLInputElement>) => {console.log(e.currentTarget.value)}
     },
     name: {
       order: 3,
       isRequired: true,
-    },
-    birthdate: {
-      order: 4,
-      isRequired: true,
+      placeholder: "Name",
     },
     password: {
-      order: 5,
+      order: 4,
     },
     confirm_password: {
+      order: 5,
+    },
+    birthdate: {
       order: 6,
+      isRequired: true,
+      label: "Birthdate",
+      labelHidden: false,
     },
   },
 };
 
-const Components = {
+const components = {
+  Header() {
+    const { tokens } = useTheme();
+    return (
+      <View textAlign="center" padding={tokens.space.large}>
+        <Image
+          alt="hacklytics logo"
+          src={logo}
+          width={200}
+          height={200} 
+        />
+        <h1>Hacklytics 2024 Portal</h1>
+        <Text>View scheduling, RSVP, datasets and more</Text>
+      </View>
+    );
+  },
+  Footer() {
+    const { tokens } = useTheme();
+    return (
+      <View textAlign="center" padding={tokens.space.large}>
+        <Text color={tokens.colors.neutral[80]}>
+          &copy; All Rights Reserved
+        </Text>
+      </View>
+    );
+  },
   SignUp: {
     FormFields() {
       const { validationErrors } = useAuthenticator();
       return (
         <>
           <Authenticator.SignUp.FormFields />
-          <SwitchField
-            name="custom:isInperson"
-            label="I will be attending in-person:"
-          />
-          {/* <SwitchField name="custom:isVegetarian" label="I am a vegetarian:" /> */}
           <SelectField
             name="custom:foodPreference"
             label="Dietary Restrictions:"
@@ -118,7 +157,7 @@ const Components = {
       );
     },
   },
-};
+}
 
 const App = () => {
   const [theme, setTheme] = useState<Theme>(
@@ -159,21 +198,15 @@ const App = () => {
 
   return (
     <>
-      <div className={styles.ToastContainer}>
-        <ToastContainer />
-      </div>
       <AmplifyProvider
         theme={ThemeMap.get(theme) ?? hacklytics}
         colorMode={colorMode}
       >
-        <ThemeContext.Provider
-          value={{ theme, setTheme, colorMode, setColorMode }}
-        >
+        <ThemeContext.Provider value={{ theme, setTheme, colorMode, setColorMode }}>
           <Authenticator
             formFields={formFields}
             services={Services}
-            components={Components}
-            variation="modal"
+            components={components}
           >
             {({ signOut, user }) => {
               return (
@@ -238,7 +271,6 @@ const App = () => {
               );
             }}
           </Authenticator>
-          <View className={styles.Background}></View>
         </ThemeContext.Provider>
       </AmplifyProvider>
     </>

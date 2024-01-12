@@ -41,8 +41,8 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
             <TableRow>
                 <TableCell>School Email</TableCell>
                 <TableCell>
-                {(user?.attributes["custom:schoolEmail"] &&
-                  titleCaseWord(user?.attributes["custom:schoolEmail"])) ??
+                {(user?.attributes["custom:gtemail"] &&
+                  user?.attributes["custom:gtemail"]) ??
                   "None"}
               </TableCell>
               </TableRow>

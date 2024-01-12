@@ -55,26 +55,17 @@ Amplify.configure({
   },
 });
 
-I18n.putVocabulariesForLanguage('en', {
-  'Sign In': 'Login', // Tab header
-  'Sign in': 'Log in', // Button label
-  'Sign in to your account': 'Welcome Back!',
-  Username: 'Enter your username', // Username label
-  Password: 'Enter your password', // Password label
-  'Forgot your password?': 'Reset Password',
-});
-
 const formFields = {
   signUp: {
     email: {
       order: 1,
       isRequired: true,
     },
-    schoolEmail: {
+    gtemail: {
       order: 2,
       placeholder: "School email (optional)",
       isRequired: false,
-      name: "custom:schoolEmail",
+      name: "custom:gtemail",
       type: "email",
     },
     name: {
@@ -173,9 +164,9 @@ const App = () => {
   const Services = {
     async validateCustomSignUp(formData: any) {
       if (formData["custom:gtemail"] !== "") {
-        if (!formData["custom:gtemail"].endsWith("@gatech.edu")) {
+        if (!formData["custom:gtemail"].endsWith(".edu")) {
           return {
-            "custom:gtemail": "Must be a valid GT email address",
+            "custom:gtemail": "Must be a valid school email address",
           };
         }
       }
@@ -198,6 +189,9 @@ const App = () => {
 
   return (
     <>
+      <div className={styles.ToastContainer}>
+        <ToastContainer />
+      </div>
       <AmplifyProvider
         theme={ThemeMap.get(theme) ?? hacklytics}
         colorMode={colorMode}

@@ -4,7 +4,6 @@ export const hacklytics: Theme = {
   name: "hacklytics-theme",
   tokens: {
     colors: {
-
       brand: {
         primary: {
           10: { value: "{colors.blue.10}" },

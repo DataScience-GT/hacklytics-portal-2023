@@ -147,27 +147,22 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   };
 
   const saveSettings = async (newSettings: AdminSettings) => {
-    // hide status alert
     setSettingStatus({ show: false });
-    // attempt to update the graphql database
     try {
       const res: any = await API.graphql({
         query: updateAdminSettings,
         variables: {
           input: {
-            ...newSettings,
-            createdAt: undefined,
-            updatedAt: undefined,
-            _deleted: undefined,
-            _lastChangedAt: undefined,
+            id: newSettings.id,
+            hacklyticsOpen: newSettings.hacklyticsOpen,
+            participantEmails: newSettings.participantEmails,
+            _version: (newSettings as any)._version
           },
         },
         authMode: "AMAZON_COGNITO_USER_POOLS",
       });
 
-      //check for errors
       if (res.errors) {
-        //errors
         setSettingStatus({
           show: true,
           type: "error",
@@ -175,8 +170,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         });
         return;
       } else {
-        //success
-        // update the local state
         setAdminSettings(res.data.updateAdminSettings);
         setSettingStatus({
           show: true,

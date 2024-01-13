@@ -99,7 +99,7 @@ const components = {
           width={200}
           height={200} 
         />
-        <h1>Hacklytics 2024 Portal</h1>
+        <Heading style={{fontSize: '2em'}}>Hacklytics 2024 Portal</Heading>
         <Text>View scheduling, RSVP, datasets and more</Text>
       </View>
     );
@@ -151,9 +151,8 @@ const components = {
 }
 
 const App = () => {
-  const [theme, setTheme] = useState<Theme>(
-    (localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics
-  );
+  
+  const [theme, setTheme] = useState<Theme>((localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics);
   const [colorMode, setColorMode] = useState<"system" | "light" | "dark">(
     (localStorage.getItem("hacklytics-color-mode") as
       | "system"
@@ -196,7 +195,10 @@ const App = () => {
         theme={ThemeMap.get(theme) ?? hacklytics}
         colorMode={colorMode}
       >
-        <ThemeContext.Provider value={{ theme, setTheme, colorMode, setColorMode }}>
+        <ThemeContext.Provider 
+          value={{ theme, setTheme, colorMode, setColorMode }}
+        >
+          <View className={styles.Background}></View>
           <Authenticator
             formFields={formFields}
             services={Services}

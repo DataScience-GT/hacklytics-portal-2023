@@ -193,7 +193,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
         ) : adminSettings.hacklyticsOpen && userAccess ? (
           // hacklytics is open :D (started)
           <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
-            <Card width="20%"variation="outlined" paddingLeft="2em" borderRadius="5em">
+            <Card width="20%" variation="outlined" paddingLeft="2em" borderRadius="5em">
               <Flex direction={"row"} justifyContent={"space-between"}>
                 <div>
                   <Heading level={4}>Points</Heading>

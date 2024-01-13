@@ -38,7 +38,7 @@ import {
 } from "../../graphql/queries";
 import { updateAdminSettings, deleteEvent } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
-import { CreateEvent, UpdateEvent, DeleteEvent } from "../../ui-components";
+import { CreateEvent, UpdateEvent, DeleteEvent, DeleteAllEmails } from "../../ui-components";
 import { toast } from "react-toastify";
 
 interface AdminPageProps {
@@ -106,6 +106,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   // participants
   const [participantPage, setParticipantPage] = useState<number>(1);
   const [participantPageSize, setParticipantPageSize] = useState<number>(5);
+  const [showDeleteAllEmailsModal, setShowDeleteAllEmailsModal] = useState(false);
 
   const [participantEmailsField, setParticipantEmailsField] =
     useState<string>("");
@@ -647,15 +648,15 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     <Loader size="large" />
                   </Flex>
                 ) : (
-                  <Flex direction={"column"} alignItems="center">
-                    <Heading
-                      marginTop={"medium"}
-                      textAlign={"left"}
-                      width={"100%"}
-                    >
+                  <Flex direction={"column"}>
+                    <Heading marginTop={"medium"} textAlign={"left"} width={"100%"}>
                       Participant Emails
                     </Heading>
-                    {/* show a list of participants (paginated) */}
+                    <Button width="fit-content" size="small" onClick={(e) => {
+                      setShowDeleteAllEmailsModal(true);
+                    }}>
+                      Remove All Emails
+                    </Button>
                     <Table size="small">
                       <TableHead>
                         <TableRow>
@@ -937,6 +938,31 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
             onCancel={() => {
               setDeleteEventModalOpen(false);
+            }}
+          />
+        </Modal>
+
+        {/* DELETE ALL EMAILS MODAL */}
+        <Modal
+          contentLabel="Delete All Emails Modal"
+          isOpen={showDeleteAllEmailsModal}
+          onRequestClose={() => {
+            setShowDeleteAllEmailsModal(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <DeleteAllEmails 
+            onSubmit={() => {
+              saveSettings({
+                ...adminSettings,
+                participantEmails: [],
+              });
+              setShowDeleteAllEmailsModal(false);
+            }}
+            onCancel={() => {
+              setShowDeleteAllEmailsModal(false);
             }}
           />
         </Modal>

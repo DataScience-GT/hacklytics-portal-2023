@@ -11,6 +11,7 @@ export { default as ContactUs } from "./ContactUs";
 export { default as CreateEvent } from "./CreateEvent";
 export { default as CreateScavengerHunt } from "./CreateScavengerHunt";
 export { default as DeleteAllEmails } from "./DeleteAllEmails";
+export { default as DeleteAllEvents } from "./DeleteAllEvents";
 export { default as DeleteEvent } from "./DeleteEvent";
 export { default as EditProfile } from "./EditProfile";
 export { default as EditScavengerHunt } from "./EditScavengerHunt";

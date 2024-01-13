@@ -33,12 +33,11 @@ import StatusAlert from "../../components/StatusAlert/StatusAlert";
 import { API, DataStore } from "aws-amplify";
 import {
   getAdminSettings,
-  listCheckins,
   listEvents,
 } from "../../graphql/queries";
 import { updateAdminSettings, deleteEvent } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
-import { CreateEvent, UpdateEvent, DeleteEvent, DeleteAllEmails } from "../../ui-components";
+import { CreateEvent, UpdateEvent, DeleteEvent, DeleteAllEmails, DeleteAllEvents } from "../../ui-components";
 import { toast } from "react-toastify";
 
 interface AdminPageProps {
@@ -92,6 +91,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [deleteEventStatus, setDeleteEventStatus] = useState<Status>({
     show: false,
   });
+  const [showDeleteAllEventsModal, setShowDeleteAllEventsModal] = useState(false);
 
   const [eventAction, setEventAction] = useState<"delete" | "edit" | "">("");
 
@@ -201,6 +201,30 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     window.location.reload();
+  }
+
+  const deleteSpecificEvent = async (eventID: string, eventVersion: number) => {
+    const res: any = await API.graphql({
+      query: deleteEvent,
+      variables: {
+        input: {
+          id: eventID,
+          _version: eventVersion
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+  }
+
+  const deleteAllEvents = async (callback?: () => void) => {
+    try {
+      for (const event of events) {
+        deleteSpecificEvent(event.id, (event as any)._version);
+      }
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const loadEvents = async (callback?: () => void) => {
@@ -370,6 +394,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           >
             Delete
           </ToggleButton>
+          <Button 
+            isDisabled={eventsLoading || events.length === 0}
+            onClick={() => {
+            setShowDeleteAllEventsModal(true);
+          }}>
+            Delete All
+          </Button>
         </Flex>
         {eventsLoading ? (
           <Flex
@@ -827,12 +858,11 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         >
           <StatusAlert status={createEventStatus} />
           <CreateEvent
+            onCancel={() => {
+              setCreateEventModalOpen(false);
+            }}
             onSubmit={(fields) => {
-              // Example function to trim all string inputs
-              // console.log(fields);o
-              // return fields;
               const updatedFields: any = {};
-              //foreach field that is a string, trim it
               Object.keys(fields).forEach((key) => {
                 if (typeof fields[key as keyof typeof fields] === "string") {
                   updatedFields[key] = (
@@ -844,13 +874,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               });
               return updatedFields;
             }}
-            // onCancel={() => {
-            //   setCreateEventModalOpen(false);
-            // }}
             onSuccess={(fields) => {
-              // create new event in database
-              // console.log(fields);
-
               setCreateEventModalOpen(false);
               setEvents([...events, fields as Event]);
             }}
@@ -938,6 +962,28 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
             onCancel={() => {
               setDeleteEventModalOpen(false);
+            }}
+          />
+        </Modal>
+
+        {/* DELETE ALL EVENTS MODAL */}
+        <Modal
+          contentLabel="Delete All Events Modal"
+          isOpen={showDeleteAllEventsModal}
+          onRequestClose={() => {
+            setShowDeleteAllEventsModal(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <DeleteAllEvents 
+            onSubmit={() => {
+              deleteAllEvents();
+              setShowDeleteAllEventsModal(false);
+            }}
+            onCancel={() => {
+              setShowDeleteAllEventsModal(false);
             }}
           />
         </Modal>

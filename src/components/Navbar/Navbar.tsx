@@ -38,7 +38,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
           direction={"row"}
           justifyContent="space-between"
           alignItems="center"
-          gap="20%"
+          gap="0.5em"
           height="100%"
           width="100%"
         >
@@ -69,44 +69,58 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
           <Flex
             direction={"row"}
             justifyContent="flex-end"
+            alignItems="center"
             gap="1em"
+            height="100%"
             width="fit-content"
             grow={1}
           >
-            {user && getGroups(user).includes("Administrator") && (
-              <Link className={styles.MenuLink} to="/admin" style={{background: "var(--amplify-colors-background-info)"}}>
-                <Button size="small">Admin Console</Button>
-              </Link>
-            )}
-            <Link className={styles.MenuLink} to="/">
-              <Button size="small">Dashboard</Button>
-            </Link>
             {/* {user &&
               (getGroups(user).includes("Scavenger") ||
                 getGroups(user).includes("Administrator")) && (
-                <Link className={styles.MenuLink} to="/scavengerhunts">
+                <Link to="/scavengerhunts" style={{ textDecoration: "none" }}>
                   <Button size="small">Scavenger Hunts</Button>
                 </Link>
-            )} */}
-            {/* {user &&
-              (getGroups(user).includes("Volunteer") ||
-                getGroups(user).includes("Administrator")) && (
-                <Link className={styles.MenuLink} to="/shop">
-                  <Button size="small">Points Shop</Button>
-                </Link>
               )} */}
-            <Link className={styles.MenuLink} to="/datasets">
-              <Button size="small">Datasets</Button>
-            </Link>
-            <Link className={styles.MenuLink} to="/account">
-              <Button size="small">Account</Button>
-            </Link>
-            <Link className={styles.MenuLink} to="/settings">
-              <Button size="small">Settings</Button>
-            </Link>
-            <Button size="small" className={styles.LogoutButton} onClick={signOut}>
-              Logout
-            </Button>
+            {user && getGroups(user).includes("Administrator") && (
+              <Link to="/admin" style={{ textDecoration: "none" }}>
+                <Button size="small">Admin Console</Button>
+              </Link>
+            )}
+            <View width="fit-content">
+              <Menu menuAlign="end">
+                <Link className={styles.MenuLink} to="/">
+                  <MenuItem>Dashboard</MenuItem>
+                </Link>
+                {user &&
+                  (getGroups(user).includes("Scavenger") ||
+                    getGroups(user).includes("Administrator")) && (
+                    <Link className={styles.MenuLink} to="/scavengerhunts">
+                      <MenuItem>Scavenger Hunts</MenuItem>
+                    </Link>
+                  )}
+                {user &&
+                  (getGroups(user).includes("Volunteer") ||
+                    getGroups(user).includes("Administrator")) && (
+                    <Link className={styles.MenuLink} to="/shop">
+                      <MenuItem>Points Shop</MenuItem>
+                    </Link>
+                  )}
+                <Link className={styles.MenuLink} to="/datasets">
+                  <MenuItem>Datasets</MenuItem>
+                </Link>
+                <Link className={styles.MenuLink} to="/account">
+                  <MenuItem>Account</MenuItem>
+                </Link>
+                <Link className={styles.MenuLink} to="/settings">
+                  <MenuItem>Settings</MenuItem>
+                </Link>
+                <Divider />
+                <MenuItem className={styles.LogoutButton} onClick={signOut}>
+                  Logout
+                </MenuItem>
+              </Menu>
+            </View>
           </Flex>
         </Flex>
       </View>

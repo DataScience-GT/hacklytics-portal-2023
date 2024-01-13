@@ -192,17 +192,17 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : adminSettings.hacklyticsOpen && userAccess ? (
           // hacklytics is open :D (started)
-          <Flex direction={"column"} gap={"medium"}>
-            <Card variation="outlined" borderRadius="1em">
-              <Heading level={4}>Points</Heading>
-              <Text>
-                You have {points} points.
-              </Text>
+          <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
+            <Card variation="outlined" paddingLeft="2em" borderRadius="5em">
+              <Flex direction={"row"} justifyContent={"space-between"}>
+                <div>
+                  <Heading level={4}>Points</Heading>
+                  <Text>You have {points} points.</Text>
+                </div>
+              </Flex>
             </Card>
-            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
-              Schedule
-            </Heading>
-            <Flex direction={"row"} gap={"medium"} wrap="wrap">
+            <Heading textAlign={"center"} level={3} marginBottom={"medium"} marginTop={"medium"}>Schedule</Heading>
+            <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"}>
               {events.map((event, i) => (
                 <EventCard
                   event={event}

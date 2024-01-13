@@ -123,10 +123,6 @@ const EventCard: FC<EventCardProps> = ({
         )}
         <Heading level={4} paddingTop="2px" paddingBottom={"2px"}>
           {event?.name}
-          {/* {" "} */}
-          {/* <Badge variation={event?.status ? "success" : "error"}>
-            {event?.status ? "Open" : "Closed"}
-          </Badge> */}
         </Heading>
         <Text
           fontWeight={400}

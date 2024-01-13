@@ -689,7 +689,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                       Remove All Emails
                     </Button>
                     <Text fontSize={"0.9em"} textAlign={"left"} width={"100%"}>
-                      Number of registered participants: {participantEmailsField.length}
+                      Number of registered participants: {adminSettings && adminSettings.participantEmails && adminSettings.participantEmails.length}
                     </Text>
                     <Table size="small">
                       <TableHead>

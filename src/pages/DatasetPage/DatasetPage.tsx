@@ -37,23 +37,14 @@ const DatasetPage: FC<DatasetPageProps> = ({ user, signOut }) => (
             <TableCell>
               <ul>
                 <li>
-                  <a
-                    href="https://www.kaggle.com/datasets/abecklas/fifa-world-cup"
-                    target={"_blank"}
-                    rel="noreferrer"
-                  >
+                  <a href="https://www.kaggle.com/datasets/abecklas/fifa-world-cup" target={"_blank"} rel="noreferrer">
                     FIFA World Cup Dataset
                   </a>
                 </li>
                 <li>
-                  <a
-                    href="https://www.kaggle.com/datasets/dansbecker/nba-shot-logs"
-                    target={"_blank"}
-                    rel="noreferrer"
-                  >
+                  <a href="https://www.kaggle.com/datasets/dansbecker/nba-shot-logs" target={"_blank"} rel="noreferrer">
                     NBA Shot Logs
-                  </a>{" "}
-                  from the 2014-2015 season
+                  </a>{" "}from the 2014-2015 season
                 </li>
                 <li>
                   <a
@@ -132,54 +123,45 @@ const DatasetPage: FC<DatasetPageProps> = ({ user, signOut }) => (
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Energy and Sustainability</TableCell>
+            <TableCell>Generative AI</TableCell>
             <TableCell>
               <ul>
                 <li>
                   <a
-                    href="https://datahub.io/core/co2-fossil-global"
+                    href="https://defined.ai/dataset/stem-question-answer-pairs-dataset-for-large-language-models"
                     target={"_blank"}
                     rel="noreferrer"
                   >
-                    CO2 Fossil Fuel Dataset
+                    STEM Q&A Pairs
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://data.openei.org/data_lakes"
+                    href="https://defined.ai/dataset/healthcare-prompt-and-response-data"
                     target={"_blank"}
                     rel="noreferrer"
                   >
-                    OpenDEI Data Lake
+                    Healthcare Prompt and Response Data
                   </a>
                 </li>
                 <li>
                   <a
-                    href="https://sage.nelson.wisc.edu/data-and-models/datasets/"
+                    href="https://defined.ai/dataset/general-knowledge-prompt-and-response"
                     target={"_blank"}
                     rel="noreferrer"
                   >
-                    Sustainability Datasets
+                    General Knowledge Prompt and Response Data
                   </a>
                 </li>
                 <br />
                 <Text>Other Dataset Resources:</Text>
                 <li>
                   <a
-                    href="https://www.ncdc.noaa.gov/cdo-web/datasets"
+                    href="https://guides.library.cmu.edu/machine-learning"
                     target={"_blank"}
                     rel="noreferrer"
                   >
-                    Climate Data
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.energy.gov/data/open-energy-data"
-                    target={"_blank"}
-                    rel="noreferrer"
-                  >
-                    Open Energy Data
+                    Carnegie Mellon: Open Source AI Datasets
                   </a>
                 </li>
               </ul>

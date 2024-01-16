@@ -9,6 +9,8 @@ import {
   Card,
   Heading,
   Alert,
+  Tabs,
+  TabItem,
 } from "@aws-amplify/ui-react";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
@@ -28,9 +30,6 @@ import EventCard from "../../components/EventCard/EventCard";
 import getGroups from "../../misc/Groups";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
 
-// import { listTodos } from "../../graphql";
-// import { API, graphqlOperation } from "aws-amplify";
-
 interface HomePageProps {
   user?: AmplifyUser;
   signOut?: (data?: AuthEventData | undefined) => void;
@@ -44,8 +43,10 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
 
   const [points, setPoints] = useState<number>(0);
   const [pointsLoading, setPointsLoading] = useState(true);
-
   const [events, setEvents] = useState<Event[]>([]);
+  const [pastEvents, setPastEvents] = useState<Event[]>([]);
+  const [currentEvents, setCurrentEvents] = useState<Event[]>([]);
+  const [futureEvents, setFutureEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
   const [eventRSVPs, setEventRSVPs] = useState<EventRSVP[]>([]);
@@ -69,6 +70,11 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
   }, []);
 
+  const ScheduleTabMap = new Map<string, number>([
+    ["/schedule/itemized", 0],
+    ["/schedule/full", 1],
+  ]);
+
   const loadSettings = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: getAdminSettings,
@@ -79,35 +85,15 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
     setAdminSettings(res.data.getAdminSettings);
     let settings = res.data.getAdminSettings;
-    if (
-      settings &&
-      settings.participantEmails &&
-      user &&
-      user.attributes &&
-      user.attributes.email &&
-      settings.participantEmails
-        .map((x: String) => x.toLowerCase())
-        .includes(user.attributes.email.toLowerCase())
-    ) {
+    if (settings && settings.participantEmails && user && user.attributes && user.attributes.email && settings.participantEmails
+        .map((x: String) => x.toLowerCase()).includes(user.attributes.email.toLowerCase())) {
       setUserAccess(true);
     } else {
       // check if school email is in participant emails
-      if (
-        user &&
-        user.attributes &&
-        user.attributes["custom:schoolEmail"] &&
-        settings.participantEmails
-          .map((x: String) => x.toLowerCase())
-          .includes(user.attributes["custom:schoolEmail"].toLowerCase())
-      ) {
+      if (user && user.attributes && user.attributes["custom:schoolEmail"] && settings.participantEmails
+          .map((x: String) => x.toLowerCase()).includes(user.attributes["custom:schoolEmail"].toLowerCase())) {
         setUserAccess(true);
-      }
-      // check if admin
-      else if (
-        user &&
-        (getGroups(user).includes("Administrator") ||
-          getGroups(user).includes("Volunteer"))
-      ) {
+      } else if (user && (getGroups(user).includes("Administrator") || getGroups(user).includes("Volunteer"))) {
         setUserAccess(true);
       } else {
         setUserAccess(false);
@@ -118,7 +104,6 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
   };
 
   const loadPoints = async (callback?: () => void) => {
-    // get points for user
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
@@ -127,9 +112,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-
     let items = res.data.listPoints.items;
-
     if (items.length > 0) {
       let points = 0;
       items.forEach((item: Points) => {
@@ -138,7 +121,6 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     } else {
       setPoints(0);
     }
-
     if (callback) callback();
   };
 
@@ -152,17 +134,31 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
     let items = res.data.listEvents.items;
 
-    // sort events by start time
     items.sort((a: Event, b: Event) => {
-      // if no start time, set to really far in the past
       let a1 = new Date(a.start ?? "june 2000");
       let b1 = new Date(b.start ?? "june 2000");
       return a1.getTime() - b1.getTime();
     });
 
-    if (items.length > 0) {
-      setEvents(items);
+    let now = new Date();
+    let pastEvents: Event[] = [];
+    let currentEvents: Event[] = [];
+    let futureEvents: Event[] = [];
+    // current events are 0-6 hours into the future
+    for (const event of items) {
+      let time = new Date(event.start) ?? "june 2000";
+      if (time.getTime() < now.getTime()) {
+        pastEvents.push(event);
+      } else if (time.getTime() >= now.getTime() && time.getTime() < now.getTime() + (60 * 60 * 1000 * 6)) {
+        currentEvents.push(event);
+      } else {
+        futureEvents.push(event);
+      }
     }
+    setPastEvents(pastEvents);
+    setCurrentEvents(currentEvents);
+    setFutureEvents(futureEvents);
+    setEvents(items);
 
     if (callback) callback();
   };
@@ -171,27 +167,50 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res = await DataStore.query(EventRSVP, (e) =>
       e.userID("eq", user?.attributes?.sub ?? "")
     );
-
     setEventRSVPs(res);
     if (callback) callback();
   };
 
+  const onRsvp = async (event: Event) => {
+    setCurrentlyRSVPing(true);
+    if (eventRSVPs.filter((x) => x.eventID === event.id).length >= 1) {
+      let rsvp = eventRSVPs.find((x) => x.eventID === event.id);
+      const toDelete = await DataStore.query(EventRSVP, rsvp?.id ?? "");
+      if (toDelete) DataStore.delete(toDelete);
+      setEventRSVPs(eventRSVPs.filter((x) => x.eventID !== event.id));
+      setCurrentlyRSVPing(false);
+    } else {
+      let rsvp: any = await API.graphql({
+        query: createEventRSVP,
+        variables: {
+          input: {
+            userID: user?.attributes?.sub,
+            userName: user?.attributes?.name,
+            eventID: event.id,
+          },
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      setEventRSVPs([
+        ...eventRSVPs,
+        rsvp.data.createEventRSVP,
+      ]);
+      setCurrentlyRSVPing(false);
+    }
+  }
+
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-        {settingsLoading ||
-        pointsLoading ||
-        eventsLoading ||
-        eventRSVPsLoading ? (
-          <Flex
-            direction={"column"}
-            justifyContent={"center"}
-            alignItems={"center"}
-          >
+          {settingsLoading 
+          || pointsLoading 
+          || eventsLoading 
+          || eventRSVPsLoading 
+        ? (
+          <Flex direction={"column"} justifyContent={"center"} alignItems={"center"}>
             <Loader size={"large"} />
           </Flex>
         ) : adminSettings.hacklyticsOpen && userAccess ? (
-          // hacklytics is open :D (started)
           <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
             <Card width="20%" variation="outlined" paddingLeft="2em" borderRadius="5em">
               <Flex direction={"row"} justifyContent={"space-between"}>
@@ -201,60 +220,103 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 </div>
               </Flex>
             </Card>
-            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Schedule</Heading>
-            <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"}>
-              {events.map((event, i) => (
-                <EventCard
-                  event={event}
-                  key={i}
-                  currentlyRSVPing={currentlyRSVPing}
-                  isRSVPed={
-                    eventRSVPs.filter((x) => x.eventID === event.id).length >= 1
-                  }
-                  onRSVP={
-                    event.canRSVP
-                      ? async () => {
-                          setCurrentlyRSVPing(true);
-                          if (
-                            eventRSVPs.filter((x) => x.eventID === event.id)
-                              .length >= 1
-                          ) {
-                            let rsvp = eventRSVPs.find(
-                              (x) => x.eventID === event.id
-                            );
-                            const toDelete = await DataStore.query(
-                              EventRSVP,
-                              rsvp?.id ?? ""
-                            );
-                            if (toDelete) DataStore.delete(toDelete);
-                            setEventRSVPs(
-                              eventRSVPs.filter((x) => x.eventID !== event.id)
-                            );
-                            setCurrentlyRSVPing(false);
-                          } else {
-                            let rsvp: any = await API.graphql({
-                              query: createEventRSVP,
-                              variables: {
-                                input: {
-                                  userID: user?.attributes?.sub,
-                                  userName: user?.attributes?.name,
-                                  eventID: event.id,
-                                },
-                              },
-                              authMode: "AMAZON_COGNITO_USER_POOLS",
-                            });
-                            setEventRSVPs([
-                              ...eventRSVPs,
-                              rsvp.data.createEventRSVP,
-                            ]);
-                            setCurrentlyRSVPing(false);
-                          }
-                        }
-                      : undefined
-                  }
-                />
-              ))}
+            <Flex direction={"row"} justifyContent={"flex-end"}>
+              <Flex direction={"row"} justifyContent={"space-between"} padding={"0.5em"}>
+                <Text color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
+                <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
+                <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
+                <a className={styles.link} href="https://hacklytics-2024.devpost.com/" target="_blank">DevPost</a>
+                <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>
+                <a className={styles.link} href="https://join.slack.com/t/datasciencegt/shared_invite/zt-29yzp7it3-kyS4baNNIfu5M2c27ekzhA" target="_blank">DSGT Slack</a>
+              </Flex>
             </Flex>
+            <Tabs spacing="relative" defaultIndex={ScheduleTabMap.get(window.location.pathname) ?? 0} grow={1}
+              onChange={(index: string | number) => {
+                let ScheduleTabMapRev = Array.from(ScheduleTabMap.keys());
+                let i = parseInt(index as string);
+                window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
+              }}
+            >
+              <TabItem title="Itemized Schedule">
+                <Heading level={3} marginTop={"medium"}>Current Events</Heading>
+                <Text fontSize={"1.2em"} marginBottom={"medium"}>What's happening now</Text>
+                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
+                  {currentEvents.length == 0 ? (
+                    <Text>No events happening now.</Text>
+                  ) : (
+                    <>
+                      {currentEvents.map((event, i) => (
+                        <EventCard
+                          event={event}
+                          key={i}
+                          currentlyRSVPing={currentlyRSVPing}
+                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                        />
+                      ))}
+                    </>
+                  )}
+                </Flex>
+                <Heading level={3} marginTop={"medium"}>Future events</Heading>
+                <Text fontSize={"1.2em"} marginBottom={"medium"}>What's happening later</Text>
+                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
+                  {futureEvents.length == 0 ? (
+                    <Text>No events in the future.</Text>
+                  ) : (
+                    <>
+                      {futureEvents.map((event, i) => (
+                        <EventCard
+                          event={event}
+                          key={i}
+                          currentlyRSVPing={currentlyRSVPing}
+                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                        />
+                      ))}
+                    </>
+                  )}
+                </Flex>
+                <Heading level={3} marginTop={"medium"}>Previous events</Heading>
+                <Text fontSize={"1.2em"} marginBottom={"medium"}>Events which have ended</Text>
+                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
+                  {pastEvents.length == 0 ? (
+                    <Text>No events have ended yet.</Text>
+                  ) : (
+                    <>
+                      {pastEvents.map((event, i) => (
+                        <EventCard
+                          event={event}
+                          key={i}
+                          currentlyRSVPing={currentlyRSVPing}
+                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                        />
+                    ))}
+                    </>
+                  )}
+                </Flex>
+              </TabItem>
+              <TabItem title="Full Schedule">
+                <Heading level={3} marginTop={"medium"} marginBottom={"medium"}>All events</Heading>
+                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
+                  {events.length == 0 ? (
+                    <Text>No events.</Text>
+                  ) : (
+                    <>
+                      {events.map((event, i) => (
+                        <EventCard
+                          event={event}
+                          key={i}
+                          currentlyRSVPing={currentlyRSVPing}
+                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                        />
+                      ))}
+                    </>
+                  )}
+                </Flex>
+              </TabItem>
+            </Tabs>
           </Flex>
         ) : (
           <>
@@ -276,18 +338,5 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     </div>
   );
 };
-
-// {user && (
-//   <View width="100%" padding="1em">
-//     <Text>dev Hello {user.attributes?.name}</Text>
-//     {user.attributes &&
-//       Object.values(user.attributes).map((attr, i) => (
-//         <Text key={i}>{attr}</Text>
-//       ))}
-//     <Button onClick={signOut}>
-//       <Text>Sign Out</Text>
-//     </Button>
-//   </View>
-// )}
 
 export default HomePage;

@@ -1,1 +1,11 @@
-.HomePage {}
+.HomePage {
+    
+}
+
+.link {
+    color: var(--amplify-colors-font-primary);
+    text-decoration: none;
+    &:hover {
+        text-decoration: underline;
+    }
+}

@@ -522,11 +522,18 @@ export const getEventRSVP = /* GraphQL */ `query GetEventRSVP($id: ID!) {
   APITypes.GetEventRSVPQuery
 >;
 export const listEventRSVPS = /* GraphQL */ `query ListEventRSVPS(
-  $filter: ModelEventRSVPFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listEventRSVPS(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listEventRSVPS(
+    limit: $limit
+    nextToken: $nextToken
+    filter: {
+      _deleted: {
+        ne: true
+      }
+    }
+  ) {
     items {
       id
       userID

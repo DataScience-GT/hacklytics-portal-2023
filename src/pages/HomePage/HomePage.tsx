@@ -210,7 +210,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           <Flex direction={"column"} justifyContent={"center"} alignItems={"center"}>
             <Loader size={"large"} />
           </Flex>
-        ) : adminSettings.hacklyticsOpen && userAccess ? (
+        ) : (adminSettings.hacklyticsOpen && userAccess) || (user && (getGroups(user).includes("Administrator"))) ? (
           <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
             <Card width="20%" variation="outlined" paddingLeft="2em" borderRadius="5em">
               <Flex direction={"row"} justifyContent={"space-between"}>

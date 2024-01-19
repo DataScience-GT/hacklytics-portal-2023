@@ -33,13 +33,14 @@ import StatusAlert from "../../components/StatusAlert/StatusAlert";
 import { API, DataStore } from "aws-amplify";
 import {
   getAdminSettings,
+  listEventRSVPS,
   listEvents,
 } from "../../graphql/queries";
 import { updateAdminSettings, deleteEvent } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
 import { CreateEvent, UpdateEvent, DeleteEvent, DeleteAllEmails, DeleteAllEvents } from "../../ui-components";
 import { toast } from "react-toastify";
-import { ListCheckins } from "../../graphql/customQueries";
+import { ListCheckins, sub_query } from "../../graphql/customQueries";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -62,7 +63,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   //events --------------------
   const [events, setEvents] = useState<Event[]>([]);
-  const [eventCheckins, setEventCheckins] = useState(new Map());
+  const [eventCheckins, setEventCheckins] = useState<Map<string, number>>(new Map());
   const [loadingEventCheckins, setLoadingEventCheckins] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState<boolean>(true);
@@ -80,7 +81,15 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [editEventModalOpen, setEditEventModalOpen] = useState<boolean>(false);
   const [eventEditing, setEventEditing] = useState<EagerEvent>({} as EagerEvent);
   const [editEventStatus, setEditEventStatus] = useState<Status>({ show: false });
+  const [eventRsvps, setEventRsvps] = useState<Map<string, string[]>>(new Map());
   const [loadingRsvps, setLoadingRsvps] = useState<boolean>(true);
+  const [showEventRsvps, setShowEventRsvps] = useState<boolean>(false);
+  const [eventChosen, setEventChosen] = useState<Event>({} as Event);
+  const [usernameSearch, setUsernameSearch] = useState<string>("");
+  const [usernamePage, setUsernamePage] = useState<number>(1);
+  const [usernamePageSize, setUsernamePageSize] = useState<number>(localStorage.getItem("usernamePageSize")
+      ? parseInt(localStorage.getItem("usernamePageSize") as string) : 10);
+  const [filteredUsernames, setFilteredUsernames] = useState<string[]>([]);
 
   // participants
   const [participantPage, setParticipantPage] = useState<number>(1);
@@ -98,9 +107,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     loadEventCheckins(() => {
       setLoadingEventCheckins(false);
     });
-    // loadRsvps(() => {
-    //   setLoadingRsvps(false);
-    // })
+    loadRsvps(() => {
+      setLoadingRsvps(false);
+    })
   }, []);
 
   useEffect(() => {
@@ -110,11 +119,35 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           .includes(eventSearch)
       )
     );
-  }, [events, eventSearch]);
+    setFilteredUsernames(
+      eventRsvps.get(eventChosen.id)?.filter((x) => 
+          x.toLowerCase()
+          .includes(usernameSearch)) || []
+    );
+    console.log(filteredUsernames);
+  }, [events, eventSearch, eventRsvps, eventChosen, usernameSearch]);
 
-  // const loadRsvps = async (callback?: () => void) => {
-  //   const 
-  // }
+  const loadRsvps = async (callback?: () => void) => {
+    const res: any = await API.graphql({
+      query: listEventRSVPS,
+      variables: {
+        id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+        limit: 1000,
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    let rsvps = res.data.listEventRSVPS.items;
+    let map: Map<string, string[]> = new Map();
+    for (const rsvp of rsvps) {
+      let eventID: string = rsvp.eventID;
+      let username: string = rsvp.userName;
+      let record = map.get(eventID) || [];
+      record.push(username);
+      map.set(eventID, record);
+    }
+    setEventRsvps(map);
+    if (callback) callback();
+  }
 
   // settings --------------------
   const loadSettings = async (callback?: () => void) => {
@@ -220,15 +253,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       setEventCheckins(new Map(eventCheckins.set(checkin.event.id, count + 1)));
     }
     // subscribe to new checkins
-    const sub_query = `
-    subscription OnCreateCheckin {
-      onCreateCheckin {
-        event {
-          id
-        }
-      }
-    }
-    `;
     const subscription: any = API.graphql({
       query: sub_query,
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -348,7 +372,23 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     saveSettings({ ...adminSettings, participantEmails: newEmails });
   }
 
-  console.log(eventCheckins);
+  function clickSearchUsername(e: React.ChangeEvent<HTMLInputElement>): void {
+    setUsernameSearch(e.target.value.toLowerCase());
+    let maxPages = Math.ceil(filteredUsernames.length / usernamePageSize);
+    if (usernamePage > maxPages && maxPages !== 0) {
+      setUsernamePage(maxPages);
+    }
+    if (eventPage < 1) {
+      setUsernamePage(1);
+    }
+  }
+
+  function deselectSearchUsername(): void {
+    setUsernameSearch("");
+    if (eventPage < 1) {
+      setUsernamePage(1);
+    }
+  }
 
   return (
     <div className={styles.AdminPage}>
@@ -394,15 +434,15 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               <Table highlightOnHover={events.length >= 1 && eventAction !== ""}>
                 <TableHead>
                   <TableRow>
-                    <TableCell as="th">Event Name</TableCell>
-                    <TableCell as="th">Description</TableCell>
+                    <TableCell as="th" style={{ width: '150px' }}>Event Name</TableCell>
+                    <TableCell as="th" style={{ width: '400px' }}>Description</TableCell>
                     <TableCell as="th">Location</TableCell>
                     <TableCell as="th">Start</TableCell>
                     <TableCell as="th">End</TableCell>
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
                     <TableCell as="th">Check-ins</TableCell>
-                    <TableCell as="th">Requires RSVP</TableCell>
+                    <TableCell as="th">RSVPs</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody border={eventAction !== "" ? "2px solid gray" : ""} boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}>
@@ -453,7 +493,20 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                                 <Loader size="small" />
                               )}
                             </TableCell>
-                            <TableCell>{event.requireRSVP ? "True" : "False"}</TableCell>
+                            <TableCell>
+                              {!loadingRsvps ? (
+                                eventRsvps.get(event.id)?.length ?? 0
+                              ) : (
+                                <Loader size="small" />
+                              )}
+                              {" "}
+                              <a className={styles.link} onClick={() => {
+                                setShowEventRsvps(true);
+                                setEventChosen(event);
+                              }}>
+                                  (See all)
+                              </a>
+                            </TableCell>
                           </TableRow>
                         ))}
                     </>
@@ -778,6 +831,87 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               setShowDeleteAllEmailsModal(false);
             }}
           />
+        </Modal>
+
+        {/* SHOW EVENT RSVPS MODAL */}
+        <Modal
+          contentLabel="Show Event Rsvps Modal"
+          isOpen={showEventRsvps}
+          onRequestClose={() => {
+            setShowEventRsvps(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <Heading marginBottom={"1em"} level={4}>Showing all RSVPS for {eventChosen.name ?? <Badge>Undefined</Badge>}</Heading>
+          <SearchField 
+            label="" 
+            labelHidden={true} 
+            placeholder={"Search username"} 
+            onChange={(e) => clickSearchUsername(e)} 
+            onClear={() => deselectSearchUsername()} 
+            isDisabled={loadingRsvps || eventRsvps.get(eventChosen.id)?.length === 0}
+          />
+          <Flex marginTop={"medium"} direction={"row"} justifyContent={"flex-start"} gap={"1em"} wrap={"wrap"}>
+            {!eventRsvps.get(eventChosen.id) || eventRsvps.get(eventChosen.id)?.length == 0 ? (
+              <Text>No RSVPs for this event.</Text>
+            ) : (
+              <>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell as="th" style={{ width: '150px' }}>Username</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredUsernames.slice((usernamePage - 1) * usernamePageSize, (usernamePage - 1) * usernamePageSize + usernamePageSize)
+                    .map((username) => (
+                      <TableRow key={username}>
+                          <TableCell>{username}</TableCell>
+                        </TableRow>
+                    ))
+                  }
+                </TableBody>
+                <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+                  <Pagination
+                    currentPage={usernamePage}
+                    totalPages={Math.ceil(filteredUsernames.length / usernamePageSize)}
+                    siblingCount={1}
+                    onChange={(newPageIndex, previousPageIndex) => {
+                      setUsernamePage(newPageIndex);
+                    }}
+                    onNext={() => {
+                      setUsernamePage(usernamePage + 1);
+                    }}
+                    onPrevious={() => {
+                      setUsernamePage(usernamePage - 1);
+                    }}
+                  />
+                  <Flex direction={"row"} alignItems={"center"}>
+                    <SelectField
+                      label="" 
+                      labelHidden={true}
+                      onChange={(e) => {
+                        setUsernamePageSize(parseInt(e.target.value));
+                        localStorage.setItem("usernamePageSize", e.target.value);
+                      }}
+                      defaultValue={usernamePageSize.toString()}
+                      size={"small"}
+                    >
+                      <option value={1}>1</option>
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                    </SelectField>
+                    <Text>usernames per page</Text>
+                  </Flex>
+                </Flex>
+              </Table>
+              </>
+            )}
+          </Flex>
         </Modal>
       </View>
     </div>

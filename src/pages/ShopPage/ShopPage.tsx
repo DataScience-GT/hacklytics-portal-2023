@@ -29,12 +29,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const [loadingPoints, setLoadingPoints] = React.useState<boolean>(true);
 
   const [shirtsClaimed, setShirtsClaimed] = React.useState<ClaimShirt[]>([]);
-  const [loadingShirtsClaimed, setLoadingShirtsClaimed] =
-    React.useState<boolean>(true);
+  const [loadingShirtsClaimed, setLoadingShirtsClaimed] = React.useState<boolean>(true);
 
-  const [tryingToClaimShirt, setTryingToClaimShirt] =
-    React.useState<boolean>(false);
-
+  const [tryingToClaimShirt, setTryingToClaimShirt] = React.useState<boolean>(false);
   const [shopSearch, setShopSearch] = React.useState<string>("");
   const [filteredPoints, setFilteredPoints] = React.useState<Points[]>([]);
 
@@ -70,13 +67,11 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       let point = points[p];
       let existing = finalpoints.get(point.userID);
       if (existing) {
-        finalpoints.set(point.userID, new Points(
-          {
+        finalpoints.set(point.userID, new Points({
             userID: point.userID,
             userName: point.userName,
             points: existing.points + point.points
-          }
-        ))
+        }))
       } else {
         finalpoints.set(point.userID, point)
       }
@@ -115,6 +110,8 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     loadShirtsClaimed();
   };
 
+  console.log(shirtsClaimed);
+
   return (
     <div className={styles.ShopPage}>
       <View padding={"medium"}>
@@ -133,20 +130,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
             placeholder={"Search"}
             onChange={(e) => {
               setShopSearch(e.target.value.toLowerCase());
-              // let maxPages = Math.ceil(filteredEvents.length / eventPageSize);
-              // if (eventPage > maxPages && maxPages !== 0) {
-              //   setEventPage(maxPages);
-              // }
-
-              // if (eventPage < 1) {
-              //   setEventPage(1);
-              // }
             }}
             onClear={() => {
               setShopSearch("");
-              // if (eventPage < 1) {
-              //   setEventPage(1);
-              // }
             }}
             isDisabled={loadingPoints || points.length === 0}
           />
@@ -164,7 +150,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
             </TableHead>
             <TableBody>
               <TableRow>
-                <TableCell colSpan={3}>No points yet :(</TableCell>
+                <TableCell colSpan={3}>No points yet.</TableCell>
               </TableRow>
             </TableBody>
           </Table>
@@ -185,7 +171,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                   <TableCell>
                     {shirtsClaimed.filter((x) => x.userID === point.userID)
                       .length > 0 ? (
-                      <Button disabled={true}>Claimed</Button>
+                        <>
+                          <Button disabled={true}>Claimed</Button>
+                        </>
                     ) : (
                       <Button
                         onClick={() => {

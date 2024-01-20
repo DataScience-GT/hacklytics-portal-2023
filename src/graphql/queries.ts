@@ -679,11 +679,18 @@ export const getClaimShirt = /* GraphQL */ `query GetClaimShirt($id: ID!) {
   APITypes.GetClaimShirtQuery
 >;
 export const listClaimShirts = /* GraphQL */ `query ListClaimShirts(
-  $filter: ModelClaimShirtFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listClaimShirts(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listClaimShirts (
+    limit: $limit
+    nextToken: $nextToken
+    filter: {
+      _deleted: {
+        ne: true
+      }
+    }
+  ) {
     items {
       id
       userID

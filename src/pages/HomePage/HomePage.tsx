@@ -213,7 +213,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
         ) : (adminSettings.hacklyticsOpen && userAccess) || (user && (getGroups(user).includes("Administrator"))) ? (
           <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
             <Flex direction={"column"} alignItems={"center"}>
-              <View width={"90%"}>
+              <View width={"100%"}>
                 <Card variation={"outlined"} borderRadius={"4em"} width={"14em"} paddingLeft={"medium"}>
                   <Flex direction={"row"} paddingLeft={"1em"}>
                     <div>
@@ -226,9 +226,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                   Number of participants: {adminSettings && adminSettings.participantEmails 
                         && adminSettings.participantEmails.length} 
                 </Text>
-                <Text marginBottom={"large"}>Tracks available: Sports, Finance, Generative AI, Health</Text>
-                <Flex justifyContent={"flex-end"} direction={"row"} gap={"1em"} padding={"0.5em"} wrap={"wrap"}>
-                  <Text color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
+                <Flex justifyContent={"flex-end"} direction={"row"} gap={"0em"} padding={"0.5em"} wrap={"wrap"} marginBottom={"1em"}>
+                  <Text marginRight={"1em"} color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
                   <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
                   <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
                   <a className={styles.link} href="https://hacklytics-2024.devpost.com/" target="_blank">DevPost</a>

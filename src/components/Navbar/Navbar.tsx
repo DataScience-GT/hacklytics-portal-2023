@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./Navbar.module.scss";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
@@ -27,11 +27,24 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 576);
+    };
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
+
   return (
     <div data-testid="Navbar">
       <View as="header" className={styles.Navbar} width="100vw" padding="medium">
         <Flex direction={"row"} justifyContent="space-between" alignItems="center" gap="0.5em" height="100%" width="100%">
-          <Flex direction={"row"} justifyContent="flex-start" gap="0.5em" height="100%" width="fit-content">
+          <Flex direction={"row"} justifyContent="flex-start" gap="0.5em" height="100%" width={"fit-content"}>
             <Link to="/" style={{ textDecoration: "none" }}>
               <Flex direction={"row"} justifyContent="flex-start" alignItems="center" gap="0.5em" height="100%" width="fit-content">
                 <Image className={styles.Logo} alt="DSGT Logo" src={logo} />
@@ -42,30 +55,28 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
             </Link>
           </Flex>
           <Flex direction={"row"} justifyContent="flex-end" alignItems="center" gap="1em" height="100%" width="fit-content" grow={1}>
-            {/* {user &&
-              (getGroups(user).includes("Scavenger") ||
-                getGroups(user).includes("Administrator")) && (
-                <Link to="/scavengerhunts" style={{ textDecoration: "none" }}>
-                  <Button size="small">Scavenger Hunts</Button>
-                </Link>
-              )} */}
-            {user && getGroups(user).includes("Administrator") && (
+            {!isMobile && user && getGroups(user).includes("Administrator") && (
               <Link to="/admin" style={{ textDecoration: "none" }}>
                 <Button size="small">Admin Console</Button>
               </Link>
             )}
             <View width="fit-content">
               <Menu menuAlign="end">
+                {isMobile && user && getGroups(user).includes("Administrator") && (
+                  <Link to="/admin" style={{ textDecoration: "none" }}>
+                    <MenuItem size="small">Admin Console</MenuItem>
+                  </Link>
+                )}
                 <Link className={styles.MenuLink} to="/">
                   <MenuItem>Dashboard</MenuItem>
                 </Link>
-                {user &&
+                {/* {user &&
                   (getGroups(user).includes("Scavenger") ||
                     getGroups(user).includes("Administrator")) && (
                     <Link className={styles.MenuLink} to="/scavengerhunts">
                       <MenuItem>Scavenger Hunts</MenuItem>
                     </Link>
-                  )}
+                  )} */}
                 {user &&
                   (getGroups(user).includes("Volunteer") ||
                     getGroups(user).includes("Administrator")) && (

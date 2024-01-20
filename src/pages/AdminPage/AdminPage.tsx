@@ -873,7 +873,8 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     ))
                   }
                 </TableBody>
-                <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+              </Table>
+              <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
                   <Pagination
                     currentPage={usernamePage}
                     totalPages={Math.ceil(filteredUsernames.length / usernamePageSize)}
@@ -908,7 +909,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     <Text>usernames per page</Text>
                   </Flex>
                 </Flex>
-              </Table>
               </>
             )}
           </Flex>

@@ -12,6 +12,7 @@ import {
   MenuItem,
   Divider,
   Button,
+  Text
 } from "@aws-amplify/ui-react";
 
 import { Link } from "react-router-dom";
@@ -28,37 +29,11 @@ interface NavbarProps {
 const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
   return (
     <div data-testid="Navbar">
-      <View
-        as="header"
-        className={styles.Navbar}
-        width="100vw"
-        padding="medium"
-      >
-        <Flex
-          direction={"row"}
-          justifyContent="space-between"
-          alignItems="center"
-          gap="0.5em"
-          height="100%"
-          width="100%"
-        >
-          <Flex
-            direction={"row"}
-            justifyContent="flex-start"
-            alignItems="center"
-            gap="0.5em"
-            height="100%"
-            width="fit-content"
-          >
+      <View as="header" className={styles.Navbar} width="100vw" padding="medium">
+        <Flex direction={"row"} justifyContent="space-between" alignItems="center" gap="0.5em" height="100%" width="100%">
+          <Flex direction={"row"} justifyContent="flex-start" gap="0.5em" height="100%" width="fit-content">
             <Link to="/" style={{ textDecoration: "none" }}>
-              <Flex
-                direction={"row"}
-                justifyContent="flex-start"
-                alignItems="center"
-                gap="0.5em"
-                height="100%"
-                width="fit-content"
-              >
+              <Flex direction={"row"} justifyContent="flex-start" alignItems="center" gap="0.5em" height="100%" width="fit-content">
                 <Image className={styles.Logo} alt="DSGT Logo" src={logo} />
                 <Heading className={styles.DSGT} level={4}>
                   Hacklytics 2024
@@ -66,15 +41,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
               </Flex>
             </Link>
           </Flex>
-          <Flex
-            direction={"row"}
-            justifyContent="flex-end"
-            alignItems="center"
-            gap="1em"
-            height="100%"
-            width="fit-content"
-            grow={1}
-          >
+          <Flex direction={"row"} justifyContent="flex-end" alignItems="center" gap="1em" height="100%" width="fit-content" grow={1}>
             {/* {user &&
               (getGroups(user).includes("Scavenger") ||
                 getGroups(user).includes("Administrator")) && (

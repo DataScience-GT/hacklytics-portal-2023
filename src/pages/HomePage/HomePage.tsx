@@ -212,111 +212,115 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : (adminSettings.hacklyticsOpen && userAccess) || (user && (getGroups(user).includes("Administrator"))) ? (
           <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
-            <Card width="20%" variation="outlined" paddingLeft="2em" borderRadius="5em">
-              <Flex direction={"row"} justifyContent={"space-between"}>
-                <div>
-                  <Heading level={4}>Points</Heading>
-                  <Text>You have {points} points.</Text>
-                </div>
-              </Flex>
-            </Card>
-            <Flex direction={"row"} justifyContent={"flex-end"}>
-              <Flex direction={"row"} justifyContent={"space-between"} padding={"0.5em"}>
-                <Text color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
-                <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
-                <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
-                <a className={styles.link} href="https://hacklytics-2024.devpost.com/" target="_blank">DevPost</a>
-                <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>
-                <a className={styles.link} href="https://join.slack.com/t/datasciencegt/shared_invite/zt-29yzp7it3-kyS4baNNIfu5M2c27ekzhA" target="_blank">DSGT Slack</a>
-              </Flex>
+            <Flex direction={"column"} alignItems={"center"}>
+              <View width={"90%"}>
+                <Card variation={"outlined"} borderRadius={"4em"} width={"14em"} paddingLeft={"medium"}>
+                  <Flex direction={"row"} paddingLeft={"1em"}>
+                    <div>
+                      <Heading level={4}>Points</Heading>
+                      <Text>You have {points} points.</Text>
+                    </div>
+                  </Flex>
+                </Card>
+                <Text marginTop={"medium"}>
+                  Number of participants: {adminSettings && adminSettings.participantEmails 
+                        && adminSettings.participantEmails.length} 
+                </Text>
+                <Text marginBottom={"large"}>Tracks available: Sports, Finance, Generative AI, Health</Text>
+                <Flex justifyContent={"flex-end"} direction={"row"} gap={"1em"} padding={"0.5em"} wrap={"wrap"}>
+                  <Text color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
+                  <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
+                  <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
+                  <a className={styles.link} href="https://hacklytics-2024.devpost.com/" target="_blank">DevPost</a>
+                  <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>
+                  <a className={styles.link} href="https://join.slack.com/t/datasciencegt/shared_invite/zt-29yzp7it3-kyS4baNNIfu5M2c27ekzhA" target="_blank">DSGT Slack</a>
+                </Flex>
+                <Tabs spacing="relative" defaultIndex={ScheduleTabMap.get(window.location.pathname) ?? 0} grow={1}
+                  onChange={(index: string | number) => {
+                    let ScheduleTabMapRev = Array.from(ScheduleTabMap.keys());
+                    let i = parseInt(index as string);
+                    window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
+                  }}
+                >
+                  <TabItem title="Itemized Schedule">
+                    <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Current events</Heading>
+                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                      {currentEvents.length == 0 ? (
+                        <Text>No events happening now.</Text>
+                      ) : (
+                        <>
+                          {currentEvents.map((event, i) => (
+                            <EventCard
+                              event={event}
+                              key={i}
+                              currentlyRSVPing={currentlyRSVPing}
+                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                            />
+                          ))}
+                        </>
+                      )}
+                    </Flex>
+                    <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Future events</Heading>
+                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                      {futureEvents.length == 0 ? (
+                        <Text>No events in the future.</Text>
+                      ) : (
+                        <>
+                          {futureEvents.map((event, i) => (
+                            <EventCard
+                              event={event}
+                              key={i}
+                              currentlyRSVPing={currentlyRSVPing}
+                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                            />
+                          ))}
+                        </>
+                      )}
+                    </Flex>
+                    <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Previous events</Heading>
+                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                      {pastEvents.length == 0 ? (
+                        <Text>No events have ended yet.</Text>
+                      ) : (
+                        <>
+                          {pastEvents.map((event, i) => (
+                            <EventCard
+                              event={event}
+                              key={i}
+                              currentlyRSVPing={currentlyRSVPing}
+                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                            />
+                        ))}
+                        </>
+                      )}
+                    </Flex>
+                  </TabItem>
+                  <TabItem title="Full Schedule">
+                    <Heading level={3} marginTop={"medium"} marginBottom={"medium"}>All events</Heading>
+                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                      {events.length == 0 ? (
+                        <Text>No events.</Text>
+                      ) : (
+                        <>
+                          {events.map((event, i) => (
+                            <EventCard
+                              event={event}
+                              key={i}
+                              currentlyRSVPing={currentlyRSVPing}
+                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
+                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                            />
+                          ))}
+                        </>
+                      )}
+                    </Flex>
+                  </TabItem>
+                </Tabs>
+              </View>
             </Flex>
-            <Tabs spacing="relative" defaultIndex={ScheduleTabMap.get(window.location.pathname) ?? 0} grow={1}
-              onChange={(index: string | number) => {
-                let ScheduleTabMapRev = Array.from(ScheduleTabMap.keys());
-                let i = parseInt(index as string);
-                window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
-              }}
-            >
-              <TabItem title="Itemized Schedule">
-                <Heading level={3} marginTop={"medium"}>Current Events</Heading>
-                <Text fontSize={"1.2em"} marginBottom={"medium"}>What's happening now</Text>
-                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
-                  {currentEvents.length == 0 ? (
-                    <Text>No events happening now.</Text>
-                  ) : (
-                    <>
-                      {currentEvents.map((event, i) => (
-                        <EventCard
-                          event={event}
-                          key={i}
-                          currentlyRSVPing={currentlyRSVPing}
-                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
-                        />
-                      ))}
-                    </>
-                  )}
-                </Flex>
-                <Heading level={3} marginTop={"medium"}>Future events</Heading>
-                <Text fontSize={"1.2em"} marginBottom={"medium"}>What's happening later</Text>
-                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
-                  {futureEvents.length == 0 ? (
-                    <Text>No events in the future.</Text>
-                  ) : (
-                    <>
-                      {futureEvents.map((event, i) => (
-                        <EventCard
-                          event={event}
-                          key={i}
-                          currentlyRSVPing={currentlyRSVPing}
-                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
-                        />
-                      ))}
-                    </>
-                  )}
-                </Flex>
-                <Heading level={3} marginTop={"medium"}>Previous events</Heading>
-                <Text fontSize={"1.2em"} marginBottom={"medium"}>Events which have ended</Text>
-                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
-                  {pastEvents.length == 0 ? (
-                    <Text>No events have ended yet.</Text>
-                  ) : (
-                    <>
-                      {pastEvents.map((event, i) => (
-                        <EventCard
-                          event={event}
-                          key={i}
-                          currentlyRSVPing={currentlyRSVPing}
-                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
-                        />
-                    ))}
-                    </>
-                  )}
-                </Flex>
-              </TabItem>
-              <TabItem title="Full Schedule">
-                <Heading level={3} marginTop={"medium"} marginBottom={"medium"}>All events</Heading>
-                <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"space-evenly"} marginBottom={"medium"}>
-                  {events.length == 0 ? (
-                    <Text>No events.</Text>
-                  ) : (
-                    <>
-                      {events.map((event, i) => (
-                        <EventCard
-                          event={event}
-                          key={i}
-                          currentlyRSVPing={currentlyRSVPing}
-                          isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                          onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
-                        />
-                      ))}
-                    </>
-                  )}
-                </Flex>
-              </TabItem>
-            </Tabs>
           </Flex>
         ) : (
           <>

@@ -114,85 +114,87 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
 
   return (
     <div className={styles.ShopPage}>
-      <View padding={"medium"}>
-        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
-          Points Shop
-        </Heading>
-        <Flex
-          direction={"row"}
-          gap={"medium"}
-          marginBottom={"medium"}
-          wrap={"wrap"}
-        >
-          <SearchField
-            label=""
-            labelHidden={true}
-            placeholder={"Search"}
-            onChange={(e) => {
-              setShopSearch(e.target.value.toLowerCase());
-            }}
-            onClear={() => {
-              setShopSearch("");
-            }}
-            isDisabled={loadingPoints || points.length === 0}
-          />
-        </Flex>
-        {loadingPoints || loadingShirtsClaimed ? (
-          <Text>Loading...</Text>
-        ) : points.length <= 0 ? (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell as="th">Participant</TableCell>
-                <TableCell as="th">Points</TableCell>
-                <TableCell as="th">Claim Shirt</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell colSpan={3}>No points yet.</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        ) : (
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell as="th">Participant</TableCell>
-                <TableCell as="th">Points</TableCell>
-                <TableCell as="th">Claim Shirt</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredPoints.map((point) => (
-                <TableRow key={point.id}>
-                  <TableCell>{point.userName}</TableCell>
-                  <TableCell>{point.points}</TableCell>
-                  <TableCell>
-                    {shirtsClaimed.filter((x) => x.userID === point.userID)
-                      .length > 0 ? (
-                        <>
-                          <Button disabled={true}>Claimed</Button>
-                        </>
-                    ) : (
-                      <Button
-                        onClick={() => {
-                          claimShirt(point);
-                          setTryingToClaimShirt(true);
-                        }}
-                        isLoading={tryingToClaimShirt}
-                        loadingText="Claiming"
-                      >
-                        Claim
-                      </Button>
-                    )}
-                  </TableCell>
+      <Flex direction={"column"} padding={"medium"} alignItems={"center"}>
+        <View width={"85%"}>
+          <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
+            Points Shop
+          </Heading>
+          <Flex
+            direction={"row"}
+            gap={"medium"}
+            marginBottom={"medium"}
+            wrap={"wrap"}
+          >
+            <SearchField
+              label=""
+              labelHidden={true}
+              placeholder={"Search"}
+              onChange={(e) => {
+                setShopSearch(e.target.value.toLowerCase());
+              }}
+              onClear={() => {
+                setShopSearch("");
+              }}
+              isDisabled={loadingPoints || points.length === 0}
+            />
+          </Flex>
+          {loadingPoints || loadingShirtsClaimed ? (
+            <Text>Loading...</Text>
+          ) : points.length <= 0 ? (
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell as="th">Participant</TableCell>
+                  <TableCell as="th">Points</TableCell>
+                  <TableCell as="th">Claim Shirt</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        )}
-      </View>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell colSpan={3}>No points yet.</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          ) : (
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell as="th" width={"50%"}>Participant</TableCell>
+                  <TableCell as="th" width={"30%"}>Points</TableCell>
+                  <TableCell as="th">Claim Shirt</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredPoints.map((point) => (
+                  <TableRow key={point.id}>
+                    <TableCell>{point.userName}</TableCell>
+                    <TableCell>{point.points}</TableCell>
+                    <TableCell>
+                      {shirtsClaimed.filter((x) => x.userID === point.userID)
+                        .length > 0 ? (
+                          <>
+                            <Button disabled={true}>Claimed</Button>
+                          </>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            claimShirt(point);
+                            setTryingToClaimShirt(true);
+                          }}
+                          isLoading={tryingToClaimShirt}
+                          loadingText="Claiming"
+                        >
+                          Claim
+                        </Button>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </View>
+      </Flex>
     </div>
   );
 };

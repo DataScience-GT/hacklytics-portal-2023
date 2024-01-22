@@ -63,7 +63,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   //events --------------------
   const [events, setEvents] = useState<Event[]>([]);
-  const [eventCheckins, setEventCheckins] = useState<Map<string, number>>(new Map());
+  const [eventCheckins, setEventCheckins] = useState<Map<string, string[]>>(new Map());
   const [loadingEventCheckins, setLoadingEventCheckins] = useState<boolean>(true);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState<boolean>(true);
@@ -90,6 +90,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [usernamePageSize, setUsernamePageSize] = useState<number>(localStorage.getItem("usernamePageSize")
       ? parseInt(localStorage.getItem("usernamePageSize") as string) : 10);
   const [filteredUsernames, setFilteredUsernames] = useState<string[]>([]);
+
+  const [checkinSearch, setCheckinSearch] = useState<string>("");
+  const [checkinPage, setCheckinPage] = useState<number>(1);
+  const [checkinPageSize, setCheckinPageSize] = useState<number>(localStorage.getItem("checkingPageSize")
+      ? parseInt(localStorage.getItem("checkinPageSize") as string) : 10);
+  const [filteredCheckins, setFilteredCheckins] = useState<string[]>([]);
+  const [showCheckins, setShowCheckins] = useState<boolean>(false);
 
   // participants
   const [participantPage, setParticipantPage] = useState<number>(1);
@@ -124,8 +131,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           x.toLowerCase()
           .includes(usernameSearch)) || []
     );
-    console.log(filteredUsernames);
-  }, [events, eventSearch, eventRsvps, eventChosen, usernameSearch]);
+    setFilteredCheckins(
+      eventCheckins.get(eventChosen.id)?.filter((x) => 
+          x.toLowerCase()
+          .includes(checkinSearch)) || []
+    );
+  }, [events, eventSearch, eventRsvps, eventChosen, usernameSearch, 
+    checkinSearch, eventCheckins]);
 
   const loadRsvps = async (callback?: () => void) => {
     const res: any = await API.graphql({
@@ -246,12 +258,17 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    let checkins1 = res.data.listCheckins.items;
-    for (var c in checkins1) {
-      let checkin: Checkin = checkins1[c];
-      let count = eventCheckins.get(checkin.event.id) ?? 0;
-      setEventCheckins(new Map(eventCheckins.set(checkin.event.id, count + 1)));
+    let checkins = res.data.listCheckins.items;
+    let map: Map<string, string[]> = new Map();
+    for (const checkin of checkins) {
+      let eventID: string = checkin.event.id;
+      let username: string = checkin.userName;
+      let record = map.get(eventID) || [];
+      record.push(username);
+      map.set(eventID, record);
     }
+    setEventCheckins(map);
+
     // subscribe to new checkins
     const subscription: any = API.graphql({
       query: sub_query,
@@ -260,10 +277,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     subscription.subscribe({
       next: (eventData: any) => {
         let checkin: Checkin = eventData.value.data.onCreateCheckin;
-        let count = eventCheckins.get(checkin.event.id) ?? 0;
-        setEventCheckins(
-          new Map(eventCheckins.set(checkin.event.id, count + 1))
-        );
+        let arr = eventCheckins.get(checkin.event.id) ?? [];
+        let username: string = checkin.userName;
+        arr.push(username);
+        setEventCheckins(new Map(eventCheckins.set(checkin.event.id, arr)));
       },
     });
     if (callback) callback();
@@ -378,15 +395,33 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     if (usernamePage > maxPages && maxPages !== 0) {
       setUsernamePage(maxPages);
     }
-    if (eventPage < 1) {
+    if (usernamePage < 1) {
       setUsernamePage(1);
     }
   }
 
   function deselectSearchUsername(): void {
     setUsernameSearch("");
-    if (eventPage < 1) {
+    if (usernamePage < 1) {
       setUsernamePage(1);
+    }
+  }
+
+  function clickSearchCheckin(e: React.ChangeEvent<HTMLInputElement>): void {
+    setCheckinSearch(e.target.value.toLowerCase());
+    let maxPages = Math.ceil(filteredCheckins.length / checkinPageSize);
+    if (checkinPage > maxPages && maxPages !== 0) {
+      setCheckinPage(maxPages);
+    }
+    if (checkinPage < 1) {
+      setCheckinPage(1);
+    }
+  }
+
+  function deselectSearchCheckin(): void {
+    setCheckinSearch("");
+    if (checkinPage < 1) {
+      setCheckinPage(1);
     }
   }
 
@@ -435,7 +470,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell as="th" style={{ width: '150px' }}>Event Name</TableCell>
-                    <TableCell as="th" style={{ width: '400px' }}>Description</TableCell>
+                    <TableCell as="th" style={{ width: '350px' }}>Description</TableCell>
                     <TableCell as="th">Location</TableCell>
                     <TableCell as="th">Start</TableCell>
                     <TableCell as="th">End</TableCell>
@@ -488,10 +523,17 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                             <TableCell>{event.points ?? <Badge>Undefined</Badge>}</TableCell>
                             <TableCell>
                               {!loadingEventCheckins ? (
-                                eventCheckins.get(event.id) ?? 0
+                                eventCheckins.get(event.id)?.length ?? 0
                               ) : (
                                 <Loader size="small" />
                               )}
+                              {" "}
+                              <a className={styles.link} onClick={() => {
+                                setShowCheckins(true);
+                                setEventChosen(event);
+                              }}>
+                                  (See all)
+                              </a>
                             </TableCell>
                             <TableCell>
                               {!loadingRsvps ? (
@@ -898,6 +940,87 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                         localStorage.setItem("usernamePageSize", e.target.value);
                       }}
                       defaultValue={usernamePageSize.toString()}
+                      size={"small"}
+                    >
+                      <option value={1}>1</option>
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                    </SelectField>
+                    <Text>usernames per page</Text>
+                  </Flex>
+                </Flex>
+              </>
+            )}
+          </Flex>
+        </Modal>
+
+        {/* SHOW EVENT CHECKINS MODAL */}
+        <Modal
+          contentLabel="Show Event Checkins Modal"
+          isOpen={showCheckins}
+          onRequestClose={() => {
+            setShowCheckins(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <Heading marginBottom={"1em"} level={4}>Showing all Checkins for {eventChosen.name ?? <Badge>Undefined</Badge>}</Heading>
+          <SearchField 
+            label="" 
+            labelHidden={true} 
+            placeholder={"Search username"} 
+            onChange={(e) => clickSearchCheckin(e)} 
+            onClear={() => deselectSearchCheckin()} 
+            isDisabled={loadingEventCheckins || eventCheckins.get(eventChosen.id)?.length === 0}
+          />
+          <Flex marginTop={"medium"} direction={"row"} justifyContent={"flex-start"} gap={"1em"} wrap={"wrap"}>
+            {!eventCheckins.get(eventChosen.id) || eventCheckins.get(eventChosen.id)?.length == 0 ? (
+              <Text>No checkins for this event.</Text>
+            ) : (
+              <>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell as="th" style={{ width: '150px' }}>Username</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredCheckins.slice((checkinPage - 1) * checkinPageSize, (checkinPage - 1) * checkinPageSize + checkinPageSize)
+                    .map((username) => (
+                      <TableRow key={username}>
+                          <TableCell>{username}</TableCell>
+                        </TableRow>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+              <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+                  <Pagination
+                    currentPage={checkinPage}
+                    totalPages={Math.ceil(filteredCheckins.length / checkinPageSize)}
+                    siblingCount={1}
+                    onChange={(newPageIndex, previousPageIndex) => {
+                      setCheckinPage(newPageIndex);
+                    }}
+                    onNext={() => {
+                      setCheckinPage(checkinPage + 1);
+                    }}
+                    onPrevious={() => {
+                      setCheckinPage(checkinPage - 1);
+                    }}
+                  />
+                  <Flex direction={"row"} alignItems={"center"}>
+                    <SelectField
+                      label="" 
+                      labelHidden={true}
+                      onChange={(e) => {
+                        setCheckinPageSize(parseInt(e.target.value));
+                        localStorage.setItem("checkinPageSize", e.target.value);
+                      }}
+                      defaultValue={checkinPageSize.toString()}
                       size={"small"}
                     >
                       <option value={1}>1</option>

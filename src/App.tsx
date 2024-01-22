@@ -45,6 +45,7 @@ import ShopPage from "./pages/ShopPage/ShopPage";
 
 import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui-react';
+import ChallengesPage from "./pages/ChallengesPage/ChallengesPage";
 I18n.putVocabularies(translations);
 I18n.setLanguage('en');
 
@@ -213,6 +214,10 @@ const App = () => {
                       <Route
                         path="/*"
                         element={<HomePage user={user} signOut={signOut} />}
+                      />
+                      <Route
+                        path="/challenges"
+                        element={<ChallengesPage user={user} signOut={signOut} />}
                       />
                       <Route
                         path="/account"

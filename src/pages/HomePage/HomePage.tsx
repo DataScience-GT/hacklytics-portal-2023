@@ -213,20 +213,16 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
         ) : (adminSettings.hacklyticsOpen && userAccess) || (user && (getGroups(user).includes("Administrator"))) ? (
           <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
             <Flex direction={"column"} alignItems={"center"}>
-              <View width={"100%"}>
-                <Card variation={"outlined"} borderRadius={"4em"} width={"14em"} paddingLeft={"medium"}>
-                  <Flex direction={"row"} paddingLeft={"1em"}>
+              <View width={"85%"}>
+                <Card variation={"outlined"} borderRadius={"3em"} width={"fit-content"} marginBottom={"1em"}>
+                  <Flex direction={"row"} padding={"0 1em"}>
                     <div>
                       <Heading level={4}>Points</Heading>
                       <Text>You have {points} points.</Text>
                     </div>
                   </Flex>
                 </Card>
-                <Text marginTop={"medium"}>
-                  Number of participants: {adminSettings && adminSettings.participantEmails 
-                        && adminSettings.participantEmails.length} 
-                </Text>
-                <Flex justifyContent={"flex-end"} direction={"row"} gap={"0em"} padding={"0.5em"} wrap={"wrap"} marginBottom={"1em"}>
+                <Flex justifyContent={"flex-start"} direction={"row"} gap={"0em"} padding={"0.5em"} wrap={"wrap"} marginBottom={"1em"}>
                   <Text marginRight={"1em"} color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
                   <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
                   <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>

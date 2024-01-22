@@ -77,6 +77,9 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                       <MenuItem>Scavenger Hunts</MenuItem>
                     </Link>
                   )} */}
+                <Link className={styles.MenuLink} to="/challenges">
+                  <MenuItem>Challenges</MenuItem>
+                </Link>
                 {user &&
                   (getGroups(user).includes("Volunteer") ||
                     getGroups(user).includes("Administrator")) && (

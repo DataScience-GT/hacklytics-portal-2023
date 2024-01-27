@@ -225,6 +225,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                 <Flex justifyContent={"flex-start"} direction={"row"} gap={"0em"} padding={"0.5em"} wrap={"wrap"} marginBottom={"1em"}>
                   <Text marginRight={"1em"} color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
                   <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
+                  <a className={styles.link} href="https://discord.gg/tTGfeWBf" target="_blank">Hacklytics Discord</a>
                   <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
                   <a className={styles.link} href="https://hacklytics-2024.devpost.com/" target="_blank">DevPost</a>
                   <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>

@@ -37,9 +37,7 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
           <TableBody className={styles.ChallengesTableBody}>
             <TableRow>
               <TableCell>Sports</TableCell>
-              <TableCell>
-                
-              </TableCell>
+              <TableCell></TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Healthcare</TableCell>

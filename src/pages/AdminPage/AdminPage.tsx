@@ -126,18 +126,26 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           .includes(eventSearch)
       )
     );
+  }, [events, eventSearch]);
+
+  useEffect(() => {
     setFilteredUsernames(
       eventRsvps.get(eventChosen.id)?.filter((x) => 
           x.toLowerCase()
           .includes(usernameSearch)) || []
     );
+  }, [eventRsvps, eventChosen, usernameSearch])
+
+  useEffect(() => {
+    console.log(eventCheckins);
+    console.log(eventChosen);
+    console.log(checkinSearch);
     setFilteredCheckins(
       eventCheckins.get(eventChosen.id)?.filter((x) => 
           x.toLowerCase()
           .includes(checkinSearch)) || []
     );
-  }, [events, eventSearch, eventRsvps, eventChosen, usernameSearch, 
-    checkinSearch, eventCheckins]);
+  }, [eventCheckins, eventChosen, checkinSearch])
 
   const loadRsvps = async (callback?: () => void) => {
     const res: any = await API.graphql({
@@ -261,6 +269,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     let checkins = res.data.listCheckins.items;
     let map: Map<string, string[]> = new Map();
     for (const checkin of checkins) {
+      if (checkin === null) continue;
       let eventID: string = checkin.event.id;
       let username: string = checkin.userName;
       let record = map.get(eventID) || [];
@@ -427,7 +436,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   return (
     <div className={styles.AdminPage}>
-      <View padding="medium">
+      <View padding="medium" width={"85%"}>
         <Button onClick={() => {
           window.history.pushState({}, "Admin Settings", "/admin/settings");
           setSettingsModalOpen(true);
@@ -470,14 +479,14 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 <TableHead>
                   <TableRow>
                     <TableCell as="th" style={{ width: '150px' }}>Event Name</TableCell>
-                    <TableCell as="th" style={{ width: '350px' }}>Description</TableCell>
+                    <TableCell as="th" style={{ width: '300px' }}>Description</TableCell>
                     <TableCell as="th">Location</TableCell>
                     <TableCell as="th">Start</TableCell>
                     <TableCell as="th">End</TableCell>
                     <TableCell as="th">Status</TableCell>
                     <TableCell as="th">Points</TableCell>
-                    <TableCell as="th">Check-ins</TableCell>
-                    <TableCell as="th">RSVPs</TableCell>
+                    <TableCell as="th" style={{ width: '120px'}}>Check-ins</TableCell>
+                    <TableCell as="th" style={{ width: '120px'}}>RSVPs</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody border={eventAction !== "" ? "2px solid gray" : ""} boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}>

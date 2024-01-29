@@ -11,9 +11,12 @@ import {
 import {
   listScavengerHuntCheckins,
   listScavengerHunts,
+} from "../../graphql/queries";
+
+import {
   onCreateScavengerHunt,
   onCreateScavengerHuntCheckin,
-} from "../../graphql";
+} from "../../graphql/subscriptions";
 import { API, DataStore } from "aws-amplify";
 import {
   Text,

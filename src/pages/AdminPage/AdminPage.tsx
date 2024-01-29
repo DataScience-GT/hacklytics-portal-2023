@@ -3,6 +3,8 @@ import styles from "./AdminPage.module.scss";
 // import GLOBAL from "../../GLOBAL.module.scss";
 import Modal from "react-modal";
 
+import { UserData, User } from "../../misc/Interfaces";
+import { sub_query } from "../../misc/CustomQueries";
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import {
   View,
@@ -35,13 +37,13 @@ import {
   getAdminSettings,
   listEventRSVPS,
   listEvents,
-  listCheckins
+  listCheckins,
+  listUsers
 } from "../../graphql/queries";
 import { updateAdminSettings, deleteEvent } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
 import { CreateEvent, UpdateEvent, DeleteEvent, DeleteAllEmails, DeleteAllEvents } from "../../ui-components";
 import { toast } from "react-toastify";
-import { sub_query } from "../../graphql/customQueries";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -56,42 +58,25 @@ const SettingTabMap = new Map<string, number>([
 
 const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
-  // settings --------------------
+  // settings
   const [settingsModalOpen, setSettingsModalOpen] = React.useState(window.location.pathname.includes("/admin/settings"));
   const [settingStatus, setSettingStatus] = React.useState<Status>({ show: false });
   const [adminSettings, setAdminSettings] = useState<AdminSettings>({ id: "0" });
   const [settingsLoading, setSettingsLoading] = useState<boolean>(true);
 
-  //events --------------------
+  // events 
   const [events, setEvents] = useState<Event[]>([]);
-  const [eventCheckins, setEventCheckins] = useState<Map<string, string[]>>(new Map());
-  const [loadingEventCheckins, setLoadingEventCheckins] = useState<boolean>(true);
-  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [eventsLoading, setEventsLoading] = useState<boolean>(true);
+  const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
   const [eventSearch, setEventSearch] = useState<string>("");
   const [eventPage, setEventPage] = useState<number>(1);
   const [eventPageSize, setEventPageSize] = useState<number>(localStorage.getItem("eventPageSize")
       ? parseInt(localStorage.getItem("eventPageSize") as string) : 10);
 
-  const [createEventModalOpen, setCreateEventModalOpen] = useState<boolean>(false);
-  const [createEventStatus, setCreateEventStatus] = useState<Status>({ show: false });
-  const [deleteEventModalOpen, setDeleteEventModalOpen] = useState(false);
-  const [showDeleteAllEventsModal, setShowDeleteAllEventsModal] = useState(false);
-  const [eventAction, setEventAction] = useState<"delete" | "edit" | "">("");
-
-  const [editEventModalOpen, setEditEventModalOpen] = useState<boolean>(false);
-  const [eventEditing, setEventEditing] = useState<EagerEvent>({} as EagerEvent);
-  const [editEventStatus, setEditEventStatus] = useState<Status>({ show: false });
-  const [eventRsvps, setEventRsvps] = useState<Map<string, string[]>>(new Map());
-  const [loadingRsvps, setLoadingRsvps] = useState<boolean>(true);
-  const [showEventRsvps, setShowEventRsvps] = useState<boolean>(false);
+  // checkins
   const [eventChosen, setEventChosen] = useState<Event>({} as Event);
-  const [usernameSearch, setUsernameSearch] = useState<string>("");
-  const [usernamePage, setUsernamePage] = useState<number>(1);
-  const [usernamePageSize, setUsernamePageSize] = useState<number>(localStorage.getItem("usernamePageSize")
-      ? parseInt(localStorage.getItem("usernamePageSize") as string) : 10);
-  const [filteredUsernames, setFilteredUsernames] = useState<string[]>([]);
-
+  const [eventCheckins, setEventCheckins] = useState<Map<string, string[]>>(new Map());
+  const [loadingEventCheckins, setLoadingEventCheckins] = useState<boolean>(true);
   const [checkinSearch, setCheckinSearch] = useState<string>("");
   const [checkinPage, setCheckinPage] = useState<number>(1);
   const [checkinPageSize, setCheckinPageSize] = useState<number>(localStorage.getItem("checkingPageSize")
@@ -99,11 +84,40 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   const [filteredCheckins, setFilteredCheckins] = useState<string[]>([]);
   const [showCheckins, setShowCheckins] = useState<boolean>(false);
 
+  // rsvps
+  const [eventRsvps, setEventRsvps] = useState<Map<string, string[]>>(new Map());
+  const [loadingRsvps, setLoadingRsvps] = useState<boolean>(true);
+  const [showEventRsvps, setShowEventRsvps] = useState<boolean>(false);
+  const [usernameSearch, setUsernameSearch] = useState<string>("");
+  const [usernamePage, setUsernamePage] = useState<number>(1);
+  const [usernamePageSize, setUsernamePageSize] = useState<number>(localStorage.getItem("usernamePageSize")
+      ? parseInt(localStorage.getItem("usernamePageSize") as string) : 10);
+  const [filteredUsernames, setFilteredUsernames] = useState<string[]>([]);
+
+  // modals & status
+  const [createEventModalOpen, setCreateEventModalOpen] = useState<boolean>(false);
+  const [createEventStatus, setCreateEventStatus] = useState<Status>({ show: false });
+  const [deleteEventModalOpen, setDeleteEventModalOpen] = useState(false);
+  const [showDeleteAllEventsModal, setShowDeleteAllEventsModal] = useState(false);
+  const [eventAction, setEventAction] = useState<"delete" | "edit" | "">("");
+  const [editEventModalOpen, setEditEventModalOpen] = useState<boolean>(false);
+  const [eventEditing, setEventEditing] = useState<EagerEvent>({} as EagerEvent);
+  const [editEventStatus, setEditEventStatus] = useState<Status>({ show: false });
+
   // participants
   const [participantPage, setParticipantPage] = useState<number>(1);
   const [participantPageSize, setParticipantPageSize] = useState<number>(5);
   const [showDeleteAllEmailsModal, setShowDeleteAllEmailsModal] = useState<boolean>(false);
   const [participantEmailsField, setParticipantEmailsField] = useState<string>("");
+
+  // users
+  const [users, setUsers] = useState<{[name: string]: any}>({});
+  const [usersLoading, setUsersLoading] = useState<boolean>(true);
+  const [userSearch, setUserSearch] = useState<string>("");
+  const [userPage, setUserPage] = useState<number>(1);
+  const [userPageSize, setUserPageSize] = useState<number>(localStorage.getItem("userPageSize")
+  ? parseInt(localStorage.getItem("userPageSize") as string) : 10);
+  const [filteredUsers, setFilteredUsers] = useState<{[name: string]: any}>({});
 
   useEffect(() => {
     loadSettings(() => {
@@ -117,6 +131,9 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     });
     loadRsvps(() => {
       setLoadingRsvps(false);
+    })
+    loadUsers(() => {
+      setUsersLoading(false);
     })
   }, []);
 
@@ -135,7 +152,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           x.toLowerCase()
           .includes(usernameSearch)) || []
     );
-  }, [eventRsvps, eventChosen, usernameSearch])
+  }, [eventRsvps, eventChosen, usernameSearch]);
 
   useEffect(() => {
     setFilteredCheckins(
@@ -143,7 +160,39 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           x.toLowerCase()
           .includes(checkinSearch)) || []
     );
-  }, [eventCheckins, eventChosen, checkinSearch])
+  }, [eventCheckins, eventChosen, checkinSearch]);
+
+  useEffect(() => {
+    const filteredDict: { [key: string]: any } = {};
+    for (const key in users) {
+        if (key.toLowerCase().includes(userSearch.toLowerCase())) {
+            filteredDict[key] = users[key];
+        }
+    }
+    setFilteredUsers(filteredDict);
+    console.log(Object.values(filteredDict));
+  }, [users, userSearch]);
+
+  const loadUsers = async (callback?: () => void) => {
+    const res: any = await API.graphql({
+      query: listUsers,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    let userData: UserData = JSON.parse(res.data.listUsers);
+    const usersDict: { [name: string]: any } = {};
+    userData.body.users.forEach((user: User) => {
+      const userInfo: any = {};
+      // Extract relevant information
+      user.Attributes.forEach((attribute) => {
+          userInfo[attribute.Name] = attribute.Value;
+      });
+      userInfo['UserCreateDate'] = user.UserCreateDate;
+      userInfo['UserLastModifiedDate'] = user.UserLastModifiedDate;
+      usersDict[userInfo.name] = userInfo;
+    });
+    setUsers(usersDict);
+    if (callback) callback();
+  }
 
   const loadRsvps = async (callback?: () => void) => {
     const res: any = await API.graphql({
@@ -234,7 +283,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
   }
-
   const deleteAllEvents = async () => {
     for (const event of events) {
       deleteSpecificEvent(event.id, (event as any)._version);
@@ -246,6 +294,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listEvents,
       variables: {
+        filter: {_deleted: {ne: true}},
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
         limit: 1000,
       },
@@ -349,24 +398,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     setEventAction("");
   }
 
-  const clickSearch = (e: any) => {
-    setEventSearch(e.target.value.toLowerCase());
-    let maxPages = Math.ceil(filteredEvents.length / eventPageSize);
-    if (eventPage > maxPages && maxPages !== 0) {
-      setEventPage(maxPages);
-    }
-    if (eventPage < 1) {
-      setEventPage(1);
-    }
-  }
-
-  const deselectSearch = () => {
-    setEventSearch("");
-    if (eventPage < 1) {
-      setEventPage(1);
-    }
-  }
-
   const addParticipants = () => {
     if (!participantEmailsField) {
       setSettingStatus({ show: true, type: "error", message: "No emails entered" });
@@ -391,48 +422,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     }
   }
 
-  const removeEmail = (email: string) => {
-    let newEmails = adminSettings?.participantEmails?.filter((e) => e !== email);
-    saveSettings({ ...adminSettings, participantEmails: newEmails });
-  }
-
-  function clickSearchUsername(e: React.ChangeEvent<HTMLInputElement>): void {
-    setUsernameSearch(e.target.value.toLowerCase());
-    let maxPages = Math.ceil(filteredUsernames.length / usernamePageSize);
-    if (usernamePage > maxPages && maxPages !== 0) {
-      setUsernamePage(maxPages);
-    }
-    if (usernamePage < 1) {
-      setUsernamePage(1);
-    }
-  }
-
-  function deselectSearchUsername(): void {
-    setUsernameSearch("");
-    if (usernamePage < 1) {
-      setUsernamePage(1);
-    }
-  }
-
-  function clickSearchCheckin(e: React.ChangeEvent<HTMLInputElement>): void {
-    setCheckinSearch(e.target.value.toLowerCase());
-    let maxPages = Math.ceil(filteredCheckins.length / checkinPageSize);
-    if (checkinPage > maxPages && maxPages !== 0) {
-      setCheckinPage(maxPages);
-    }
-    if (checkinPage < 1) {
-      setCheckinPage(1);
-    }
-  }
-
-  function deselectSearchCheckin(): void {
-    setCheckinSearch("");
-    if (checkinPage < 1) {
-      setCheckinPage(1);
-    }
-  }
-
-
+  const EventsUsersTabMap = new Map<string, number>([
+    ["/view/events", 0],
+    ["/view/users", 1],
+  ]);
 
   return (
     <div className={styles.AdminPage}>
@@ -443,165 +436,302 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         }}>
           Open Settings
         </Button>
-        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Events</Heading>
-        <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
-          <SearchField 
-            label="" 
-            labelHidden={true} 
-            placeholder={"Search"} 
-            onChange={(e) => clickSearch(e)} 
-            onClear={() => deselectSearch()} 
-            isDisabled={eventsLoading || events.length === 0}
-          />
-          <Button onClick={() => setCreateEventModalOpen(true)} isDisabled={eventsLoading}>Create</Button>
-          <ToggleButton 
-            isDisabled={eventsLoading || events.length === 0} 
-            onClick={() => clickEdit()} 
-            isPressed={eventAction === "edit"}>
-              Edit
-          </ToggleButton>
-          <ToggleButton 
-            isDisabled={eventsLoading || events.length === 0} 
-            onClick={() => clickDelete()} 
-            isPressed={eventAction === "delete"}>
-              Delete
-            </ToggleButton>
-          <Button isDisabled={eventsLoading || events.length === 0} onClick={() => setShowDeleteAllEventsModal(true)}>Delete All</Button>
-        </Flex>
-        {eventsLoading ? (
-          <Flex direction={"row"} alignItems={"center"} justifyContent={"center"}>
-            <Loader size="large" />
-          </Flex>
-        ) : (
-          <Flex direction={"column"}>
-            <View maxWidth={"100vw"} overflow={"auto"}>
-              <Table highlightOnHover={events.length >= 1 && eventAction !== ""}>
+        <Tabs 
+          spacing="relative" 
+          defaultIndex={EventsUsersTabMap.get(window.location.pathname) ?? 0} 
+          grow={1}
+          onChange={(index: string | number) => {
+            let EventsTabMapRev = Array.from(EventsUsersTabMap.keys());
+            let i = parseInt(index as string);
+            window.history.pushState({}, "View", EventsTabMapRev[i]);
+          }}
+          width={"50%"}
+        >
+          <TabItem title="Events" width="50%">
+            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Events</Heading>
+            <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
+              <SearchField 
+                label="" 
+                labelHidden={true} 
+                placeholder={"Search"} 
+                onChange={(e) => {
+                  setEventSearch(e.target.value.toLowerCase());
+                  let maxPages = Math.ceil(filteredEvents.length / eventPageSize);
+                  if (eventPage > maxPages && maxPages !== 0) {
+                    setEventPage(maxPages);
+                  }
+                  if (eventPage < 1) {
+                    setEventPage(1);
+                  }
+                }} 
+                onClear={() => {
+                  setEventSearch("");
+                  if (eventPage < 1) {
+                    setEventPage(1);
+                  }
+                }} 
+                isDisabled={eventsLoading || events.length === 0}
+              />
+              <Button onClick={() => setCreateEventModalOpen(true)} isDisabled={eventsLoading}>Create</Button>
+              <ToggleButton 
+                isDisabled={eventsLoading || events.length === 0} 
+                onClick={() => clickEdit()} 
+                isPressed={eventAction === "edit"}>
+                  Edit
+              </ToggleButton>
+              <ToggleButton 
+                isDisabled={eventsLoading || events.length === 0} 
+                onClick={() => clickDelete()} 
+                isPressed={eventAction === "delete"}>
+                  Delete
+                </ToggleButton>
+              <Button isDisabled={eventsLoading || events.length === 0} onClick={() => setShowDeleteAllEventsModal(true)}>Delete All</Button>
+            </Flex>
+            {eventsLoading ? (
+              <Flex direction={"row"} alignItems={"center"} justifyContent={"center"}>
+                <Loader size="large" />
+              </Flex>
+            ) : (
+              <Flex direction={"column"}>
+                <View maxWidth={"100vw"} overflow={"auto"}>
+                  <Table highlightOnHover={events.length >= 1 && eventAction !== ""}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell as="th" style={{ width: '150px' }}>Event Name</TableCell>
+                        <TableCell as="th" style={{ width: '300px' }}>Description</TableCell>
+                        <TableCell as="th">Location</TableCell>
+                        <TableCell as="th">Start</TableCell>
+                        <TableCell as="th">End</TableCell>
+                        <TableCell as="th">Status</TableCell>
+                        <TableCell as="th">Points</TableCell>
+                        <TableCell as="th" style={{ width: '120px'}}>Check-ins</TableCell>
+                        <TableCell as="th" style={{ width: '120px'}}>RSVPs</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody border={eventAction !== "" ? "2px solid gray" : ""} boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}>
+                      {events.length <= 0 || !events.length ? (
+                        <>
+                          <TableRow>
+                            <TableCell colSpan={7} onClick={() => setCreateEventModalOpen(true)}>
+                              <Text style={{ textAlign: "center" }}>Create an event to get started</Text>
+                            </TableCell>
+                          </TableRow>
+                        </>
+                      ) : (
+                        <>
+                          {filteredEvents.slice((eventPage - 1) * eventPageSize, (eventPage - 1) * eventPageSize + eventPageSize)
+                            .map((event) => (
+                              <TableRow key={event.id} onClick={() => clickEvent(event)}>
+                                <TableCell>{event.name}</TableCell>
+                                <TableCell>{event.description ?? <Badge>Undefined</Badge>}</TableCell>
+                                <TableCell>{event.location ?? <Badge>Undefined</Badge>}</TableCell>
+                                <TableCell>{new Date(event.start ?? "").toLocaleString(undefined, {
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                    hour12: true,
+                                  }) ?? <Badge>Undefined</Badge>}
+                                </TableCell>
+                                <TableCell>{new Date(event.end ?? "").toLocaleString(undefined, {
+                                    month: "short",
+                                    day: "numeric",
+                                    hour: "numeric",
+                                    minute: "numeric",
+                                    hour12: true,
+                                  }) ?? <Badge>Undefined</Badge>}
+                                </TableCell>
+                                <TableCell>
+                                  {event.status ? (
+                                    <Badge variation="success">Open</Badge>
+                                  ) : (
+                                    <Badge variation="error">Closed</Badge>
+                                  )}
+                                </TableCell>
+                                <TableCell>{event.points ?? <Badge>Undefined</Badge>}</TableCell>
+                                <TableCell>
+                                  {!loadingEventCheckins ? (
+                                    eventCheckins.get(event.id)?.length ?? 0
+                                  ) : (
+                                    <Loader size="small" />
+                                  )}
+                                  {" "}
+                                  <a className={styles.link} onClick={() => {
+                                    setShowCheckins(true);
+                                    setEventChosen(event);
+                                  }}>
+                                      (See all)
+                                  </a>
+                                </TableCell>
+                                <TableCell>
+                                  {!loadingRsvps ? (
+                                    eventRsvps.get(event.id)?.length ?? 0
+                                  ) : (
+                                    <Loader size="small" />
+                                  )}
+                                  {" "}
+                                  <a className={styles.link} onClick={() => {
+                                    setShowEventRsvps(true);
+                                    setEventChosen(event);
+                                  }}>
+                                      (See all)
+                                  </a>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                        </>
+                      )}
+                    </TableBody>
+                  </Table>
+                </View>
+                <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+                  <Pagination
+                    currentPage={eventPage}
+                    totalPages={Math.ceil(filteredEvents.length / eventPageSize)}
+                    siblingCount={1}
+                    onChange={(newPageIndex, previousPageIndex) => {
+                      setEventPage(newPageIndex);
+                    }}
+                    onNext={() => {
+                      setEventPage(eventPage + 1);
+                    }}
+                    onPrevious={() => {
+                      setEventPage(eventPage - 1);
+                    }}
+                  />
+                  <Flex direction={"row"} alignItems={"center"}>
+                    <SelectField
+                      label="" 
+                      labelHidden={true}
+                      onChange={(e) => {
+                        setEventPageSize(parseInt(e.target.value));
+                        localStorage.setItem("eventPageSize", e.target.value);
+                      }}
+                      defaultValue={eventPageSize.toString()}
+                      size={"small"}
+                    >
+                      <option value={1}>1</option>
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                    </SelectField>
+                    <Text>events per page</Text>
+                  </Flex>
+                </Flex>
+              </Flex>
+            )}
+          </TabItem>
+          <TabItem title="Users" width="50%">
+            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Users</Heading>
+            <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
+              <SearchField 
+                label="" 
+                labelHidden={true} 
+                placeholder={"Search Users"} 
+                onChange={(e) => {
+                  setUserSearch(e.target.value.toLowerCase());
+                  let maxPages = Math.ceil(Object.keys(filteredUsers).length / userPageSize);
+                  if (userPage > maxPages && maxPages !== 0) {
+                    setUserPage(maxPages);
+                  } else if (userPage < 1) {
+                    setUserPage(1);
+                  }
+                }} 
+                onClear={() => {
+                  setUserSearch("");
+                  if (eventPage < 1) {
+                    setUserPage(1);
+                  }
+                }} 
+                isDisabled={usersLoading || Object.keys(filteredUsers).length === 0}
+              />
+              <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell as="th" style={{ width: '150px' }}>Event Name</TableCell>
-                    <TableCell as="th" style={{ width: '300px' }}>Description</TableCell>
-                    <TableCell as="th">Location</TableCell>
-                    <TableCell as="th">Start</TableCell>
-                    <TableCell as="th">End</TableCell>
-                    <TableCell as="th">Status</TableCell>
-                    <TableCell as="th">Points</TableCell>
-                    <TableCell as="th" style={{ width: '120px'}}>Check-ins</TableCell>
-                    <TableCell as="th" style={{ width: '120px'}}>RSVPs</TableCell>
+                    <TableCell as="th" style={{ width: '300px' }}>Name</TableCell>
+                    <TableCell as="th" style={{ width: '300px' }}>Email</TableCell>
+                    <TableCell as="th">Creation Date</TableCell>
+                    <TableCell as="th">Last Modified Date</TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody border={eventAction !== "" ? "2px solid gray" : ""} boxShadow={eventAction !== "" ? "5px 5px 5px white" : "none"}>
-                  {events.length <= 0 || !events.length ? (
+                <TableBody>
+                  {Object.keys(users).length <= 0 || !Object.keys(users).length ? (
                     <>
                       <TableRow>
-                        <TableCell colSpan={7} onClick={() => setCreateEventModalOpen(true)}>
-                          <Text style={{ textAlign: "center" }}>Create an event to get started</Text>
+                        <TableCell colSpan={4}>
+                          <Text style={{ textAlign: "center" }}>No users were found.</Text>
                         </TableCell>
                       </TableRow>
                     </>
                   ) : (
                     <>
-                      {filteredEvents.slice((eventPage - 1) * eventPageSize, (eventPage - 1) * eventPageSize + eventPageSize)
-                        .map((event) => (
-                          <TableRow key={event.id} onClick={() => clickEvent(event)}>
-                            <TableCell>{event.name}</TableCell>
-                            <TableCell>{event.description ?? <Badge>Undefined</Badge>}</TableCell>
-                            <TableCell>{event.location ?? <Badge>Undefined</Badge>}</TableCell>
-                            <TableCell>{new Date(event.start ?? "").toLocaleString(undefined, {
-                                month: "short",
-                                day: "numeric",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              }) ?? <Badge>Undefined</Badge>}
-                            </TableCell>
-                            <TableCell>{new Date(event.end ?? "").toLocaleString(undefined, {
-                                month: "short",
-                                day: "numeric",
-                                hour: "numeric",
-                                minute: "numeric",
-                                hour12: true,
-                              }) ?? <Badge>Undefined</Badge>}
-                            </TableCell>
-                            <TableCell>
-                              {event.status ? (
-                                <Badge variation="success">Open</Badge>
-                              ) : (
-                                <Badge variation="error">Closed</Badge>
-                              )}
-                            </TableCell>
-                            <TableCell>{event.points ?? <Badge>Undefined</Badge>}</TableCell>
-                            <TableCell>
-                              {!loadingEventCheckins ? (
-                                eventCheckins.get(event.id)?.length ?? 0
-                              ) : (
-                                <Loader size="small" />
-                              )}
-                              {" "}
-                              <a className={styles.link} onClick={() => {
-                                setShowCheckins(true);
-                                setEventChosen(event);
-                              }}>
-                                  (See all)
-                              </a>
-                            </TableCell>
-                            <TableCell>
-                              {!loadingRsvps ? (
-                                eventRsvps.get(event.id)?.length ?? 0
-                              ) : (
-                                <Loader size="small" />
-                              )}
-                              {" "}
-                              <a className={styles.link} onClick={() => {
-                                setShowEventRsvps(true);
-                                setEventChosen(event);
-                              }}>
-                                  (See all)
-                              </a>
-                            </TableCell>
-                          </TableRow>
-                        ))}
+                    {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPage + userPageSize)
+                      .map((user) => (
+                        <TableRow key={user.name}>
+                          <TableCell>{user.name}</TableCell>
+                          <TableCell>{user.email}</TableCell>
+                          <TableCell>{new Date(user.UserCreateDate ?? "").toLocaleString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }) ?? <Badge>Undefined</Badge>}
+                          </TableCell>
+                          <TableCell>{new Date(user.UserLastModifiedDate ?? "").toLocaleString(undefined, {
+                            month: "short",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            hour12: true,
+                          }) ?? <Badge>Undefined</Badge>}
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    }
                     </>
                   )}
                 </TableBody>
               </Table>
-            </View>
-            <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
-              <Pagination
-                currentPage={eventPage}
-                totalPages={Math.ceil(filteredEvents.length / eventPageSize)}
-                siblingCount={1}
-                onChange={(newPageIndex, previousPageIndex) => {
-                  setEventPage(newPageIndex);
-                }}
-                onNext={() => {
-                  setEventPage(eventPage + 1);
-                }}
-                onPrevious={() => {
-                  setEventPage(eventPage - 1);
-                }}
-              />
-              <Flex direction={"row"} alignItems={"center"}>
-                <SelectField
-                  label="" 
-                  labelHidden={true}
-                  onChange={(e) => {
-                    setEventPageSize(parseInt(e.target.value));
-                    localStorage.setItem("eventPageSize", e.target.value);
+              <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+                <Pagination
+                  currentPage={userPage}
+                  totalPages={Math.ceil(Object.keys(filteredUsers).length / userPageSize)}
+                  siblingCount={1}
+                  onChange={(newPageIndex, previousPageIndex) => {
+                    setUserPage(newPageIndex);
                   }}
-                  defaultValue={eventPageSize.toString()}
-                  size={"small"}
-                >
-                  <option value={1}>1</option>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={30}>30</option>
-                </SelectField>
-                <Text>events per page</Text>
+                  onNext={() => {
+                    setUserPage(userPage + 1);
+                  }}
+                  onPrevious={() => {
+                    setUserPage(userPage - 1);
+                  }}
+                />
+                <Flex direction={"row"} alignItems={"center"}>
+                  <SelectField
+                    label="" 
+                    labelHidden={true}
+                    onChange={(e) => {
+                      setUserPageSize(parseInt(e.target.value));
+                      localStorage.setItem("userPageSize", e.target.value);
+                    }}
+                    defaultValue={userPageSize.toString()}
+                    size={"small"}
+                  >
+                    <option value={1}>1</option>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={30}>30</option>
+                  </SelectField>
+                  <Text>users per page</Text>
+                </Flex>
               </Flex>
             </Flex>
-          </Flex>
-        )}
+          </TabItem>
+        </Tabs>
 
         {/* SETTINGS MODAL */}
         <Modal
@@ -654,7 +784,12 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 ) : (
                   <Flex direction={"column"}>
                     <Heading marginTop={"medium"} textAlign={"left"} width={"100%"}>Participant Emails</Heading>
-                    <Button width="fit-content" size="small" onClick={() => setShowDeleteAllEmailsModal(true)}>Remove All Emails</Button>
+                    <Button 
+                      width="fit-content" 
+                      size="small" 
+                      onClick={() => {setShowDeleteAllEmailsModal(true)}}>
+                        Remove All Emails
+                    </Button>
                     <Text fontSize={"0.9em"} textAlign={"left"} width={"100%"}>
                       Number of registered participants: {adminSettings && adminSettings.participantEmails 
                         && adminSettings.participantEmails.length}
@@ -680,7 +815,15 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                             <TableRow key={email}>
                               <TableCell>{email}</TableCell>
                               <TableCell>
-                                <Button size="small" onClick={() => removeEmail(email || "")}>Remove</Button>
+                                <Button 
+                                  size="small" 
+                                  onClick={() => {
+                                    let newEmails = adminSettings?.participantEmails?.filter((e) => e !== email);
+                                    saveSettings({ ...adminSettings, participantEmails: newEmails });
+                                  }}
+                                >
+                                    Remove
+                                </Button>
                               </TableCell>
                             </TableRow>
                           ))
@@ -900,8 +1043,22 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             label="" 
             labelHidden={true} 
             placeholder={"Search username"} 
-            onChange={(e) => clickSearchUsername(e)} 
-            onClear={() => deselectSearchUsername()} 
+            onChange={(e) => {
+              setUsernameSearch(e.target.value.toLowerCase());
+              let maxPages = Math.ceil(filteredUsernames.length / usernamePageSize);
+              if (usernamePage > maxPages && maxPages !== 0) {
+                setUsernamePage(maxPages);
+              }
+              if (usernamePage < 1) {
+                setUsernamePage(1);
+              }
+            }} 
+            onClear={() => {
+              setUsernameSearch("");
+              if (usernamePage < 1) {
+                setUsernamePage(1);
+              }
+            }} 
             isDisabled={loadingRsvps || eventRsvps.get(eventChosen.id)?.length === 0}
           />
           <Flex marginTop={"medium"} direction={"row"} justifyContent={"flex-start"} gap={"1em"} wrap={"wrap"}>
@@ -981,8 +1138,22 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             label="" 
             labelHidden={true} 
             placeholder={"Search username"} 
-            onChange={(e) => clickSearchCheckin(e)} 
-            onClear={() => deselectSearchCheckin()} 
+            onChange={(e) => {
+              setCheckinSearch(e.target.value.toLowerCase());
+              let maxPages = Math.ceil(filteredCheckins.length / checkinPageSize);
+              if (checkinPage > maxPages && maxPages !== 0) {
+                setCheckinPage(maxPages);
+              }
+              if (checkinPage < 1) {
+                setCheckinPage(1);
+              }
+            }} 
+            onClear={() => {
+              setCheckinSearch("");
+              if (checkinPage < 1) {
+                setCheckinPage(1);
+              }
+            }} 
             isDisabled={loadingEventCheckins || eventCheckins.get(eventChosen.id)?.length === 0}
           />
           <Flex marginTop={"medium"} direction={"row"} justifyContent={"flex-start"} gap={"1em"} wrap={"wrap"}>

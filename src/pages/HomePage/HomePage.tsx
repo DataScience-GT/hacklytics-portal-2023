@@ -18,12 +18,14 @@ import { API, DataStore } from "aws-amplify";
 import {
   createEventRSVP,
   deleteEventRSVP,
+} from "../../graphql/mutations";
+import {
   getAdminSettings,
   getPoints,
   listEventRSVPS,
   listEvents,
   listPoints,
-} from "../../graphql";
+} from "../../graphql/queries";
 import { AdminSettings, Event, EventRSVP, Points } from "../../models/index";
 import HacklyticsCard from "../../components/HacklyticsCard/HacklyticsCard";
 import EventCard from "../../components/EventCard/EventCard";
@@ -107,7 +109,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
-        filter: {userID: {eq: user?.username}},
+        filter: {userID: {eq: user?.username}, _deleted: {ne: true}},
         limit: 1000
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -128,6 +130,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listEvents,
       variables: {
+        filter: {_deleted: {ne: true}},
         limit: 1000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -231,14 +234,18 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                   <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>
                   <a className={styles.link} href="https://join.slack.com/t/datasciencegt/shared_invite/zt-29yzp7it3-kyS4baNNIfu5M2c27ekzhA" target="_blank">DSGT Slack</a>
                 </Flex>
-                <Tabs spacing="relative" defaultIndex={ScheduleTabMap.get(window.location.pathname) ?? 0} grow={1}
+                <Tabs 
+                  spacing="relative" 
+                  defaultIndex={ScheduleTabMap.get(window.location.pathname) ?? 0} 
+                  grow={1}
                   onChange={(index: string | number) => {
                     let ScheduleTabMapRev = Array.from(ScheduleTabMap.keys());
                     let i = parseInt(index as string);
                     window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
                   }}
+                  width={"50%"}
                 >
-                  <TabItem title="Itemized Schedule">
+                  <TabItem title="Itemized Schedule" width="50%">
                     <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Current events</Heading>
                     <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
                       {currentEvents.length == 0 ? (
@@ -294,7 +301,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                       )}
                     </Flex>
                   </TabItem>
-                  <TabItem title="Full Schedule">
+                  <TabItem title="Full Schedule" width="50%">
                     <Heading level={3} marginTop={"medium"} marginBottom={"medium"}>All events</Heading>
                     <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
                       {events.length == 0 ? (

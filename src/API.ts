@@ -515,6 +515,46 @@ export type DeleteClaimShirtInput = {
   _version?: number | null,
 };
 
+export type CreateClaimHoodieInput = {
+  id?: string | null,
+  userID: string,
+  userName: string,
+  _version?: number | null,
+};
+
+export type ModelClaimHoodieConditionInput = {
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  and?: Array< ModelClaimHoodieConditionInput | null > | null,
+  or?: Array< ModelClaimHoodieConditionInput | null > | null,
+  not?: ModelClaimHoodieConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ClaimHoodie = {
+  __typename: "ClaimHoodie",
+  id: string,
+  userID: string,
+  userName: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateClaimHoodieInput = {
+  id: string,
+  userID?: string | null,
+  userName?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteClaimHoodieInput = {
+  id: string,
+  _version?: number | null,
+};
+
 export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
@@ -677,6 +717,23 @@ export type ModelClaimShirtConnection = {
   startedAt?: number | null,
 };
 
+export type ModelClaimHoodieFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  and?: Array< ModelClaimHoodieFilterInput | null > | null,
+  or?: Array< ModelClaimHoodieFilterInput | null > | null,
+  not?: ModelClaimHoodieFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelClaimHoodieConnection = {
+  __typename: "ModelClaimHoodieConnection",
+  items:  Array<ClaimHoodie | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
 export type ModelSubscriptionAdminSettingsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   hacklyticsOpen?: ModelSubscriptionBooleanInput | null,
@@ -817,6 +874,15 @@ export type ModelSubscriptionClaimShirtFilterInput = {
   userName?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelSubscriptionClaimHoodieFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  userName?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionClaimHoodieFilterInput | null > | null,
+  or?: Array< ModelSubscriptionClaimHoodieFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
 };
 
@@ -1445,6 +1511,63 @@ export type DeleteClaimShirtMutationVariables = {
 export type DeleteClaimShirtMutation = {
   deleteClaimShirt?:  {
     __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateClaimHoodieMutationVariables = {
+  input: CreateClaimHoodieInput,
+  condition?: ModelClaimHoodieConditionInput | null,
+};
+
+export type CreateClaimHoodieMutation = {
+  createClaimHoodie?:  {
+    __typename: "ClaimHoodie",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateClaimHoodieMutationVariables = {
+  input: UpdateClaimHoodieInput,
+  condition?: ModelClaimHoodieConditionInput | null,
+};
+
+export type UpdateClaimHoodieMutation = {
+  updateClaimHoodie?:  {
+    __typename: "ClaimHoodie",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteClaimHoodieMutationVariables = {
+  input: DeleteClaimHoodieInput,
+  condition?: ModelClaimHoodieConditionInput | null,
+};
+
+export type DeleteClaimHoodieMutation = {
+  deleteClaimHoodie?:  {
+    __typename: "ClaimHoodie",
     id: string,
     userID: string,
     userName: string,
@@ -2177,6 +2300,75 @@ export type SyncClaimShirtsQuery = {
   } | null,
 };
 
+export type GetClaimHoodieQueryVariables = {
+  id: string,
+};
+
+export type GetClaimHoodieQuery = {
+  getClaimHoodie?:  {
+    __typename: "ClaimHoodie",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListClaimHoodiesQueryVariables = {
+  filter?: ModelClaimHoodieFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListClaimHoodiesQuery = {
+  listClaimHoodies?:  {
+    __typename: "ModelClaimHoodieConnection",
+    items:  Array< {
+      __typename: "ClaimHoodie",
+      id: string,
+      userID: string,
+      userName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncClaimHoodiesQueryVariables = {
+  filter?: ModelClaimHoodieFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncClaimHoodiesQuery = {
+  syncClaimHoodies?:  {
+    __typename: "ModelClaimHoodieConnection",
+    items:  Array< {
+      __typename: "ClaimHoodie",
+      id: string,
+      userID: string,
+      userName: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
 export type OnCreateAdminSettingsSubscriptionVariables = {
   filter?: ModelSubscriptionAdminSettingsFilterInput | null,
 };
@@ -2778,6 +2970,60 @@ export type OnDeleteClaimShirtSubscriptionVariables = {
 export type OnDeleteClaimShirtSubscription = {
   onDeleteClaimShirt?:  {
     __typename: "ClaimShirt",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateClaimHoodieSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimHoodieFilterInput | null,
+};
+
+export type OnCreateClaimHoodieSubscription = {
+  onCreateClaimHoodie?:  {
+    __typename: "ClaimHoodie",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateClaimHoodieSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimHoodieFilterInput | null,
+};
+
+export type OnUpdateClaimHoodieSubscription = {
+  onUpdateClaimHoodie?:  {
+    __typename: "ClaimHoodie",
+    id: string,
+    userID: string,
+    userName: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteClaimHoodieSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimHoodieFilterInput | null,
+};
+
+export type OnDeleteClaimHoodieSubscription = {
+  onDeleteClaimHoodie?:  {
+    __typename: "ClaimHoodie",
     id: string,
     userID: string,
     userName: string,

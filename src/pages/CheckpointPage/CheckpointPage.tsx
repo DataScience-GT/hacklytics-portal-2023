@@ -5,14 +5,16 @@ import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import { View, Text, Flex, Button } from "@aws-amplify/ui-react";
 import { useParams } from "react-router-dom";
 import {
-  createPoints,
-  createScavengerHuntCheckin,
   getPoints,
   getScavengerHunt,
   listPoints,
   listScavengerHuntCheckins,
+} from "../../graphql/queries";
+import {
+  createPoints,
+  createScavengerHuntCheckin,
   updatePoints,
-} from "../../graphql";
+} from "../../graphql/mutations";
 import { API } from "aws-amplify";
 import { ScavengerHuntCheckin } from "../../models";
 import Status from "../../Types/Status";

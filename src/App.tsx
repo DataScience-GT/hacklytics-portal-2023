@@ -46,6 +46,7 @@ import ShopPage from "./pages/ShopPage/ShopPage";
 import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui-react';
 import ChallengesPage from "./pages/ChallengesPage/ChallengesPage";
+import Footer from "./components/Footer/Footer";
 I18n.putVocabularies(translations);
 I18n.setLanguage('en');
 
@@ -267,6 +268,7 @@ const App = () => {
                         }
                       />
                     </Routes>
+                    <Footer user={user} signOut={signOut} />
                   </div>
                 </BrowserRouter>
               );

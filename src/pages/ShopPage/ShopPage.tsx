@@ -2,8 +2,9 @@ import React, { FC, useEffect } from "react";
 import styles from "./ShopPage.module.scss";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
-import { ClaimShirt, Points } from "../../models";
-import { createClaimShirt, listClaimShirts, listPoints } from "../../graphql";
+import { ClaimHoodie, ClaimShirt, Points } from "../../models";
+import { listClaimHoodies, listClaimShirts, listPoints } from "../../graphql/queries";
+import { createClaimHoodie, createClaimShirt } from "../../graphql/mutations";
 import { API } from "aws-amplify";
 import {
   Button,
@@ -30,8 +31,12 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
 
   const [shirtsClaimed, setShirtsClaimed] = React.useState<ClaimShirt[]>([]);
   const [loadingShirtsClaimed, setLoadingShirtsClaimed] = React.useState<boolean>(true);
+  const [hoodiedClaimed, setHoodiesClaimed] = React.useState<ClaimHoodie[]>([]);
+  const [loadingHoodiesClaimed, setLoadingHoodiesClaimed] = React.useState<boolean>(true);
 
   const [tryingToClaimShirt, setTryingToClaimShirt] = React.useState<boolean>(false);
+  const [tryingToClaimHoodie, setTryingToClaimHoodie] = React.useState<boolean>(false);
+
   const [shopSearch, setShopSearch] = React.useState<string>("");
   const [filteredPoints, setFilteredPoints] = React.useState<Points[]>([]);
 
@@ -42,6 +47,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     loadShirtsClaimed(() => {
       setLoadingShirtsClaimed(false);
     });
+    loadHoodiesClaimed(() => {
+      setLoadingHoodiesClaimed(false);
+    })
   }, []);
 
   useEffect(() => {
@@ -56,12 +64,12 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
+        filter: {_deleted: {ne: true}},
         limit: 10000
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let points: Points[] = res.data.listPoints.items;
-    // merge the points by user id
     let finalpoints: Map<String, Points> = new Map()
     for (var p in points) {
       let point = points[p];
@@ -94,6 +102,17 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     }
   };
 
+  const loadHoodiesClaimed = async (callback?: () => void) => {
+    const res: any = await API.graphql({
+      query: listClaimHoodies,
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    setHoodiesClaimed(res.data.listClaimHoodies.items);
+    if (callback) {
+      callback();
+    }
+  };
+
   const claimShirt = async (point: Points) => {
     const res: any = await API.graphql({
       query: createClaimShirt,
@@ -105,12 +124,24 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
-    console.log(res);
     setTryingToClaimShirt(false);
     loadShirtsClaimed();
   };
 
-  console.log(shirtsClaimed);
+  const claimHoodie = async (point: Points) => {
+    const res: any = await API.graphql({
+      query: createClaimHoodie,
+      variables: {
+        input: {
+          userID: point.userID,
+          userName: point.userName,
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    setTryingToClaimHoodie(false);
+    loadHoodiesClaimed();
+  };
 
   return (
     <div className={styles.ShopPage}>
@@ -119,12 +150,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
           <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
             Points Shop
           </Heading>
-          <Flex
-            direction={"row"}
-            gap={"medium"}
-            marginBottom={"medium"}
-            wrap={"wrap"}
-          >
+          <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
             <SearchField
               label=""
               labelHidden={true}
@@ -138,7 +164,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               isDisabled={loadingPoints || points.length === 0}
             />
           </Flex>
-          {loadingPoints || loadingShirtsClaimed ? (
+          {loadingPoints || loadingShirtsClaimed || loadingHoodiesClaimed ? (
             <Text>Loading...</Text>
           ) : points.length <= 0 ? (
             <Table>
@@ -152,7 +178,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell colSpan={3}>No points yet.</TableCell>
+                  <TableCell colSpan={4}>No points yet.</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -160,10 +186,10 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell as="th" width={"50%"}>Participant</TableCell>
-                  <TableCell as="th" width={"30%"}>Points</TableCell>
-                  <TableCell as="th">Claim Shirt</TableCell>
-                  <TableCell as="th">Claim Hoodie</TableCell>
+                  <TableCell as="th" width={"30%"}>Participant</TableCell>
+                  <TableCell as="th" width={"20%"}>Points</TableCell>
+                  <TableCell as="th" width={"25%"}>Claim Shirt</TableCell>
+                  <TableCell as="th" width={"25%"}>Claim Hoodie</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -184,6 +210,25 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                             setTryingToClaimShirt(true);
                           }}
                           isLoading={tryingToClaimShirt}
+                          loadingText="Claiming"
+                        >
+                          Claim
+                        </Button>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {hoodiedClaimed.filter((x) => x.userID === point.userID)
+                        .length > 0 ? (
+                          <>
+                            <Button disabled={true}>Claimed</Button>
+                          </>
+                      ) : (
+                        <Button
+                          onClick={() => {
+                            claimHoodie(point);
+                            setTryingToClaimHoodie(true);
+                          }}
+                          isLoading={tryingToClaimHoodie}
                           loadingText="Claiming"
                         >
                           Claim

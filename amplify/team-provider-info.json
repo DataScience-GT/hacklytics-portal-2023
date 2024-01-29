@@ -26,7 +26,7 @@
       "function": {
         "hacklyticsportal20232e32fd51": {
           "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
-          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-74346a3754752f4e3248-build.zip"
+          "s3Key": "amplify-builds/hacklyticsportal20232e32fd51-75346a4e435031597471-build.zip"
         },
         "hacklyticsportal2023listusers": {
           "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
@@ -34,7 +34,7 @@
         },
         "hacklyticsportalGetUserByName": {
           "deploymentBucketName": "amplify-amplify0f0acd1e2a0b4-staging-14346-deployment",
-          "s3Key": "amplify-builds/hacklyticsportalGetUserByName-5847415145532f666b63-build.zip"
+          "s3Key": "amplify-builds/hacklyticsportalGetUserByName-4d614739526e7347346f-build.zip"
         }
       }
     }

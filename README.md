@@ -12,15 +12,16 @@ hence you have to sudo npm install -g @aws-amplify/cli to install the amplify CL
 you should see this: 
 Follow the instructions at
 https://docs.amplify.aws/cli/start/install/#configure-the-amplify-cli
-
 to complete the user creation in the AWS console
 https://console.aws.amazon.com/iamv2/home#/users/create
-use your IAM user sign on and secret key and access key to sign on to the amplify CLI. 
+>>>
+use your IAM identity center user sign on and secret key and access key to sign on to the amplify CLI. you can see this in "command line access" when you log onto your iam identity center user.
 
-4. lastly sudo amplify pull --appId d1nefwyjdgyk10 --envName staging in order to setup the backend amplify. itll log you onto amplify after which you should paste your cli key in to the cmd line (or itll complete automatically). proceed to filling out the form for local setup (build folder, run path, build command, etc). hit y for do you plan on updating backend.
+5. lastly sudo amplify pull --appId d1nefwyjdgyk10 --envName staging in order to setup the backend amplify. itll log you onto amplify after which you should paste your cli key in to the cmd line (or itll complete automatically). proceed to filling out the form for local setup (build folder, run path, build command, etc). hit y for do you plan on updating backend.
+NOTICE: if you see the error 🛑 File at path: '/Users/vicentemiranda/hacklytics-portal-2024/hacklytics-portal-2023/amplify/team-provider-info.json' does not exist this means you have to run amplify configure project. 
    
-5. lastly create a .env in your root dir and copy the following into it
+7. lastly create a .env in your root dir and copy the following into it
 REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID=9996afdb-c7e7-46fc-bfae-b0939b9027d0
 REACT_APP_CHECKPOINT_URL=localhost:3000
   
-6. npm start -- this should work as intended now
+8. npm start -- this should work as intended now

@@ -38,6 +38,10 @@ type ClaimShirtMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type ClaimHoodieMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
@@ -270,4 +274,26 @@ export declare type ClaimShirt = LazyLoading extends LazyLoadingDisabled ? Eager
 
 export declare const ClaimShirt: (new (init: ModelInit<ClaimShirt, ClaimShirtMetaData>) => ClaimShirt) & {
   copyOf(source: ClaimShirt, mutator: (draft: MutableModel<ClaimShirt, ClaimShirtMetaData>) => MutableModel<ClaimShirt, ClaimShirtMetaData> | void): ClaimShirt;
+}
+
+type EagerClaimHoodie = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyClaimHoodie = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ClaimHoodie = LazyLoading extends LazyLoadingDisabled ? EagerClaimHoodie : LazyClaimHoodie
+
+export declare const ClaimHoodie: (new (init: ModelInit<ClaimHoodie, ClaimHoodieMetaData>) => ClaimHoodie) & {
+  copyOf(source: ClaimHoodie, mutator: (draft: MutableModel<ClaimHoodie, ClaimHoodieMetaData>) => MutableModel<ClaimHoodie, ClaimHoodieMetaData> | void): ClaimHoodie;
 }

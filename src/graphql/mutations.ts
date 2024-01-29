@@ -671,3 +671,63 @@ export const deleteClaimShirt = /* GraphQL */ `mutation DeleteClaimShirt(
   APITypes.DeleteClaimShirtMutationVariables,
   APITypes.DeleteClaimShirtMutation
 >;
+export const createClaimHoodie = /* GraphQL */ `mutation CreateClaimHoodie(
+  $input: CreateClaimHoodieInput!
+  $condition: ModelClaimHoodieConditionInput
+) {
+  createClaimHoodie(input: $input, condition: $condition) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateClaimHoodieMutationVariables,
+  APITypes.CreateClaimHoodieMutation
+>;
+export const updateClaimHoodie = /* GraphQL */ `mutation UpdateClaimHoodie(
+  $input: UpdateClaimHoodieInput!
+  $condition: ModelClaimHoodieConditionInput
+) {
+  updateClaimHoodie(input: $input, condition: $condition) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateClaimHoodieMutationVariables,
+  APITypes.UpdateClaimHoodieMutation
+>;
+export const deleteClaimHoodie = /* GraphQL */ `mutation DeleteClaimHoodie(
+  $input: DeleteClaimHoodieInput!
+  $condition: ModelClaimHoodieConditionInput
+) {
+  deleteClaimHoodie(input: $input, condition: $condition) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteClaimHoodieMutationVariables,
+  APITypes.DeleteClaimHoodieMutation
+>;

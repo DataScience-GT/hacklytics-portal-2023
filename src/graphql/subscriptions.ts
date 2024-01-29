@@ -623,3 +623,60 @@ export const onDeleteClaimShirt = /* GraphQL */ `subscription OnDeleteClaimShirt
   APITypes.OnDeleteClaimShirtSubscriptionVariables,
   APITypes.OnDeleteClaimShirtSubscription
 >;
+export const onCreateClaimHoodie = /* GraphQL */ `subscription OnCreateClaimHoodie(
+  $filter: ModelSubscriptionClaimHoodieFilterInput
+) {
+  onCreateClaimHoodie(filter: $filter) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateClaimHoodieSubscriptionVariables,
+  APITypes.OnCreateClaimHoodieSubscription
+>;
+export const onUpdateClaimHoodie = /* GraphQL */ `subscription OnUpdateClaimHoodie(
+  $filter: ModelSubscriptionClaimHoodieFilterInput
+) {
+  onUpdateClaimHoodie(filter: $filter) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateClaimHoodieSubscriptionVariables,
+  APITypes.OnUpdateClaimHoodieSubscription
+>;
+export const onDeleteClaimHoodie = /* GraphQL */ `subscription OnDeleteClaimHoodie(
+  $filter: ModelSubscriptionClaimHoodieFilterInput
+) {
+  onDeleteClaimHoodie(filter: $filter) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteClaimHoodieSubscriptionVariables,
+  APITypes.OnDeleteClaimHoodieSubscription
+>;

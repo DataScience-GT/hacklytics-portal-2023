@@ -128,17 +128,49 @@ export const getEvent = /* GraphQL */ `query GetEvent($id: ID!) {
 }
 ` as GeneratedQuery<APITypes.GetEventQueryVariables, APITypes.GetEventQuery>;
 export const listEvents = /* GraphQL */ `query ListEvents(
+  $filter: ModelEventFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listEvents(
+  listEvents(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      description
+      status
+      requireRSVP
+      canRSVP
+      start
+      end
+      location
+      points
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListEventsQueryVariables,
+  APITypes.ListEventsQuery
+>;
+export const syncEvents = /* GraphQL */ `query SyncEvents(
+  $filter: ModelEventFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncEvents(
+    filter: $filter
     limit: $limit
     nextToken: $nextToken
-    filter: {
-      _deleted: {
-        ne: true
-      }
-    }
+    lastSync: $lastSync
   ) {
     items {
       id
@@ -156,14 +188,16 @@ export const listEvents = /* GraphQL */ `query ListEvents(
       _version
       _deleted
       _lastChangedAt
+      __typename
     }
     nextToken
     startedAt
+    __typename
   }
 }
 ` as GeneratedQuery<
-  APITypes.ListEventsQueryVariables,
-  APITypes.ListEventsQuery
+  APITypes.SyncEventsQueryVariables,
+  APITypes.SyncEventsQuery
 >;
 export const getCheckin = /* GraphQL */ `query GetCheckin($id: ID!) {
   getCheckin(id: $id) {
@@ -522,18 +556,11 @@ export const getEventRSVP = /* GraphQL */ `query GetEventRSVP($id: ID!) {
   APITypes.GetEventRSVPQuery
 >;
 export const listEventRSVPS = /* GraphQL */ `query ListEventRSVPS(
+  $filter: ModelEventRSVPFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listEventRSVPS(
-    limit: $limit
-    nextToken: $nextToken
-    filter: {
-      _deleted: {
-        ne: true
-      }
-    }
-  ) {
+  listEventRSVPS(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       userID
@@ -679,18 +706,11 @@ export const getClaimShirt = /* GraphQL */ `query GetClaimShirt($id: ID!) {
   APITypes.GetClaimShirtQuery
 >;
 export const listClaimShirts = /* GraphQL */ `query ListClaimShirts(
+  $filter: ModelClaimShirtFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listClaimShirts (
-    limit: $limit
-    nextToken: $nextToken
-    filter: {
-      _deleted: {
-        ne: true
-      }
-    }
-  ) {
+  listClaimShirts(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
       userID
@@ -742,4 +762,79 @@ export const syncClaimShirts = /* GraphQL */ `query SyncClaimShirts(
 ` as GeneratedQuery<
   APITypes.SyncClaimShirtsQueryVariables,
   APITypes.SyncClaimShirtsQuery
+>;
+export const getClaimHoodie = /* GraphQL */ `query GetClaimHoodie($id: ID!) {
+  getClaimHoodie(id: $id) {
+    id
+    userID
+    userName
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetClaimHoodieQueryVariables,
+  APITypes.GetClaimHoodieQuery
+>;
+export const listClaimHoodies = /* GraphQL */ `query ListClaimHoodies(
+  $filter: ModelClaimHoodieFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listClaimHoodies(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListClaimHoodiesQueryVariables,
+  APITypes.ListClaimHoodiesQuery
+>;
+export const syncClaimHoodies = /* GraphQL */ `query SyncClaimHoodies(
+  $filter: ModelClaimHoodieFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncClaimHoodies(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      userID
+      userName
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncClaimHoodiesQueryVariables,
+  APITypes.SyncClaimHoodiesQuery
 >;

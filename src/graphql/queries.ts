@@ -283,11 +283,18 @@ export const getPoints = /* GraphQL */ `query GetPoints($id: ID!) {
 }
 ` as GeneratedQuery<APITypes.GetPointsQueryVariables, APITypes.GetPointsQuery>;
 export const listPoints = /* GraphQL */ `query ListPoints(
-  $filter: ModelPointsFilterInput
   $limit: Int
   $nextToken: String
 ) {
-  listPoints(filter: $filter, limit: $limit, nextToken: $nextToken) {
+  listPoints(
+    limit: $limit
+    nextToken: $nextToken
+    filter: {
+      _deleted: {
+        ne: true
+      }
+    }
+  ) {
     items {
       userID
       userName

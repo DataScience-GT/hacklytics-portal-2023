@@ -29,33 +29,61 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell as="th">Challenge</TableCell>
-              <TableCell as="th">Description</TableCell>
+              <TableCell as="th" width={"400px"}>Challenge</TableCell>
+              <TableCell as="th" width={"400px"}>Description</TableCell>
               <TableCell as="th">Prizes</TableCell>
             </TableRow>
           </TableHead>
           <TableBody className={styles.ChallengesTableBody}>
             <TableRow>
-              <TableCell>Sports</TableCell>
+              <TableCell>National Security Agency Challenge</TableCell>
+              <TableCell></TableCell>
+              <TableCell>1st: $500. 2nd: $300. 3rd: $200.</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Elevance Healthcare Challenge</TableCell>
+              <TableCell></TableCell>
+              <TableCell>1st: Job Interview</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Traversaal AI Challenge</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Healthcare</TableCell>
-              <TableCell>
-
-              </TableCell>
+              <TableCell>Assurant Challenge</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Generative AI</TableCell>
-              <TableCell>
-                
-              </TableCell>
+              <TableCell>Archetype AI Challenge</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>Finance</TableCell>
-              <TableCell>
-                
-              </TableCell>
+              <TableCell>Best Use of Intel Developer Cloud</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Best Use of MongoDB Atlas</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Best Use of Taipy</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Best Use of Starknet</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Best AI Application Built with Cloudflare</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
             </TableRow>
           </TableBody>
         </Table>

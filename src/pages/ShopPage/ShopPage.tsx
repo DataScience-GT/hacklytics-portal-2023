@@ -147,6 +147,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                   <TableCell as="th">Participant</TableCell>
                   <TableCell as="th">Points</TableCell>
                   <TableCell as="th">Claim Shirt</TableCell>
+                  <TableCell as="th">Claim Hoodie</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -162,6 +163,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                   <TableCell as="th" width={"50%"}>Participant</TableCell>
                   <TableCell as="th" width={"30%"}>Points</TableCell>
                   <TableCell as="th">Claim Shirt</TableCell>
+                  <TableCell as="th">Claim Hoodie</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

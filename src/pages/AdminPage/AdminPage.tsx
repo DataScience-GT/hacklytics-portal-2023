@@ -35,12 +35,13 @@ import {
   getAdminSettings,
   listEventRSVPS,
   listEvents,
+  listCheckins
 } from "../../graphql/queries";
 import { updateAdminSettings, deleteEvent } from "../../graphql/mutations";
 import { AdminSettings, Checkin, EagerEvent, Event } from "../../models/index";
 import { CreateEvent, UpdateEvent, DeleteEvent, DeleteAllEmails, DeleteAllEvents } from "../../ui-components";
 import { toast } from "react-toastify";
-import { ListCheckins, sub_query } from "../../graphql/customQueries";
+import { sub_query } from "../../graphql/customQueries";
 
 interface AdminPageProps {
   user?: AmplifyUser;
@@ -137,9 +138,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   }, [eventRsvps, eventChosen, usernameSearch])
 
   useEffect(() => {
-    console.log(eventCheckins);
-    console.log(eventChosen);
-    console.log(checkinSearch);
     setFilteredCheckins(
       eventCheckins.get(eventChosen.id)?.filter((x) => 
           x.toLowerCase()
@@ -259,7 +257,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   const loadEventCheckins = async (callback?: () => void) => {
     const res: any = await API.graphql({
-      query: ListCheckins,
+      query: listCheckins,
       variables: {
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
         limit: 10000,
@@ -270,7 +268,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     let map: Map<string, string[]> = new Map();
     for (const checkin of checkins) {
       if (checkin === null) continue;
-      let eventID: string = checkin.event.id;
+      let eventID: string = checkin.eventCheckinsId;
       let username: string = checkin.userName;
       let record = map.get(eventID) || [];
       record.push(username);
@@ -433,6 +431,8 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       setCheckinPage(1);
     }
   }
+
+
 
   return (
     <div className={styles.AdminPage}>

@@ -34,17 +34,15 @@ const SettingsPage: FC<SettingsPageProps> = ({ user, signOut }) => {
                 isExclusive
                 onChange={(value) => setTheme(value.toString() as Theme)}
               >
-                <Flex direction={"row"} wrap={"wrap"} gap={"0"}>
-                  {Object.values(Theme).map((t, i) => (
-                    <ToggleButton
-                      key={i}
-                      value={t}
-                      style={{ textTransform: "capitalize" }}
-                    >
-                      {t}
-                    </ToggleButton>
-                  ))}
-                </Flex>
+                {Object.values(Theme).map((t, i) => (
+                  <ToggleButton
+                    key={i}
+                    value={t}
+                    style={{ textTransform: "capitalize" }}
+                  >
+                    {t}
+                  </ToggleButton>
+                ))}
               </ToggleButtonGroup>
             </View>
             <View>

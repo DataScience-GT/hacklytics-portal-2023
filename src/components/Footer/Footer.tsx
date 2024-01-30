@@ -71,6 +71,9 @@ const Footer: FC<FooterProps> = ({ user, signOut }) => {
                     <a className={styles.Link} href="https://github.com/DataScience-GT" target="_blank">Github</a>
                     <a className={styles.Link} href="mailto:info@hacklytics.io" target="_blank">Contact</a>
                     <a className={styles.Link} href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">MLH Code of Conduct</a>
+                    <Flex direction={"row"} paddingLeft={"3em"} alignItems={"center"}>
+                        <Text>&#169; 2024 DSGT.</Text>
+                    </Flex>
                 </Flex>
                 </>
             )}

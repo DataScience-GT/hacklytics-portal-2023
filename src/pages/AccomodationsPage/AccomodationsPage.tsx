@@ -37,7 +37,7 @@ const AccomodationsPage: FC<AccomodationsPageProps> = ({ user, signOut }) => (
           Showers
         </Heading>
         <Text>
-            You can use a shower from the Campus Recreation Center or from Klaus floor 3.
+            You can use a shower from Klaus Floor 3.
         </Text>
       </View>
     </Flex>

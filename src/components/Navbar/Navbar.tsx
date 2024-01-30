@@ -60,6 +60,12 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 <Button size="small">Admin Console</Button>
               </Link>
             )}
+            {!isMobile && user && (getGroups(user).includes("Administrator")
+                    || (getGroups(user).includes("Volunteer"))) && (
+              <Link to="/shop" style={{ textDecoration: "none" }}>
+                <Button size="small">Points Shop</Button>
+              </Link>
+            )}
             <View width="fit-content">
               <Menu menuAlign="end">
                 {isMobile && user && getGroups(user).includes("Administrator") && (
@@ -67,26 +73,18 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                     <MenuItem size="small">Admin Console</MenuItem>
                   </Link>
                 )}
+                {isMobile && user && (getGroups(user).includes("Administrator")
+                    || (getGroups(user).includes("Volunteer"))) && (
+                  <Link to="/shop" style={{ textDecoration: "none" }}>
+                    <MenuItem size="small">Points Shop</MenuItem>
+                  </Link>
+                )}
                 <Link className={styles.MenuLink} to="/">
                   <MenuItem>Dashboard</MenuItem>
                 </Link>
-                {/* {user &&
-                  (getGroups(user).includes("Scavenger") ||
-                    getGroups(user).includes("Administrator")) && (
-                    <Link className={styles.MenuLink} to="/scavengerhunts">
-                      <MenuItem>Scavenger Hunts</MenuItem>
-                    </Link>
-                  )} */}
-                <Link className={styles.MenuLink} to="/challenges">
-                  <MenuItem>Challenges</MenuItem>
+                <Link className={styles.MenuLink} to="/accomodations">
+                  <MenuItem>Accomodations</MenuItem>
                 </Link>
-                {user &&
-                  (getGroups(user).includes("Volunteer") ||
-                    getGroups(user).includes("Administrator")) && (
-                    <Link className={styles.MenuLink} to="/shop">
-                      <MenuItem>Points Shop</MenuItem>
-                    </Link>
-                  )}
                 <Link className={styles.MenuLink} to="/datasets">
                   <MenuItem>Datasets</MenuItem>
                 </Link>

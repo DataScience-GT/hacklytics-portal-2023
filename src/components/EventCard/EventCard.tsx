@@ -113,29 +113,20 @@ const EventCard: FC<EventCardProps> = ({
     <div className={styles.EventCard} data-testid="EventCard">
       <Card variation="outlined" padding={"medium"}>
         {event?.start && (
-          <Text
-            fontWeight={400}
-            style={{ filter: "invert(0.2)" }}
-            fontSize="small"
-          >
+          <Text fontWeight={400} style={{ filter: "invert(0.2)" }} fontSize="small">
             {timeframe} {until > 0 ? <Badge size="small" variation="info">In {until} {untilUnit}</Badge> : (inProgress ? <Badge size="small" variation="success">In Progress</Badge> : <Badge size="small">Past</Badge>)}
           </Text>
         )}
         <Heading level={4} paddingTop="2px" paddingBottom={"2px"}>
           {event?.name}
         </Heading>
-        <Text
-          fontWeight={400}
-          style={{ filter: "invert(0.2)" }}
-          fontSize="small"
-        >
-          {event?.location}
+        <Text fontWeight={400} style={{ filter: "invert(0.2)" }} fontSize="small">
+          {event?.location} | {event?.points} {event?.points === 1 ? "point" : "points"} 
         </Text>
         {event?.description && (
           <Divider marginTop={"medium"} marginBottom={"medium"} />
         )}
         <Text>{event?.description}</Text>
-        {/* {event?.points && <Text>Points: {event?.points}</Text>} */}
         {onRSVP && (
           <Button
             width={"100%"}

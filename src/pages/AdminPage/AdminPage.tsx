@@ -198,6 +198,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listEventRSVPS,
       variables: {
+        filter: {_deleted: {ne: true}},
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
         limit: 1000,
       },
@@ -430,10 +431,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   return (
     <div className={styles.AdminPage}>
       <View padding="medium" width={"85%"}>
-        <Button onClick={() => {
-          window.history.pushState({}, "Admin Settings", "/admin/settings");
-          setSettingsModalOpen(true);
-        }}>
+        <Button 
+          onClick={() => {
+            window.history.pushState({}, "Admin Settings", "/admin/settings");
+            setSettingsModalOpen(true);
+          }}
+          marginBottom={"1em"}
+        >
           Open Settings
         </Button>
         <Tabs 

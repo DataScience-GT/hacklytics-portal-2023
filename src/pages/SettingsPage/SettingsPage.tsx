@@ -28,7 +28,6 @@ const SettingsPage: FC<SettingsPageProps> = ({ user, signOut }) => {
       <Flex direction={"column"} padding={"medium"} alignItems={"center"}>
         <View width={"85%"}>
           <Flex direction="column" gap={"1em"}>
-            <Heading level={3}>Settings</Heading>
             <View>
               <ToggleButtonGroup
                 value={theme}

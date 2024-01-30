@@ -47,6 +47,7 @@ import { I18n } from 'aws-amplify';
 import { translations } from '@aws-amplify/ui-react';
 import ChallengesPage from "./pages/ChallengesPage/ChallengesPage";
 import Footer from "./components/Footer/Footer";
+import AccomodationsPage from "./pages/AccomodationsPage/AccomodationsPage";
 I18n.putVocabularies(translations);
 I18n.setLanguage('en');
 
@@ -231,6 +232,10 @@ const App = () => {
                       <Route
                         path="/settings"
                         element={<SettingsPage user={user} signOut={signOut} />}
+                      />
+                      <Route
+                        path="/accomodations"
+                        element={<AccomodationsPage user={user} signOut={signOut} />}
                       />
                       {user &&
                         (getGroups(user).includes("Administrator") ||

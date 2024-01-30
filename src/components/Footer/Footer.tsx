@@ -32,7 +32,7 @@ const Footer: FC<FooterProps> = ({ user, signOut }) => {
   return (
     <div data-testid="Footer">
         <View as="footer" className={styles.Footer} width="100vw" padding="medium">
-            <Flex marginTop={"3em"} marginBottom={"3em"} direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
+            <Flex marginTop={"2em"} marginBottom={"4em"} direction={"row"} justifyContent={"space-between"} alignItems={"center"}>
                 <Flex direction={"row"} paddingRight={"3em"}>
                     <img src={hacklytics} alt="hacklytics" width="40em"/>
                     <Heading level={3}>DSGT</Heading>
@@ -41,7 +41,7 @@ const Footer: FC<FooterProps> = ({ user, signOut }) => {
                 <a className={styles.Link} href="https://www.linkedin.com/company/dsgt/" target="_blank">LinkedIn</a>
                 <a className={styles.Link} href="https://github.com/DataScience-GT" target="_blank">Github</a>
                 <a className={styles.Link} href="mailto:info@hacklytics.io" target="_blank">Contact</a>
-                <a className={styles.Link} href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">MLH Code of Conduct</a>
+                <a className={styles.Link} href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">MLH Code of Conduct</a>
             </Flex>
         </View>
     </div>

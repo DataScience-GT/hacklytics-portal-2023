@@ -230,8 +230,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                   <a className={styles.link} href="https://discord.gg/tTGfeWBf" target="_blank">Hacklytics Discord</a>
                   <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
                   <a className={styles.link} href="https://hacklytics-2024.devpost.com/" target="_blank">DevPost</a>
-                  <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>
+                  <a className={styles.link} href="https://hack.mlh.io/hacklytics/software" target="_blank">MLH APIs</a>
                   <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
+                  <a className={styles.link} href="https://datasciencegt.org/" target="_blank">DSGT Website</a>
                 </Flex>
                 <Tabs 
                   spacing="relative" 
@@ -242,7 +243,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                     let i = parseInt(index as string);
                     window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
                   }}
-                  width={"50%"}
+                  width={"70%"}
                 >
                   <TabItem title="Itemized Schedule" width="50%">
                     <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Current events</Heading>
@@ -326,18 +327,22 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : (
           <>
-            <HacklyticsCard loading={settingsLoading} access={userAccess} />
-            {!userAccess && (
-              <StatusAlert
-                status={{
-                  show: true,
-                  type: "error",
-                  message:
-                    "You currently have not been confirmed to participate in Hacklytics. " 
-                    + "Please contact us at info@hacklytics.io if you believe this is a mistake.",
-                }}
-              />
-            )}
+          <Flex direction={"column"} alignItems={"center"}>
+            <View width={"85%"}>
+              <HacklyticsCard loading={settingsLoading} access={userAccess} />
+              {!userAccess && (
+                <StatusAlert
+                  status={{
+                    show: true,
+                    type: "error",
+                    message:
+                      "You currently have not been confirmed to participate in Hacklytics. " 
+                      + "Please contact us at info@hacklytics.io if you believe this is a mistake.",
+                  }}
+                />
+              )}
+           </View>
+          </Flex>
           </>
         )}
       </View>

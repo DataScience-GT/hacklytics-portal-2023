@@ -211,6 +211,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                           }}
                           isLoading={tryingToClaimShirt}
                           loadingText="Claiming"
+                          isDisabled={point.points < 5}
                         >
                           Claim
                         </Button>
@@ -230,6 +231,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                           }}
                           isLoading={tryingToClaimHoodie}
                           loadingText="Claiming"
+                          isDisabled={point.points < 20}
                         >
                           Claim
                         </Button>

@@ -670,7 +670,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     </>
                   ) : (
                     <>
-                    {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPage + userPageSize)
+                    {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPageSize + userPageSize)
                       .map((user) => (
                         <TableRow key={user.name}>
                           <TableCell>{user.name}</TableCell>

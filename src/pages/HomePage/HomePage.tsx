@@ -337,7 +337,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                     type: "error",
                     message:
                       "You currently have not been confirmed to participate in Hacklytics. " 
-                      + "Please contact us at info@hacklytics.io if you believe this is a mistake.",
+                      + "Please contact vmiranda6@gatech.edu if you believe this is a mistake.",
                   }}
                 />
               )}

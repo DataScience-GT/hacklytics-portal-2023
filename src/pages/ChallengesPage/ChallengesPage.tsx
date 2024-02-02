@@ -29,26 +29,37 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell as="th" width={"400px"}>Challenge</TableCell>
-              <TableCell as="th" width={"400px"}>Description</TableCell>
-              <TableCell as="th">Prizes</TableCell>
+              <TableCell as="th" width={"30%"}>Challenge</TableCell>
+              <TableCell as="th" width={"10%"}>Link</TableCell>
+              <TableCell as="th" width={"30%"}>Description</TableCell>
+              <TableCell as="th">Prizes (per team)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody className={styles.ChallengesTableBody}>
             <TableRow>
               <TableCell>National Security Agency Challenge</TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
               <TableCell>1st: $500. 2nd: $300. 3rd: $200.</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Elevance Healthcare Challenge</TableCell>
               <TableCell></TableCell>
+              <TableCell></TableCell>
               <TableCell>1st: Job Interview</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Traversaal AI Challenge</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
+              <TableCell>
+                <a href="https://huggingface.co/traversaal-ai-hackathon" target="_blank">Link</a>
+              </TableCell>
+              <TableCell>
+                Traversaal.ai is thrilled to host a cutting-edge hackathon that challenges participants 
+                across three progressive levels, each designed to push the boundaries of AI-driven hotel search and 
+                recommendation systems. With a focus on enhancing user experiences and leveraging advanced models, 
+                the hackathon unfolds in three distinct levels.
+                </TableCell>
+                <TableCell>1st: $500. 2nd: $250. 3rd: $150.</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Assurant Challenge</TableCell>

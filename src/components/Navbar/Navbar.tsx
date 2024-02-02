@@ -85,6 +85,9 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 <Link className={styles.MenuLink} to="/accomodations">
                   <MenuItem>Accomodations</MenuItem>
                 </Link>
+                {/* <Link className={styles.MenuLink} to="/challenges">
+                  <MenuItem>Challenges</MenuItem>
+                </Link> */}
                 <Link className={styles.MenuLink} to="/datasets">
                   <MenuItem>Datasets</MenuItem>
                 </Link>

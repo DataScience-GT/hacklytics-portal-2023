@@ -92,8 +92,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       setUserAccess(true);
     } else {
       // check if school email is in participant emails
-      if (user && user.attributes && user.attributes["custom:schoolEmail"] && settings.participantEmails
-          .map((x: String) => x.toLowerCase()).includes(user.attributes["custom:schoolEmail"].toLowerCase())) {
+      if (user && user.attributes && user.attributes["custom:gtemail"] && settings.participantEmails
+          .map((x: String) => x.toLowerCase()).includes(user.attributes["custom:gtemail"].toLowerCase())) {
         setUserAccess(true);
       } else if (user && (getGroups(user).includes("Administrator") || getGroups(user).includes("Volunteer"))) {
         setUserAccess(true);

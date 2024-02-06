@@ -42,6 +42,10 @@ type ClaimHoodieMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type ClaimSleepingBagMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerAdminSettings = {
   readonly id: string;
   readonly hacklyticsOpen?: boolean | null;
@@ -258,6 +262,7 @@ type EagerClaimShirt = {
   readonly id: string;
   readonly userID: string;
   readonly userName: string;
+  readonly timestamp: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -266,6 +271,7 @@ type LazyClaimShirt = {
   readonly id: string;
   readonly userID: string;
   readonly userName: string;
+  readonly timestamp: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -280,6 +286,7 @@ type EagerClaimHoodie = {
   readonly id: string;
   readonly userID: string;
   readonly userName: string;
+  readonly timestamp: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -288,6 +295,7 @@ type LazyClaimHoodie = {
   readonly id: string;
   readonly userID: string;
   readonly userName: string;
+  readonly timestamp: string;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
 }
@@ -296,4 +304,28 @@ export declare type ClaimHoodie = LazyLoading extends LazyLoadingDisabled ? Eage
 
 export declare const ClaimHoodie: (new (init: ModelInit<ClaimHoodie, ClaimHoodieMetaData>) => ClaimHoodie) & {
   copyOf(source: ClaimHoodie, mutator: (draft: MutableModel<ClaimHoodie, ClaimHoodieMetaData>) => MutableModel<ClaimHoodie, ClaimHoodieMetaData> | void): ClaimHoodie;
+}
+
+type EagerClaimSleepingBag = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly timestamp: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyClaimSleepingBag = {
+  readonly id: string;
+  readonly userID: string;
+  readonly userName: string;
+  readonly timestamp: string;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type ClaimSleepingBag = LazyLoading extends LazyLoadingDisabled ? EagerClaimSleepingBag : LazyClaimSleepingBag
+
+export declare const ClaimSleepingBag: (new (init: ModelInit<ClaimSleepingBag, ClaimSleepingBagMetaData>) => ClaimSleepingBag) & {
+  copyOf(source: ClaimSleepingBag, mutator: (draft: MutableModel<ClaimSleepingBag, ClaimSleepingBagMetaData>) => MutableModel<ClaimSleepingBag, ClaimSleepingBagMetaData> | void): ClaimSleepingBag;
 }

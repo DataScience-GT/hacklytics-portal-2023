@@ -619,6 +619,7 @@ export const createClaimShirt = /* GraphQL */ `mutation CreateClaimShirt(
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -639,6 +640,7 @@ export const updateClaimShirt = /* GraphQL */ `mutation UpdateClaimShirt(
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -659,6 +661,7 @@ export const deleteClaimShirt = /* GraphQL */ `mutation DeleteClaimShirt(
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -679,6 +682,7 @@ export const createClaimHoodie = /* GraphQL */ `mutation CreateClaimHoodie(
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -699,6 +703,7 @@ export const updateClaimHoodie = /* GraphQL */ `mutation UpdateClaimHoodie(
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -719,6 +724,7 @@ export const deleteClaimHoodie = /* GraphQL */ `mutation DeleteClaimHoodie(
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -730,4 +736,67 @@ export const deleteClaimHoodie = /* GraphQL */ `mutation DeleteClaimHoodie(
 ` as GeneratedMutation<
   APITypes.DeleteClaimHoodieMutationVariables,
   APITypes.DeleteClaimHoodieMutation
+>;
+export const createClaimSleepingBag = /* GraphQL */ `mutation CreateClaimSleepingBag(
+  $input: CreateClaimSleepingBagInput!
+  $condition: ModelClaimSleepingBagConditionInput
+) {
+  createClaimSleepingBag(input: $input, condition: $condition) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateClaimSleepingBagMutationVariables,
+  APITypes.CreateClaimSleepingBagMutation
+>;
+export const updateClaimSleepingBag = /* GraphQL */ `mutation UpdateClaimSleepingBag(
+  $input: UpdateClaimSleepingBagInput!
+  $condition: ModelClaimSleepingBagConditionInput
+) {
+  updateClaimSleepingBag(input: $input, condition: $condition) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateClaimSleepingBagMutationVariables,
+  APITypes.UpdateClaimSleepingBagMutation
+>;
+export const deleteClaimSleepingBag = /* GraphQL */ `mutation DeleteClaimSleepingBag(
+  $input: DeleteClaimSleepingBagInput!
+  $condition: ModelClaimSleepingBagConditionInput
+) {
+  deleteClaimSleepingBag(input: $input, condition: $condition) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteClaimSleepingBagMutationVariables,
+  APITypes.DeleteClaimSleepingBagMutation
 >;

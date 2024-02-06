@@ -573,6 +573,7 @@ export const onCreateClaimShirt = /* GraphQL */ `subscription OnCreateClaimShirt
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -592,6 +593,7 @@ export const onUpdateClaimShirt = /* GraphQL */ `subscription OnUpdateClaimShirt
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -611,6 +613,7 @@ export const onDeleteClaimShirt = /* GraphQL */ `subscription OnDeleteClaimShirt
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -630,6 +633,7 @@ export const onCreateClaimHoodie = /* GraphQL */ `subscription OnCreateClaimHood
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -649,6 +653,7 @@ export const onUpdateClaimHoodie = /* GraphQL */ `subscription OnUpdateClaimHood
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -668,6 +673,7 @@ export const onDeleteClaimHoodie = /* GraphQL */ `subscription OnDeleteClaimHood
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -679,4 +685,64 @@ export const onDeleteClaimHoodie = /* GraphQL */ `subscription OnDeleteClaimHood
 ` as GeneratedSubscription<
   APITypes.OnDeleteClaimHoodieSubscriptionVariables,
   APITypes.OnDeleteClaimHoodieSubscription
+>;
+export const onCreateClaimSleepingBag = /* GraphQL */ `subscription OnCreateClaimSleepingBag(
+  $filter: ModelSubscriptionClaimSleepingBagFilterInput
+) {
+  onCreateClaimSleepingBag(filter: $filter) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnCreateClaimSleepingBagSubscriptionVariables,
+  APITypes.OnCreateClaimSleepingBagSubscription
+>;
+export const onUpdateClaimSleepingBag = /* GraphQL */ `subscription OnUpdateClaimSleepingBag(
+  $filter: ModelSubscriptionClaimSleepingBagFilterInput
+) {
+  onUpdateClaimSleepingBag(filter: $filter) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnUpdateClaimSleepingBagSubscriptionVariables,
+  APITypes.OnUpdateClaimSleepingBagSubscription
+>;
+export const onDeleteClaimSleepingBag = /* GraphQL */ `subscription OnDeleteClaimSleepingBag(
+  $filter: ModelSubscriptionClaimSleepingBagFilterInput
+) {
+  onDeleteClaimSleepingBag(filter: $filter) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedSubscription<
+  APITypes.OnDeleteClaimSleepingBagSubscriptionVariables,
+  APITypes.OnDeleteClaimSleepingBagSubscription
 >;

@@ -179,6 +179,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
+    console.log(userData);
     const usersDict: { [name: string]: any } = {};
     userData.body.users.forEach((user: User) => {
       const userInfo: any = {};
@@ -628,7 +629,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           </TabItem>
           <TabItem title="Users" width="50%">
             <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Users</Heading>
-            <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
+            <Flex direction={"column"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
               <SearchField 
                 label="" 
                 labelHidden={true} 
@@ -648,8 +649,10 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     setUserPage(1);
                   }
                 }} 
+                width={"30%"}
                 isDisabled={usersLoading || Object.keys(filteredUsers).length === 0}
               />
+              <Text>Number of users {Object.keys(users).length}</Text>
               <Table>
                 <TableHead>
                   <TableRow>
@@ -794,10 +797,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                       onClick={() => {setShowDeleteAllEmailsModal(true)}}>
                         Remove All Emails
                     </Button>
-                    <Text fontSize={"0.9em"} textAlign={"left"} width={"100%"}>
-                      Number of registered participants: {adminSettings && adminSettings.participantEmails 
-                        && adminSettings.participantEmails.length}
-                    </Text>
                     <Table size="small">
                       <TableHead>
                         <TableRow>

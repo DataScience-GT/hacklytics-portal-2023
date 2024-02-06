@@ -12,12 +12,20 @@ import {
   TableBody,
   Text,
   Flex,
+  TabItem,
+  Tabs,
 } from "@aws-amplify/ui-react";
 
 interface DatasetPageProps {
   user?: AmplifyUser;
   signOut?: (data?: AuthEventData | undefined) => void;
 }
+
+const ChallengesTabMap = new Map<string, number>([
+  ["/nsa", 0],
+  ["/elevance", 1],
+  ["/traversaalai", 2],
+]);
 
 const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
   <div className={styles.ChallengesPage}>
@@ -26,78 +34,32 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Challenges
         </Heading>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell as="th" width={"30%"}>Challenge</TableCell>
-              <TableCell as="th" width={"10%"}>Link</TableCell>
-              <TableCell as="th" width={"30%"}>Description</TableCell>
-              <TableCell as="th">Prizes (per team)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody className={styles.ChallengesTableBody}>
-            <TableRow>
-              <TableCell>National Security Agency Challenge</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>1st: $500. 2nd: $300. 3rd: $200.</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Elevance Healthcare Challenge</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell>1st: Job Interview</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Traversaal AI Challenge</TableCell>
-              <TableCell>
-                <a href="https://huggingface.co/traversaal-ai-hackathon" target="_blank">Link</a>
-              </TableCell>
-              <TableCell>
-                Traversaal.ai is thrilled to host a cutting-edge hackathon that challenges participants 
-                across three progressive levels, each designed to push the boundaries of AI-driven hotel search and 
-                recommendation systems. With a focus on enhancing user experiences and leveraging advanced models, 
-                the hackathon unfolds in three distinct levels.
-                </TableCell>
-                <TableCell>1st: $500. 2nd: $250. 3rd: $150.</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Assurant Challenge</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Archetype AI Challenge</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Best Use of Intel Developer Cloud</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Best Use of MongoDB Atlas</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Best Use of Taipy</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Best Use of Starknet</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Best AI Application Built with Cloudflare</TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+        <Tabs 
+          spacing="relative" 
+          defaultIndex={ChallengesTabMap.get(window.location.pathname) ?? 0} 
+          grow={1}
+          onChange={(index: string | number) => {
+            let ChallengesTabMapRev = Array.from(ChallengesTabMap.keys());
+            let i = parseInt(index as string);
+            window.history.pushState({}, "Challenge", ChallengesTabMapRev[i]);
+          }}
+          width={"70%"}
+        >
+          <TabItem title="National Security Agency" width="10%">
+            <Heading marginTop={"1em"} level={4}>National Security Agency Challenge</Heading>
+            <Text>
+              Cybersecurity relies on monitoring devices and networks to determine if systems 
+              are being attacked or used maliciously. There are a wide variety of data sources ranging from 
+              system logs, program binaries, network flow records, and packet data. Since this type of data 
+              has privacy implications and noise, there are many challenges to developing analytics via data 
+              science.
+          
+              In this track, you will use data science to detect anomalies in 3 challenge data sets, each 
+              increasing in difficulty: login, DNS, and netflow. Each challenge description explains the cybersecurity 
+              concepts needed to complete the challenge. May the best defender win!
+            </Text>
+          </TabItem>
+        </Tabs>
       </View>
     </Flex>
   </div>

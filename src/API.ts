@@ -479,12 +479,14 @@ export type CreateClaimShirtInput = {
   id?: string | null,
   userID: string,
   userName: string,
+  timestamp: string,
   _version?: number | null,
 };
 
 export type ModelClaimShirtConditionInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
   and?: Array< ModelClaimShirtConditionInput | null > | null,
   or?: Array< ModelClaimShirtConditionInput | null > | null,
   not?: ModelClaimShirtConditionInput | null,
@@ -496,6 +498,7 @@ export type ClaimShirt = {
   id: string,
   userID: string,
   userName: string,
+  timestamp: string,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -507,6 +510,7 @@ export type UpdateClaimShirtInput = {
   id: string,
   userID?: string | null,
   userName?: string | null,
+  timestamp?: string | null,
   _version?: number | null,
 };
 
@@ -519,12 +523,14 @@ export type CreateClaimHoodieInput = {
   id?: string | null,
   userID: string,
   userName: string,
+  timestamp: string,
   _version?: number | null,
 };
 
 export type ModelClaimHoodieConditionInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
   and?: Array< ModelClaimHoodieConditionInput | null > | null,
   or?: Array< ModelClaimHoodieConditionInput | null > | null,
   not?: ModelClaimHoodieConditionInput | null,
@@ -536,6 +542,7 @@ export type ClaimHoodie = {
   id: string,
   userID: string,
   userName: string,
+  timestamp: string,
   createdAt: string,
   updatedAt: string,
   _version: number,
@@ -547,10 +554,55 @@ export type UpdateClaimHoodieInput = {
   id: string,
   userID?: string | null,
   userName?: string | null,
+  timestamp?: string | null,
   _version?: number | null,
 };
 
 export type DeleteClaimHoodieInput = {
+  id: string,
+  _version?: number | null,
+};
+
+export type CreateClaimSleepingBagInput = {
+  id?: string | null,
+  userID: string,
+  userName: string,
+  timestamp: string,
+  _version?: number | null,
+};
+
+export type ModelClaimSleepingBagConditionInput = {
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
+  and?: Array< ModelClaimSleepingBagConditionInput | null > | null,
+  or?: Array< ModelClaimSleepingBagConditionInput | null > | null,
+  not?: ModelClaimSleepingBagConditionInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ClaimSleepingBag = {
+  __typename: "ClaimSleepingBag",
+  id: string,
+  userID: string,
+  userName: string,
+  timestamp: string,
+  createdAt: string,
+  updatedAt: string,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
+};
+
+export type UpdateClaimSleepingBagInput = {
+  id: string,
+  userID?: string | null,
+  userName?: string | null,
+  timestamp?: string | null,
+  _version?: number | null,
+};
+
+export type DeleteClaimSleepingBagInput = {
   id: string,
   _version?: number | null,
 };
@@ -704,6 +756,7 @@ export type ModelClaimShirtFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
   and?: Array< ModelClaimShirtFilterInput | null > | null,
   or?: Array< ModelClaimShirtFilterInput | null > | null,
   not?: ModelClaimShirtFilterInput | null,
@@ -721,6 +774,7 @@ export type ModelClaimHoodieFilterInput = {
   id?: ModelIDInput | null,
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
   and?: Array< ModelClaimHoodieFilterInput | null > | null,
   or?: Array< ModelClaimHoodieFilterInput | null > | null,
   not?: ModelClaimHoodieFilterInput | null,
@@ -730,6 +784,24 @@ export type ModelClaimHoodieFilterInput = {
 export type ModelClaimHoodieConnection = {
   __typename: "ModelClaimHoodieConnection",
   items:  Array<ClaimHoodie | null >,
+  nextToken?: string | null,
+  startedAt?: number | null,
+};
+
+export type ModelClaimSleepingBagFilterInput = {
+  id?: ModelIDInput | null,
+  userID?: ModelStringInput | null,
+  userName?: ModelStringInput | null,
+  timestamp?: ModelStringInput | null,
+  and?: Array< ModelClaimSleepingBagFilterInput | null > | null,
+  or?: Array< ModelClaimSleepingBagFilterInput | null > | null,
+  not?: ModelClaimSleepingBagFilterInput | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelClaimSleepingBagConnection = {
+  __typename: "ModelClaimSleepingBagConnection",
+  items:  Array<ClaimSleepingBag | null >,
   nextToken?: string | null,
   startedAt?: number | null,
 };
@@ -872,6 +944,7 @@ export type ModelSubscriptionClaimShirtFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
+  timestamp?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -881,8 +954,19 @@ export type ModelSubscriptionClaimHoodieFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
+  timestamp?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimHoodieFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimHoodieFilterInput | null > | null,
+  _deleted?: ModelBooleanInput | null,
+};
+
+export type ModelSubscriptionClaimSleepingBagFilterInput = {
+  id?: ModelSubscriptionIDInput | null,
+  userID?: ModelSubscriptionStringInput | null,
+  userName?: ModelSubscriptionStringInput | null,
+  timestamp?: ModelSubscriptionStringInput | null,
+  and?: Array< ModelSubscriptionClaimSleepingBagFilterInput | null > | null,
+  or?: Array< ModelSubscriptionClaimSleepingBagFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
 };
 
@@ -1476,6 +1560,7 @@ export type CreateClaimShirtMutation = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1495,6 +1580,7 @@ export type UpdateClaimShirtMutation = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1514,6 +1600,7 @@ export type DeleteClaimShirtMutation = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1533,6 +1620,7 @@ export type CreateClaimHoodieMutation = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1552,6 +1640,7 @@ export type UpdateClaimHoodieMutation = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -1571,6 +1660,67 @@ export type DeleteClaimHoodieMutation = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type CreateClaimSleepingBagMutationVariables = {
+  input: CreateClaimSleepingBagInput,
+  condition?: ModelClaimSleepingBagConditionInput | null,
+};
+
+export type CreateClaimSleepingBagMutation = {
+  createClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type UpdateClaimSleepingBagMutationVariables = {
+  input: UpdateClaimSleepingBagInput,
+  condition?: ModelClaimSleepingBagConditionInput | null,
+};
+
+export type UpdateClaimSleepingBagMutation = {
+  updateClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type DeleteClaimSleepingBagMutationVariables = {
+  input: DeleteClaimSleepingBagInput,
+  condition?: ModelClaimSleepingBagConditionInput | null,
+};
+
+export type DeleteClaimSleepingBagMutation = {
+  deleteClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2241,6 +2391,7 @@ export type GetClaimShirtQuery = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2263,6 +2414,7 @@ export type ListClaimShirtsQuery = {
       id: string,
       userID: string,
       userName: string,
+      timestamp: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2289,6 +2441,7 @@ export type SyncClaimShirtsQuery = {
       id: string,
       userID: string,
       userName: string,
+      timestamp: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2310,6 +2463,7 @@ export type GetClaimHoodieQuery = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2332,6 +2486,7 @@ export type ListClaimHoodiesQuery = {
       id: string,
       userID: string,
       userName: string,
+      timestamp: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2358,6 +2513,79 @@ export type SyncClaimHoodiesQuery = {
       id: string,
       userID: string,
       userName: string,
+      timestamp: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type GetClaimSleepingBagQueryVariables = {
+  id: string,
+};
+
+export type GetClaimSleepingBagQuery = {
+  getClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type ListClaimSleepingBagsQueryVariables = {
+  filter?: ModelClaimSleepingBagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type ListClaimSleepingBagsQuery = {
+  listClaimSleepingBags?:  {
+    __typename: "ModelClaimSleepingBagConnection",
+    items:  Array< {
+      __typename: "ClaimSleepingBag",
+      id: string,
+      userID: string,
+      userName: string,
+      timestamp: string,
+      createdAt: string,
+      updatedAt: string,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+    } | null >,
+    nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncClaimSleepingBagsQueryVariables = {
+  filter?: ModelClaimSleepingBagFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncClaimSleepingBagsQuery = {
+  syncClaimSleepingBags?:  {
+    __typename: "ModelClaimSleepingBagConnection",
+    items:  Array< {
+      __typename: "ClaimSleepingBag",
+      id: string,
+      userID: string,
+      userName: string,
+      timestamp: string,
       createdAt: string,
       updatedAt: string,
       _version: number,
@@ -2937,6 +3165,7 @@ export type OnCreateClaimShirtSubscription = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2955,6 +3184,7 @@ export type OnUpdateClaimShirtSubscription = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2973,6 +3203,7 @@ export type OnDeleteClaimShirtSubscription = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -2991,6 +3222,7 @@ export type OnCreateClaimHoodieSubscription = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3009,6 +3241,7 @@ export type OnUpdateClaimHoodieSubscription = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,
@@ -3027,6 +3260,64 @@ export type OnDeleteClaimHoodieSubscription = {
     id: string,
     userID: string,
     userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnCreateClaimSleepingBagSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimSleepingBagFilterInput | null,
+};
+
+export type OnCreateClaimSleepingBagSubscription = {
+  onCreateClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnUpdateClaimSleepingBagSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimSleepingBagFilterInput | null,
+};
+
+export type OnUpdateClaimSleepingBagSubscription = {
+  onUpdateClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
+    createdAt: string,
+    updatedAt: string,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
+  } | null,
+};
+
+export type OnDeleteClaimSleepingBagSubscriptionVariables = {
+  filter?: ModelSubscriptionClaimSleepingBagFilterInput | null,
+};
+
+export type OnDeleteClaimSleepingBagSubscription = {
+  onDeleteClaimSleepingBag?:  {
+    __typename: "ClaimSleepingBag",
+    id: string,
+    userID: string,
+    userName: string,
+    timestamp: string,
     createdAt: string,
     updatedAt: string,
     _version: number,

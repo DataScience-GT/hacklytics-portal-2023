@@ -693,6 +693,7 @@ export const getClaimShirt = /* GraphQL */ `query GetClaimShirt($id: ID!) {
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -715,6 +716,7 @@ export const listClaimShirts = /* GraphQL */ `query ListClaimShirts(
       id
       userID
       userName
+      timestamp
       createdAt
       updatedAt
       _version
@@ -747,6 +749,7 @@ export const syncClaimShirts = /* GraphQL */ `query SyncClaimShirts(
       id
       userID
       userName
+      timestamp
       createdAt
       updatedAt
       _version
@@ -768,6 +771,7 @@ export const getClaimHoodie = /* GraphQL */ `query GetClaimHoodie($id: ID!) {
     id
     userID
     userName
+    timestamp
     createdAt
     updatedAt
     _version
@@ -790,6 +794,7 @@ export const listClaimHoodies = /* GraphQL */ `query ListClaimHoodies(
       id
       userID
       userName
+      timestamp
       createdAt
       updatedAt
       _version
@@ -822,6 +827,7 @@ export const syncClaimHoodies = /* GraphQL */ `query SyncClaimHoodies(
       id
       userID
       userName
+      timestamp
       createdAt
       updatedAt
       _version
@@ -837,4 +843,82 @@ export const syncClaimHoodies = /* GraphQL */ `query SyncClaimHoodies(
 ` as GeneratedQuery<
   APITypes.SyncClaimHoodiesQueryVariables,
   APITypes.SyncClaimHoodiesQuery
+>;
+export const getClaimSleepingBag = /* GraphQL */ `query GetClaimSleepingBag($id: ID!) {
+  getClaimSleepingBag(id: $id) {
+    id
+    userID
+    userName
+    timestamp
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.GetClaimSleepingBagQueryVariables,
+  APITypes.GetClaimSleepingBagQuery
+>;
+export const listClaimSleepingBags = /* GraphQL */ `query ListClaimSleepingBags(
+  $filter: ModelClaimSleepingBagFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listClaimSleepingBags(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userID
+      userName
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.ListClaimSleepingBagsQueryVariables,
+  APITypes.ListClaimSleepingBagsQuery
+>;
+export const syncClaimSleepingBags = /* GraphQL */ `query SyncClaimSleepingBags(
+  $filter: ModelClaimSleepingBagFilterInput
+  $limit: Int
+  $nextToken: String
+  $lastSync: AWSTimestamp
+) {
+  syncClaimSleepingBags(
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+    lastSync: $lastSync
+  ) {
+    items {
+      id
+      userID
+      userName
+      timestamp
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
+      __typename
+    }
+    nextToken
+    startedAt
+    __typename
+  }
+}
+` as GeneratedQuery<
+  APITypes.SyncClaimSleepingBagsQueryVariables,
+  APITypes.SyncClaimSleepingBagsQuery
 >;

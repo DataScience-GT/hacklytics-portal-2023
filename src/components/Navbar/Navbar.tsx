@@ -63,7 +63,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
             {!isMobile && user && (getGroups(user).includes("Administrator")
                     || (getGroups(user).includes("Volunteer"))) && (
               <Link to="/shop" style={{ textDecoration: "none" }}>
-                <Button size="small">Points Shop</Button>
+                <Button size="small">Checkout Items</Button>
               </Link>
             )}
             <View width="fit-content">
@@ -76,7 +76,7 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 {isMobile && user && (getGroups(user).includes("Administrator")
                     || (getGroups(user).includes("Volunteer"))) && (
                   <Link to="/shop" style={{ textDecoration: "none" }}>
-                    <MenuItem size="small">Points Shop</MenuItem>
+                    <MenuItem size="small">Checkout Items</MenuItem>
                   </Link>
                 )}
                 <Link className={styles.MenuLink} to="/">

@@ -26,7 +26,7 @@ const DatasetPage: FC<DatasetPageProps> = ({ user, signOut }) => (
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Datasets
         </Heading>
-        <Text marginBottom={"1em"}>Optional datasets to try working with.</Text>
+        <Text marginBottom={"1em"}>Optional datasets to work with.</Text>
         <Table>
           <TableHead>
             <TableRow>

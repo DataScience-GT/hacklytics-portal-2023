@@ -13,7 +13,6 @@ exports.handler = async (event) => {
   try {
     var params = {
       UserPoolId: process.env.AUTH_HACKLYTICSPORTAL2023_USERPOOLID,
-      AttributesToGet: ["name", "email"],
     };
 
     AWS.config.update({
@@ -23,16 +22,21 @@ exports.handler = async (event) => {
     });
     var cognitoidentityserviceprovider =
       new AWS.CognitoIdentityServiceProvider();
-    let x = await new Promise((resolve, reject) => {
-      cognitoidentityserviceprovider.listUsers(params, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-    var users = x.Users;
+
+    let users = [];
+    let paginationToken = null;
+
+    do {
+      const data = await cognitoidentityserviceprovider.listUsers({
+        ...params,
+        PaginationToken: paginationToken,
+      }).promise();
+      console.log(data); // send to cloudwatch
+
+      users = users.concat(data.Users);
+      paginationToken = data.PaginationToken;
+    } while (paginationToken);
+
     if (users.length > 0) {
       return JSON.stringify({
         statusCode: 200,

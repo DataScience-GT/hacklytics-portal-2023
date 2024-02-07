@@ -23,17 +23,17 @@ const AccomodationsPage: FC<AccomodationsPageProps> = ({ user, signOut }) => (
   <div className={styles.AccomodationsPage}>
     <Flex direction={"column"} padding="medium" alignItems={"center"}>
       <View width={"85%"}>
-        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
+        <Heading level={3} marginTop={"medium"}>
           Accomodations
         </Heading>
-        <Heading level={5} marginBottom={"0.3em"} marginTop={"large"}>
+        <Heading level={5} marginTop={"large"}>
           Sleeping Bags
         </Heading>
         <Text>
             You can check out a sleeping bag by going to the Klaus auditorium and requesting
             one from the front desk. 
         </Text>
-        <Heading level={5} marginBottom={"0.3em"} marginTop={"large"}>
+        <Heading level={5} marginTop={"large"}>
           Showers
         </Heading>
         <Text>

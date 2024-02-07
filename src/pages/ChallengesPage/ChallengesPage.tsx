@@ -34,7 +34,7 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Challenges
         </Heading>
-        <Text marginBottom={"1em"}>Try your hand at a challenge for a more guided project and the opportunity to win cash prizes.</Text>
+        <Text marginBottom={"2em"}>Try your hand at a challenge for a more guided project and the opportunity to win cash prizes.</Text>
         <Tabs 
           spacing="relative" 
           defaultIndex={ChallengesTabMap.get(window.location.pathname) ?? 0} 
@@ -46,7 +46,7 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
           }}
           width={"70%"}
         >
-          <TabItem title="National Security Agency" width="10%">
+          <TabItem title="National Security Agency" width="20%">
             <Heading marginTop={"1em"} level={4}>NSA Cybersecurity Anomaly Detection Challenge</Heading>
             <Heading marginTop={"1em"} level={5}>Scenario</Heading>
             <Text>You are in charge of detecting anomalous logins, domains, and IPs to defend a company and a college campus.</Text>
@@ -129,7 +129,7 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
             <Heading level={5} marginTop={"1em"}>Prizes (team): 1st: $400. 2nd: $100.</Heading>
           </TabItem>
 
-          <TabItem title="Elevance Healthcare" width="10%">
+          <TabItem title="Elevance Healthcare" width="20%">
             <Table>
               <TableHead>
                 <TableRow>
@@ -184,6 +184,47 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
               </TableBody>
             </Table>
             <Heading level={5} marginTop={"1em"}>Prizes: 1st: Job interview for all team members. 2nd: $200 swag. 3rd: $200 swag.</Heading>
+          </TabItem>
+
+          <TabItem title="Traversaal AI" width="10%">
+          <Heading marginTop={"1em"} level={4}>Traversaal AI</Heading>
+            <Text>
+              Link to full challenge - <a href="https://huggingface.co/traversaal-ai-hackathon" target="_blank">here</a>.
+            </Text>
+            <Heading marginTop={"1em"} level={5}>Challenge Overview</Heading>
+            <Text>
+              Traversaal.ai is thrilled to host a cutting-edge hackathon that challenges participants across three progressive 
+              levels, each designed to push the boundaries of AI-driven hotel search and recommendation systems. With a focus on 
+              enhancing user experiences and leveraging advanced models, the hackathon unfolds in three distinct levels.
+            </Text>
+            <Heading marginTop={"1em"} level={5}>Data Overview</Heading>
+            <Text>
+              Participants will be working with a comprehensive dataset comprising hotel information across five vibrant cities. 
+              Each city dataset encompasses 30 hotels, with approximately 40 reviews for each hotel. The dataset includes various 
+              attributes, such as hotel names, descriptions, images, price ranges, ratings, reviews, and location details.
+            </Text>
+            <Heading level={5} marginTop={"1em"}>Hackathon Level 1: Semantic Hotel Search RAG System</Heading>
+            <Text>
+              Objective: Build a RAG (Retrieval-Augmented Generation) based system using Qdrant as Vector db, that empowers users 
+              to input semantic queries about the hotels they are searching for. The system should not only retrieve relevant hotels 
+              in the corresponding city but also utilize a decoder model to explain why a particular hotel matches their preferences.
+            </Text>
+            <Heading level={5} marginTop={"1em"}>Hackathon Level 2: Integration with Traversaal AI Ares API</Heading>
+            <Text>
+              Objective: Augment the Level 1 RAG model by integrating Traversaal.ai's Ares API, which performs real-time internet 
+              searches. Participants are encouraged to enhance their RAG applications by incorporating relevant details about hotels 
+              or locations obtained dynamically through the Ares API. E.g. “food near these hotels”, “things to do in this area” or “
+              articles/blogs about the hotel not available in the dataset”. Participants can utilize this api endpoint by signing up at:
+              api.traversaal.ai and get access to 100 web searches for free per user - no credit card needed.
+            </Text>
+            <Heading level={5} marginTop={"1em"}>Hackathon Level 3: Conversation Chatbot</Heading>
+            <Text>
+              Objective: Develop a conversational style chatbot capable of engaging in multiple conversations with users 
+              about their hotel preferences. The chatbot should seamlessly invoke OpenAI functions to generate RAG outputs. 
+              Additionally, participants are expected to leverage the Ares API endpoint within the chatbot to provide users 
+              with real-time information.
+            </Text>
+            <Heading level={5} marginTop={"1em"}>Prizes (team): 1st: $500. 2nd: $250 swag. 3rd: $150 swag.</Heading>
           </TabItem>
         </Tabs>
       </View>

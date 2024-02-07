@@ -657,7 +657,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                     }
                   }} 
                   width={"30%"}
-                  isDisabled={usersLoading || Object.keys(filteredUsers).length === 0}
+                  isDisabled={usersLoading}
                 />
                 <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
                   Number of users: {Object.keys(filteredUsers).length}

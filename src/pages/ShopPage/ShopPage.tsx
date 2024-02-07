@@ -18,6 +18,8 @@ import {
   Text,
   SearchField,
   Flex,
+  Pagination,
+  SelectField,
 } from "@aws-amplify/ui-react";
 import { User, UserData } from "../../misc/Interfaces";
 
@@ -42,11 +44,13 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const [tryingToClaimHoodie, setTryingToClaimHoodie] = React.useState<boolean>(false);
   const [tryingToClaimSleepingBag, setTryingToClaimSleepingBag] = React.useState<boolean>(false);
 
-  const [shopSearch, setShopSearch] = React.useState<string>("");
-  const [filteredUsers, setFilteredUsers] = React.useState<string[]>([]);
-
-  const [userList, setUserList] = React.useState<string[]>([]);
+  const [users, setUsers] = React.useState<{[name: string]: any}>({});
   const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
+  const [userSearch, setUserSearch] = React.useState<string>("");
+  const [userPage, setUserPage] = React.useState<number>(1);
+  const [userPageSize, setUserPageSize] = React.useState<number>(localStorage.getItem("userPageSize")
+  ? parseInt(localStorage.getItem("userPageSize") as string) : 10);
+  const [filteredUsers, setFilteredUsers] = React.useState<{[name: string]: any}>({});
 
   useEffect(() => {
     loadPoints(() => {
@@ -61,18 +65,23 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     loadSleepingBagsClaimed(() => {
       setLoadingSleepingBagsClaimed(false);
     })
-    loadUsers(() => {
-      setUsersLoading(false);
-    })
   }, []);
 
   useEffect(() => {
-    setFilteredUsers(
-      userList.filter((x) =>
-        (x ?? "").toLowerCase().includes(shopSearch)
-      )
-    );
-  }, [userList, shopSearch]);
+    loadUsers(() => {
+      setUsersLoading(false);
+    })
+  }, [points]);
+
+  useEffect(() => {
+    const filteredDict: { [key: string]: any } = {};
+    for (const key in users) {
+        if (key.toLowerCase().includes(userSearch.toLowerCase())) {
+            filteredDict[key] = users[key];
+        }
+    }
+    setFilteredUsers(filteredDict);
+  }, [users, userSearch]);
 
   const loadUsers = async (callback?: () => void) => {
     const res: any = await API.graphql({
@@ -80,11 +89,20 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
-    const usersList: string[] = [];
+
+    const usersDict: { [name: string]: any } = {};
     userData.body.users.forEach((user: User) => {
-      usersList.push(user.Attributes[0].Value);
+      const userInfo: any = {};
+      user.Attributes.forEach((attribute) => {
+          userInfo[attribute.Name] = attribute.Value;
+      });
+      userInfo['UserCreateDate'] = user.UserCreateDate;
+      userInfo['UserLastModifiedDate'] = user.UserLastModifiedDate;
+      userInfo['Points'] = points.filter((x) => x.userID == userInfo.sub);
+
+      usersDict[userInfo.name] = userInfo;
     });
-    setUserList(usersList);
+    setUsers(usersDict);
     if (callback) callback();
   }
 
@@ -152,13 +170,13 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     }
   };
 
-  const claimShirt = async (point: Points) => {
+  const claimShirt = async (user: any) => {
     const res: any = await API.graphql({
       query: createClaimShirt,
       variables: {
         input: {
-          userID: point.userID,
-          userName: point.userName,
+          userID: user.sub,
+          userName: user.name,
           timestamp: new Date()
         },
       },
@@ -168,13 +186,13 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     loadShirtsClaimed();
   };
 
-  const claimHoodie = async (point: Points) => {
+  const claimHoodie = async (user: any) => {
     const res: any = await API.graphql({
       query: createClaimHoodie,
       variables: {
         input: {
-          userID: point.userID,
-          userName: point.userName,
+          userID: user.sub,
+          userName: user.name,
           timestamp: new Date()
         },
       },
@@ -184,13 +202,13 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     loadHoodiesClaimed();
   };
 
-  const claimSleepingBag = async (point: Points) => {
+  const claimSleepingBag = async (user: any) => {
     const res: any = await API.graphql({
       query: createClaimSleepingBag,
       variables: {
         input: {
-          userID: point.userID,
-          userName: point.userName,
+          userID: user.sub,
+          userName: user.name,
           timestamp: new Date()
         },
       },
@@ -213,21 +231,36 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               labelHidden={true}
               placeholder={"Search"}
               onChange={(e) => {
-                setShopSearch(e.target.value.toLowerCase());
-              }}
+                setUserSearch(e.target.value.toLowerCase());
+                let maxPages = Math.ceil(Object.keys(filteredUsers).length / userPageSize);
+                if (userPage > maxPages && maxPages !== 0) {
+                  setUserPage(maxPages);
+                } else if (userPage < 1) {
+                  setUserPage(1);
+                }
+              }} 
               onClear={() => {
-                setShopSearch("");
-              }}
-              isDisabled={loadingPoints || points.length === 0}
+                setUserSearch("");
+                if (userPage < 1) {
+                  setUserPage(1);
+                }
+              }} 
+              isDisabled={usersLoading || users.length === 0}
             />
+            <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+              Number of shirts claimed: {shirtsClaimed.length}
+            </Text>
+            <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+              Number of hoodies claimed: {hoodiesClaimed.length}
+            </Text>
+            <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+              Number of sleeping bags claimed: {sleepingBagsClaimed.length}
+            </Text>
           </Flex>
-          <Text>Shirts claimed {shirtsClaimed.length}</Text>
-          <Text>Hoodies claimed {hoodiesClaimed.length}</Text>
-          <Text marginBottom={"medium"}>Sleeping bags claimed {sleepingBagsClaimed.length}</Text>
 
           {loadingPoints || loadingShirtsClaimed || loadingHoodiesClaimed || loadingSleepingBagsClaimed || usersLoading ? (
             <Text>Loading...</Text>
-          ) : userList.length <= 0 ? (
+          ) : users.length <= 0 ? (
             <Table>
               <TableHead>
                 <TableRow>
@@ -240,11 +273,12 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               </TableHead>
               <TableBody>
                 <TableRow>
-                  <TableCell colSpan={4}>No points yet.</TableCell>
+                  <TableCell colSpan={4}>No users yet.</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
           ) : (
+            <>
             <Table>
               <TableHead>
                 <TableRow>
@@ -256,93 +290,137 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredUsers.map((user) => (
-                  <TableRow key={user}>
-                    <TableCell>{user}</TableCell>
-                    {/* <TableCell>
-                      {points.filter((x) => x.userID === point.userID)
-                        .length > 0 ? (
-                          <>
-                            <Button disabled={true}>Claimed</Button>
-                          </>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            claimShirt(point);
-                            setTryingToClaimShirt(true);
-                          }}
-                          isLoading={tryingToClaimShirt}
-                          loadingText="Claiming"
-                          isDisabled={point.points < 5}
-                        >
-                          Claim
-                        </Button>
-                      )}
-                    </TableCell> */}
-                    {/*
-                    <TableCell>
-                      {shirtsClaimed.filter((x) => x.userID === point.userID)
-                        .length > 0 ? (
-                          <>
-                            <Button disabled={true}>Claimed</Button>
-                          </>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            claimShirt(point);
-                            setTryingToClaimShirt(true);
-                          }}
-                          isLoading={tryingToClaimShirt}
-                          loadingText="Claiming"
-                          isDisabled={point.points < 5}
-                        >
-                          Claim
-                        </Button>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {hoodiesClaimed.filter((x) => x.userID === point.userID)
-                        .length > 0 ? (
-                          <>
-                            <Button disabled={true}>Claimed</Button>
-                          </>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            claimHoodie(point);
-                            setTryingToClaimHoodie(true);
-                          }}
-                          isLoading={tryingToClaimHoodie}
-                          loadingText="Claiming"
-                          isDisabled={point.points < 20}
-                        >
-                          Claim
-                        </Button>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {sleepingBagsClaimed.filter((x) => x.userID === point.userID)
-                        .length > 0 ? (
-                          <>
-                            <Button disabled={true}>Claimed</Button>
-                          </>
-                      ) : (
-                        <Button
-                          onClick={() => {
-                            claimSleepingBag(point);
-                            setTryingToClaimHoodie(true);
-                          }}
-                          isLoading={tryingToClaimHoodie}
-                          loadingText="Claiming"
-                        >
-                          Claim
-                        </Button>
-                      )}
-                    </TableCell> */}
-                  </TableRow>
-                ))}
+                {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPageSize + userPageSize)
+                    .map((user) => (
+                      <TableRow key={user.sub}>
+                        <TableCell>{user.name}</TableCell>
+                        <TableCell>
+                          {user.Points.length > 0 ? (
+                            <>
+                            {user.Points[0].points}
+                            </>
+                          ) : (
+                            <>
+                            0
+                            </>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {shirtsClaimed.filter((x) => x.userID === user.sub)
+                            .length > 0 ? (
+                              <>
+                                <Button disabled={true}>Claimed</Button>
+                              </>
+                          ) : (
+                            <Button
+                              onClick={() => {
+                                claimShirt(user);
+                                setTryingToClaimShirt(true);
+                              }}
+                              isLoading={tryingToClaimShirt}
+                              loadingText="Claiming"
+                              isDisabled={user.Points.length == 0 || user.Points[0].points < 5}
+                            >
+                              {user.Points.length == 0 || user.Points[0].points < 5 ? (
+                                <>
+                                  Not enough points
+                                </>
+                              ) : (
+                                <>
+                                  Claim
+                                </>
+                              )}
+                            </Button>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {hoodiesClaimed.filter((x) => x.userID === user.sub)
+                            .length > 0 ? (
+                              <>
+                                <Button disabled={true}>Claimed</Button>
+                              </>
+                          ) : (
+                            <Button
+                              onClick={() => {
+                                claimHoodie(user);
+                                setTryingToClaimHoodie(true);
+                              }}
+                              isLoading={tryingToClaimHoodie}
+                              loadingText="Claiming"
+                              isDisabled={user.Points.length == 0 || user.Points[0].points < 20}
+                            >
+                              {user.Points.length == 0 || user.Points[0].points < 20 ? (
+                                <>
+                                  Not enough points
+                                </>
+                              ) : (
+                                <>
+                                  Claim
+                                </>
+                              )}
+                            </Button>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {sleepingBagsClaimed.filter((x) => x.userID === user.sub)
+                            .length > 0 ? (
+                              <>
+                                <Button disabled={true}>Claimed</Button>
+                              </>
+                          ) : (
+                            <Button
+                              onClick={() => {
+                                claimSleepingBag(user);
+                                setTryingToClaimHoodie(true);
+                              }}
+                              isLoading={tryingToClaimHoodie}
+                              loadingText="Claiming"
+                            >
+                              Claim
+                            </Button>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  }
               </TableBody>
             </Table>
+            <Flex marginTop={"1em"} direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+              <Pagination
+                currentPage={userPage}
+                totalPages={Math.ceil(Object.keys(filteredUsers).length / userPageSize)}
+                siblingCount={1}
+                onChange={(newPageIndex, previousPageIndex) => {
+                  setUserPage(newPageIndex);
+                }}
+                onNext={() => {
+                  setUserPage(userPage + 1);
+                }}
+                onPrevious={() => {
+                  setUserPage(userPage - 1);
+                }}
+              />
+              <Flex direction={"row"} alignItems={"center"}>
+                <SelectField
+                  label="" 
+                  labelHidden={true}
+                  onChange={(e) => {
+                    setUserPageSize(parseInt(e.target.value));
+                    localStorage.setItem("userPageSize", e.target.value);
+                  }}
+                  defaultValue={userPageSize.toString()}
+                  size={"small"}
+                >
+                  <option value={1}>1</option>
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={20}>20</option>
+                  <option value={30}>30</option>
+                </SelectField>
+                <Text>users per page</Text>
+              </Flex>
+            </Flex>
+          </>
           )}
         </View>
       </Flex>

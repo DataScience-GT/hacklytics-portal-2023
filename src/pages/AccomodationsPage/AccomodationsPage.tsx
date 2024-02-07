@@ -37,7 +37,8 @@ const AccomodationsPage: FC<AccomodationsPageProps> = ({ user, signOut }) => (
           Showers
         </Heading>
         <Text>
-            You can use a shower from Klaus Floor 3.
+            Showers are available on the 3rd floor of Klaus Computing Building (student wing), 
+            or at the 1st floor of the Clough Undergraduate Learning Commons (CULC).
         </Text>
       </View>
     </Flex>

@@ -170,7 +170,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         }
     }
     setFilteredUsers(filteredDict);
-    console.log(Object.values(filteredDict));
   }, [users, userSearch]);
 
   const loadUsers = async (callback?: () => void) => {
@@ -180,6 +179,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
     console.log(userData);
+
     const usersDict: { [name: string]: any } = {};
     userData.body.users.forEach((user: User) => {
       const userInfo: any = {};
@@ -192,6 +192,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       usersDict[userInfo.name] = userInfo;
     });
     setUsers(usersDict);
+    console.log(usersDict);
     if (callback) callback();
   }
 
@@ -628,115 +629,130 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             )}
           </TabItem>
           <TabItem title="Users" width="50%">
-            <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Users</Heading>
-            <Flex direction={"column"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
-              <SearchField 
-                label="" 
-                labelHidden={true} 
-                placeholder={"Search Users"} 
-                onChange={(e) => {
-                  setUserSearch(e.target.value.toLowerCase());
-                  let maxPages = Math.ceil(Object.keys(filteredUsers).length / userPageSize);
-                  if (userPage > maxPages && maxPages !== 0) {
-                    setUserPage(maxPages);
-                  } else if (userPage < 1) {
-                    setUserPage(1);
-                  }
-                }} 
-                onClear={() => {
-                  setUserSearch("");
-                  if (eventPage < 1) {
-                    setUserPage(1);
-                  }
-                }} 
-                width={"30%"}
-                isDisabled={usersLoading || Object.keys(filteredUsers).length === 0}
-              />
-              <Text>Number of users {Object.keys(users).length}</Text>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell as="th" style={{ width: '300px' }}>Name</TableCell>
-                    <TableCell as="th" style={{ width: '300px' }}>Email</TableCell>
-                    <TableCell as="th">Creation Date</TableCell>
-                    <TableCell as="th">Last Modified Date</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {Object.keys(users).length <= 0 || !Object.keys(users).length ? (
-                    <>
-                      <TableRow>
-                        <TableCell colSpan={4}>
-                          <Text style={{ textAlign: "center" }}>No users were found.</Text>
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  ) : (
-                    <>
-                    {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPageSize + userPageSize)
-                      .map((user) => (
-                        <TableRow key={user.name}>
-                          <TableCell>{user.name}</TableCell>
-                          <TableCell>{user.email}</TableCell>
-                          <TableCell>{new Date(user.UserCreateDate ?? "").toLocaleString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          }) ?? <Badge>Undefined</Badge>}
-                          </TableCell>
-                          <TableCell>{new Date(user.UserLastModifiedDate ?? "").toLocaleString(undefined, {
-                            month: "short",
-                            day: "numeric",
-                            hour: "numeric",
-                            minute: "numeric",
-                            hour12: true,
-                          }) ?? <Badge>Undefined</Badge>}
+            {usersLoading ? (
+              <Flex marginTop={"1em"} direction={"row"} alignItems={"center"} justifyContent={"center"}>
+                <Loader size="large" />
+              </Flex>
+            ) : (
+              <>
+              <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>Users</Heading>
+              <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
+                <SearchField 
+                  label="" 
+                  labelHidden={true} 
+                  placeholder={"Search Users"} 
+                  onChange={(e) => {
+                    setUserSearch(e.target.value.toLowerCase());
+                    let maxPages = Math.ceil(Object.keys(filteredUsers).length / userPageSize);
+                    if (userPage > maxPages && maxPages !== 0) {
+                      setUserPage(maxPages);
+                    } else if (userPage < 1) {
+                      setUserPage(1);
+                    }
+                  }} 
+                  onClear={() => {
+                    setUserSearch("");
+                    if (userPage < 1) {
+                      setUserPage(1);
+                    }
+                  }} 
+                  width={"30%"}
+                  isDisabled={usersLoading || Object.keys(filteredUsers).length === 0}
+                />
+                <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+                  Number of users: {Object.keys(filteredUsers).length}
+                </Text>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell as="th" style={{ width: '20%' }}>Name</TableCell>
+                      <TableCell as="th" style={{ width: '20%' }}>Email</TableCell>
+                      <TableCell as="th" style={{ width: '20%' }}>School email</TableCell>
+                      <TableCell as="th" style={{ width: '20%' }}>Creation Date</TableCell>
+                      <TableCell as="th" style={{ width: '20%' }}>Last Modified Date</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {Object.keys(users).length <= 0 || !Object.keys(users).length ? (
+                      <>
+                        <TableRow>
+                          <TableCell colSpan={4}>
+                            <Text style={{ textAlign: "center" }}>No users were found.</Text>
                           </TableCell>
                         </TableRow>
-                      ))
-                    }
-                    </>
-                  )}
-                </TableBody>
-              </Table>
-              <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
-                <Pagination
-                  currentPage={userPage}
-                  totalPages={Math.ceil(Object.keys(filteredUsers).length / userPageSize)}
-                  siblingCount={1}
-                  onChange={(newPageIndex, previousPageIndex) => {
-                    setUserPage(newPageIndex);
-                  }}
-                  onNext={() => {
-                    setUserPage(userPage + 1);
-                  }}
-                  onPrevious={() => {
-                    setUserPage(userPage - 1);
-                  }}
-                />
-                <Flex direction={"row"} alignItems={"center"}>
-                  <SelectField
-                    label="" 
-                    labelHidden={true}
-                    onChange={(e) => {
-                      setUserPageSize(parseInt(e.target.value));
-                      localStorage.setItem("userPageSize", e.target.value);
+                      </>
+                    ) : (
+                      <>
+                      {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPageSize + userPageSize)
+                        .map((user) => (
+                          <TableRow key={user.sub}>
+                            <TableCell>{user.name}</TableCell>
+                            <TableCell>{user.email}</TableCell>
+                            <TableCell>
+                              {user["custom:gtemail"] ?? 
+                              <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>{new Date(user.UserCreateDate ?? "").toLocaleString(undefined, {
+                              month: "short",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: true,
+                            }) ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                            <TableCell>{new Date(user.UserLastModifiedDate ?? "").toLocaleString(undefined, {
+                              month: "short",
+                              day: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                              hour12: true,
+                            }) ?? <Badge>Undefined</Badge>}
+                            </TableCell>
+                          </TableRow>
+                        ))
+                      }
+                      </>
+                    )}
+                  </TableBody>
+                </Table>
+                <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
+                  <Pagination
+                    currentPage={userPage}
+                    totalPages={Math.ceil(Object.keys(filteredUsers).length / userPageSize)}
+                    siblingCount={1}
+                    onChange={(newPageIndex, previousPageIndex) => {
+                      setUserPage(newPageIndex);
                     }}
-                    defaultValue={userPageSize.toString()}
-                    size={"small"}
-                  >
-                    <option value={1}>1</option>
-                    <option value={5}>5</option>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={30}>30</option>
-                  </SelectField>
-                  <Text>users per page</Text>
+                    onNext={() => {
+                      setUserPage(userPage + 1);
+                    }}
+                    onPrevious={() => {
+                      setUserPage(userPage - 1);
+                    }}
+                  />
+                  <Flex direction={"row"} alignItems={"center"}>
+                    <SelectField
+                      label="" 
+                      labelHidden={true}
+                      onChange={(e) => {
+                        setUserPageSize(parseInt(e.target.value));
+                        localStorage.setItem("userPageSize", e.target.value);
+                      }}
+                      defaultValue={userPageSize.toString()}
+                      size={"small"}
+                    >
+                      <option value={1}>1</option>
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={20}>20</option>
+                      <option value={30}>30</option>
+                    </SelectField>
+                    <Text>users per page</Text>
+                  </Flex>
                 </Flex>
               </Flex>
-            </Flex>
+            </>
+            )}
           </TabItem>
         </Tabs>
 

@@ -69,7 +69,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             </Text>
             <Heading level={5} marginTop={"1em"}>How to Register</Heading>
             <Text>
-              1. Navigate to [TBA].
+              1. Navigate to <a href="https://100.25.103.10/" target="_blank">this link</a>.
               <br></br>
               2. Register using an email you have access to in case we need to reach out.
               <br></br>

@@ -229,9 +229,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                   <Text marginRight={"1em"} color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
                   <a className={styles.link} href="https://discord.com/invite/K3VWvg3aMd" target="_blank">Hacklytics Discord</a>
                   <a className={styles.link} href="https://hacklytics-2024.devfolio.co/" target="_blank">DevFolio - Submission & Judging</a>
+                  <a className={styles.link} href="https://www.canva.com/design/DAF6NJuxpVQ/eNaMAjis3fDnqdLSpN5tdQ/view?utm_content=DAF6NJuxpVQ&utm_campaign=designshare&utm_medium=link&utm_source=editor" target="_blank">Participant Packet</a>
                   <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
                   <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
-                  <a className={styles.link} href="https://datasciencegt.org/" target="_blank">Data Science @ GT Website</a>
                   <a className={styles.link} href="https://hack.mlh.io/hacklytics/software" target="_blank">MLH APIs</a>
                 </Flex>
                 <Tabs 

@@ -16,25 +16,27 @@ import {
   Tabs,
 } from "@aws-amplify/ui-react";
 
-interface DatasetPageProps {
+interface ChallengesPageProps {
   user?: AmplifyUser;
   signOut?: (data?: AuthEventData | undefined) => void;
 }
 
 const ChallengesTabMap = new Map<string, number>([
   ["/nsa", 0],
-  ["/elevance", 1],
-  ["/traversaalai", 2],
+  ["/assurant", 1],
+  ["/archetypeai", 2],
+  ["/elevance", 3],
+  ["/traversaalai", 3],
 ]);
 
-const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
+const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
   <div className={styles.ChallengesPage}>
     <Flex direction={"column"} padding="medium" alignItems={"center"}>
       <View width={"85%"}>
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Challenges
         </Heading>
-        <Text marginBottom={"2em"}>Try your hand at a challenge for a more guided project and the opportunity to win cash prizes.</Text>
+        <Text marginBottom={"2em"}>You may submit to up to two challenges.</Text>
         <Tabs 
           spacing="relative" 
           defaultIndex={ChallengesTabMap.get(window.location.pathname) ?? 0} 
@@ -57,19 +59,24 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
               (Each challenge is independent of each other.)
             </Text>
             <Heading level={5} marginTop={"1em"}>The Challenges</Heading>
-            <ul>
-              <li>Given a company's login and logout events, determine which users are working weird shifts or whose account 
-              become active after they're no longer with the company.</li>
-              <li>Given the DNS lookups from a college campus, determine which domains and hosts exhibit odd behaviors.</li>
-              <li>Given the netflow for SSH connections into a campus, determine friend from foe.</li>
-            </ul>
+            <Text>
+              1. Given a company's login and logout events, determine which users are working weird shifts or whose account 
+              become active after they're no longer with the company.
+              <br></br>
+              2. Given the DNS lookups from a college campus, determine which domains and hosts exhibit odd behaviors.
+              <br></br>
+              3. Given the netflow for SSH connections into a campus, determine friend from foe.
+            </Text>
             <Heading level={5} marginTop={"1em"}>How to Register</Heading>
-            <ul>
-              <li>Navigate to [TBA].</li>
-              <li>Register using an email you have access to in case we need to reach out.</li>
-              <li>Create or join a team.</li>
-              <li>Navigate to the "Challenges" tab to begin solving!</li>
-            </ul>
+            <Text>
+              1. Navigate to [TBA].
+              <br></br>
+              2. Register using an email you have access to in case we need to reach out.
+              <br></br>
+              3. Create or join a team.
+              <br></br>
+              4. Navigate to the "Challenges" tab to begin solving!
+            </Text>
             <Heading level={5} marginTop={"1em"}>Prizes (team): 1st: $500. 2nd: $300. 3rd: $200. 
             $80 swag.</Heading>
           </TabItem>
@@ -83,28 +90,34 @@ const ChallengesPage: FC<DatasetPageProps> = ({ user, signOut }) => (
               a house's overall state and specific issues.
             </Text>
             <Text marginTop={"1em"}>Additionally, the project will focus on:</Text>
-            <ul>
-              <li>Summarizing the overall health of the house using photographic and text data.</li>
-              <li>Promptly identifying and diagnosing immediate structural or functional concerns.</li>
-              <li>Predicting and highlighting potential issues likely to arise within a 3-6 month timeframe.</li>
-              <li>Generating the top three insights as tailored maintenance and protection recommendations for homeowners, 
-                based on the individual condition of their house.</li>
-            </ul>
+            <Text>
+              1. Summarizing the overall health of the house using photographic and text data.
+              <br></br>
+              2. Promptly identifying and diagnosing immediate structural or functional concerns.
+              <br></br>
+              3. Predicting and highlighting potential issues likely to arise within a 3-6 month timeframe.
+              <br></br>
+              4. Generating the top three insights as tailored maintenance and protection recommendations for homeowners, 
+                based on the individual condition of their house.
+            </Text>
             <Heading marginTop={"1em"} level={5}>Challenge 2 – Insuring the Future: AI-Driven Drone Insurance Landscape</Heading>
             <Text marginBottom={"1em"}>
               As an insurer specializing in drone coverage, you are tasked with evaluating the drone market's growth sectors and 
               identifying potential risks for personal and commercial drones. Your analysis should encompass one or multiple of the 
               following areas:
             </Text>
-            <ul>
-              <li>Market Analysis: Investigate market trends, price elasticity, and sensitivity across various customer segments, including 
-                categories and geographical locations.</li>
-              <li>Cost Analysis: Conduct a comprehensive analysis of the cost structure for different drone categories.</li>
-              <li>Risk Assessment: Identify and evaluate the most common risks and their consequences for drones, along with the Lifetime Value 
-                (LTV) of various drone categories.</li>
-              <li>Environmental Impact Study: Assess the CO2 emissions associated with each drone category.</li>
-            </ul>
             <Text>
+              1. Market Analysis: Investigate market trends, price elasticity, and sensitivity across various customer segments, including 
+                categories and geographical locations.
+              <br></br>
+              2. Cost Analysis: Conduct a comprehensive analysis of the cost structure for different drone categories.
+              <br></br>
+              3. Risk Assessment: Identify and evaluate the most common risks and their consequences for drones, along with the Lifetime Value 
+                (LTV) of various drone categories.
+              <br></br>
+              4. Environmental Impact Study: Assess the CO2 emissions associated with each drone category.
+            </Text>
+            <Text marginTop={"1em"}>
               Furthermore, develop a Machine Learning solution for rapid insight generation. The insights can be descriptive 
               analytics or predictive analytics. The creation of an API or Microservice for proactive insight delivery would be 
               advantageous. Finally, devise an Optimal Strategy for initiating drone insurance in the market, taking into account 

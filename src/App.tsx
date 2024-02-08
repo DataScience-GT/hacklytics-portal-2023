@@ -48,6 +48,7 @@ import { translations } from '@aws-amplify/ui-react';
 import ChallengesPage from "./pages/ChallengesPage/ChallengesPage";
 import Footer from "./components/Footer/Footer";
 import AccomodationsPage from "./pages/AccomodationsPage/AccomodationsPage";
+import TracksPage from "./pages/TracksPage/TracksPage";
 I18n.putVocabularies(translations);
 I18n.setLanguage('en');
 
@@ -216,6 +217,10 @@ const App = () => {
                       <Route
                         path="/*"
                         element={<HomePage user={user} signOut={signOut} />}
+                      />
+                      <Route
+                        path="/tracks"
+                        element={<TracksPage user={user} signOut={signOut} />}
                       />
                       <Route
                         path="/challenges"

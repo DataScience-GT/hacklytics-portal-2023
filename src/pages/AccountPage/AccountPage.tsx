@@ -12,6 +12,7 @@ import {
   TableBody,
   TableRow,
   Flex,
+  Heading,
 } from "@aws-amplify/ui-react";
 import { Link } from "react-router-dom";
 
@@ -24,6 +25,9 @@ const AccountPage: FC<AccountPageProps> = ({ user, signOut }) => (
   <div className={styles.AccountPage}>
     <Flex direction={"column"} padding={"medium"} alignItems={"center"}>
       <View width={"85%"}>
+        <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
+          Account
+        </Heading>
         <Link to="/" style={{ color: "var(--amplify-colors-font-active)" }}>
           Return to Dashboard
         </Link>

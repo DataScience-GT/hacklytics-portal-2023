@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import styles from "./ChallengesPage.module.scss";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
@@ -29,8 +29,23 @@ const ChallengesTabMap = new Map<string, number>([
   ["/traversaalai", 3],
 ]);
 
-const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
-  <div className={styles.ChallengesPage}>
+const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => {
+
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 576);
+    };
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
+  
+  return (
+    <div className={styles.ChallengesPage}>
     <Flex direction={"column"} padding="medium" alignItems={"center"}>
       <View width={"85%"}>
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
@@ -46,9 +61,9 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             let i = parseInt(index as string);
             window.history.pushState({}, "Challenge", ChallengesTabMapRev[i]);
           }}
-          width={"70%"}
+          width={isMobile ? "100%" : "70%"}
         >
-          <TabItem title="National Security Agency" width="20%">
+          <TabItem title="National Security Agency" width="10em">
             <Heading marginTop={"1em"} level={4}>NSA Cybersecurity Anomaly Detection Challenge</Heading>
             <Heading marginTop={"1em"} level={5}>Scenario</Heading>
             <Text>You are in charge of detecting anomalous logins, domains, and IPs to defend a company and a college campus.</Text>
@@ -69,7 +84,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             </Text>
             <Heading level={5} marginTop={"1em"}>How to Register</Heading>
             <Text>
-              1. Navigate to <a href="https://100.25.103.10/" target="_blank">this link</a>.
+              1. Navigate to <a href="https://100.25.103.10/" target="_blank" className={styles.Link}>this link</a>.
               <br></br>
               2. Register using an email you have access to in case we need to reach out.
               <br></br>
@@ -81,7 +96,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             $80 swag.</Heading>
           </TabItem>
 
-          <TabItem title="Assurant" width="10%">
+          <TabItem title="Assurant" width="10em">
             <Heading marginTop={"1em"} level={4}>Assurant Challenge</Heading>
             <Heading marginTop={"1em"} level={5}>Challenge 1 – AI Driven House Assessment</Heading>
             <Text>
@@ -128,7 +143,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             $80 swag.</Heading>
           </TabItem>
 
-          <TabItem title="Archetype AI" width="10%">
+          <TabItem title="Archetype AI" width="10em">
             <Heading marginTop={"1em"} level={4}>Archetype AI Challenge</Heading>
             <Heading marginTop={"1em"} level={5}>Multimodal AI Challenge</Heading>
             <Text>
@@ -142,7 +157,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             <Heading level={5} marginTop={"1em"}>Prizes (team): 1st: $400. 2nd: $100.</Heading>
           </TabItem>
 
-          <TabItem title="Elevance Healthcare" width="20%">
+          <TabItem title="Elevance Healthcare" width="10em">
             <Table>
               <TableHead>
                 <TableRow>
@@ -199,10 +214,10 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
             <Heading level={5} marginTop={"1em"}>Prizes: 1st: Job interview for all team members. 2nd: $200 swag. 3rd: $200 swag.</Heading>
           </TabItem>
 
-          <TabItem title="Traversaal AI" width="10%">
+          <TabItem title="Traversaal AI" width="10em">
           <Heading marginTop={"1em"} level={4}>Traversaal AI</Heading>
             <Text>
-              Link to full challenge - <a href="https://huggingface.co/traversaal-ai-hackathon" target="_blank">here</a>.
+              Link to full challenge - <a href="https://huggingface.co/traversaal-ai-hackathon" target="_blank" className={styles.Link}>here</a>.
             </Text>
             <Heading marginTop={"1em"} level={5}>Challenge Overview</Heading>
             <Text>
@@ -243,6 +258,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => (
       </View>
     </Flex>
   </div>
-);
+  )
+};
 
 export default ChallengesPage;

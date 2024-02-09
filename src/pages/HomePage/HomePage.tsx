@@ -57,6 +57,19 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
 
   const [userAccess, setUserAccess] = useState<boolean>(false);
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth < 576);
+    };
+    checkIsMobile();
+    window.addEventListener('resize', checkIsMobile);
+    return () => {
+      window.removeEventListener('resize', checkIsMobile);
+    };
+  }, []);
+
   useEffect(() => {
     loadSettings(() => {
       setSettingsLoading(false);
@@ -243,7 +256,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                     let i = parseInt(index as string);
                     window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
                   }}
-                  width={"70%"}
+                  width={isMobile ? "100%" : "70%"}
                 >
                   <TabItem title="Itemized Schedule" width="50%">
                     <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Current events</Heading>

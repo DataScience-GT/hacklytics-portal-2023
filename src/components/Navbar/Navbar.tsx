@@ -66,16 +66,6 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 <Button size="small">Checkout Items</Button>
               </Link>
             )}
-            {!isMobile && (
-              <Link to="/challenges" style={{ textDecoration: "none" }}>
-                <Button size="small">Challenges</Button>
-              </Link>
-            )}
-            {!isMobile && (
-              <Link to="/tracks" style={{ textDecoration: "none" }}>
-                <Button size="small">Tracks</Button>
-              </Link>
-            )}
             <View width="fit-content">
               <Menu menuAlign="end">
                 {isMobile && user && getGroups(user).includes("Administrator") && (
@@ -91,6 +81,12 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 )}
                 <Link className={styles.MenuLink} to="/">
                   <MenuItem>Dashboard</MenuItem>
+                </Link>
+                <Link className={styles.MenuLink} to="/challenges">
+                  <MenuItem>Challenges</MenuItem>
+                </Link>
+                <Link className={styles.MenuLink} to="/tracks">
+                  <MenuItem>Tracks</MenuItem>
                 </Link>
                 <Link className={styles.MenuLink} to="/datasets">
                   <MenuItem>Datasets</MenuItem>

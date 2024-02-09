@@ -89,19 +89,19 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                     <MenuItem size="small">Checkout Items</MenuItem>
                   </Link>
                 )}
+                <Link className={styles.MenuLink} to="/">
+                  <MenuItem>Dashboard</MenuItem>
+                </Link>
                 {isMobile && (
-                  <Link to="/challenges" style={{ textDecoration: "none" }}>
+                  <Link to="/challenges" className={styles.MenuLink}>
                     <MenuItem size="small">Challenges</MenuItem>
                   </Link>
                 )}
                 {isMobile && (
-                  <Link to="/tracks" style={{ textDecoration: "none" }}>
+                  <Link to="/tracks" className={styles.MenuLink}>
                     <MenuItem size="small">Tracks</MenuItem>
                   </Link>
                 )}
-                <Link className={styles.MenuLink} to="/">
-                  <MenuItem>Dashboard</MenuItem>
-                </Link>
                 <Link className={styles.MenuLink} to="/datasets">
                   <MenuItem>Datasets</MenuItem>
                 </Link>

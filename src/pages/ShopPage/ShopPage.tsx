@@ -371,7 +371,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                             <Button
                               onClick={() => {
                                 claimSleepingBag(user);
-                                setTryingToClaimHoodie(true);
+                                setTryingToClaimSleepingBag(true);
                               }}
                               isLoading={tryingToClaimSleepingBag}
                               loadingText="Claiming"

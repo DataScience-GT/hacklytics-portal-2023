@@ -26,7 +26,7 @@ const DatasetPage: FC<DatasetPageProps> = ({ user, signOut }) => (
         <Heading level={3} marginTop={"medium"}>
           Datasets
         </Heading>
-        <Text marginBottom={"medium"}>Sponsored datasets available if you wish.</Text>
+        <Text marginBottom={"medium"}>Sponsored datasets.</Text>
         <Table marginBottom={"1em"}>
           <TableHead>
             <TableRow>

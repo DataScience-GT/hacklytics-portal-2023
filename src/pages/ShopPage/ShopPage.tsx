@@ -373,7 +373,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                                 claimSleepingBag(user);
                                 setTryingToClaimHoodie(true);
                               }}
-                              isLoading={tryingToClaimHoodie}
+                              isLoading={tryingToClaimSleepingBag}
                               loadingText="Claiming"
                             >
                               Claim

@@ -75,13 +75,13 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   // checkins
   const [eventChosen, setEventChosen] = useState<Event>({} as Event);
-  const [eventCheckins, setEventCheckins] = useState<Map<string, string[]>>(new Map());
+  const [eventCheckins, setEventCheckins] = useState<Map<string, {[userid: string]: any}>>(new Map());
   const [loadingEventCheckins, setLoadingEventCheckins] = useState<boolean>(true);
   const [checkinSearch, setCheckinSearch] = useState<string>("");
   const [checkinPage, setCheckinPage] = useState<number>(1);
   const [checkinPageSize, setCheckinPageSize] = useState<number>(localStorage.getItem("checkingPageSize")
       ? parseInt(localStorage.getItem("checkinPageSize") as string) : 10);
-  const [filteredCheckins, setFilteredCheckins] = useState<string[]>([]);
+  const [filteredCheckins, setFilteredCheckins] = useState<{[userid: string]: any}>({});
   const [showCheckins, setShowCheckins] = useState<boolean>(false);
 
   // rsvps
@@ -155,11 +155,15 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   }, [eventRsvps, eventChosen, usernameSearch]);
 
   useEffect(() => {
-    setFilteredCheckins(
-      eventCheckins.get(eventChosen.id)?.filter((x) => 
-          x.toLowerCase()
-          .includes(checkinSearch)) || []
-    );
+    const filteredDict: {[userid: string]: any} = {};
+    let usersDict: any = eventCheckins.get(eventChosen.id) ?? {};
+
+    for (const userID in usersDict) {
+      if (usersDict[userID].toLowerCase().includes(checkinSearch.toLowerCase())) {
+        filteredDict[userID] = usersDict[userID];
+      }
+    }
+    setFilteredCheckins(filteredDict);
   }, [eventCheckins, eventChosen, checkinSearch]);
 
   useEffect(() => {
@@ -178,8 +182,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
-    console.log(userData);
-
+      
     const usersDict: { [name: string]: any } = {};
     userData.body.users.forEach((user: User) => {
       const userInfo: any = {};
@@ -192,7 +195,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       usersDict[userInfo.name] = userInfo;
     });
     setUsers(usersDict);
-    console.log(usersDict);
     if (callback) callback();
   }
 
@@ -317,33 +319,53 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let checkins = res.data.listCheckins.items;
-    let map: Map<string, string[]> = new Map();
+    let map: Map<string, {[name: string]: any}> = new Map();
     for (const checkin of checkins) {
       if (checkin === null) continue;
       let eventID: string = checkin.eventCheckinsId;
       let username: string = checkin.userName;
-      let record = map.get(eventID) || [];
-      record.push(username);
+      let sub: string = checkin.user;
+      let record = map.get(eventID) || {};
+      record[sub] = username;
       map.set(eventID, record);
     }
     setEventCheckins(map);
-
-    // subscribe to new checkins
-    const subscription: any = API.graphql({
-      query: sub_query,
-      authMode: "AMAZON_COGNITO_USER_POOLS",
-    });
-    subscription.subscribe({
-      next: (eventData: any) => {
-        let checkin: Checkin = eventData.value.data.onCreateCheckin;
-        let arr = eventCheckins.get(checkin.event.id) ?? [];
-        let username: string = checkin.userName;
-        arr.push(username);
-        setEventCheckins(new Map(eventCheckins.set(checkin.event.id, arr)));
-      },
-    });
     if (callback) callback();
   };
+
+  const copyAllUserIDs = () => {
+    const userIDs = Object.keys(filteredCheckins);
+    if (userIDs.length > 0) {
+        const userIDsString = userIDs.join(',');
+        navigator.clipboard.writeText(userIDsString)
+            .then(() => {
+                alert('User IDs copied to clipboard: ' + userIDsString);
+            })
+            .catch((error) => {
+                console.error('Unable to copy text: ', error);
+                alert('Failed to copy user IDs to clipboard.');
+            });
+    } else {
+        alert('No user IDs to copy!');
+    }
+  }
+
+  const copyAllUsernames = () => {
+    const userNames = Object.values(filteredCheckins);
+    if (userNames.length > 0) {
+        const concat = userNames.join(',');
+        navigator.clipboard.writeText(concat)
+            .then(() => {
+                alert('User IDs copied to clipboard: ' + concat);
+            })
+            .catch((error) => {
+                console.error('Unable to copy text: ', error);
+                alert('Failed to copy user IDs to clipboard.');
+            });
+    } else {
+        alert('No user IDs to copy!');
+    }
+  }
 
   const clickEdit = () => {
     if (eventAction === "edit") {
@@ -557,7 +579,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                                 <TableCell>{event.points ?? <Badge>Undefined</Badge>}</TableCell>
                                 <TableCell>
                                   {!loadingEventCheckins ? (
-                                    eventCheckins.get(event.id)?.length ?? 0
+                                    Object.keys(eventCheckins.get(event.id) ?? {}).length ?? 0
                                   ) : (
                                     <Loader size="small" />
                                   )}
@@ -1153,6 +1175,26 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
           style={modalFormStyle}
         >
           <Heading marginBottom={"1em"} level={4}>Showing all Checkins for {eventChosen.name ?? <Badge>Undefined</Badge>}</Heading>
+          <Button 
+            width="fit-content" 
+            size="small" 
+            onClick={() => 
+              copyAllUserIDs()
+            }
+            marginBottom={"1em"}
+          >
+            Copy user IDs
+          </Button>
+          <Button   
+            width="fit-content" 
+            size="small" 
+            onClick={() => 
+              copyAllUsernames()
+            }
+            marginBottom={"1em"}
+          >
+            Copy user usernames
+          </Button>
           <SearchField 
             label="" 
             labelHidden={true} 
@@ -1173,27 +1215,29 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
                 setCheckinPage(1);
               }
             }} 
-            isDisabled={loadingEventCheckins || eventCheckins.get(eventChosen.id)?.length === 0}
+            isDisabled={loadingEventCheckins || Object.keys(eventCheckins.get(eventChosen.id) ?? {}).length == 0}
           />
           <Flex marginTop={"medium"} direction={"row"} justifyContent={"flex-start"} gap={"1em"} wrap={"wrap"}>
-            {!eventCheckins.get(eventChosen.id) || eventCheckins.get(eventChosen.id)?.length == 0 ? (
+            {!eventCheckins.get(eventChosen.id) || Object.keys(eventCheckins.get(eventChosen.id) ?? {}).length == 0 ? (
               <Text>No checkins for this event.</Text>
             ) : (
               <>
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell as="th" style={{ width: '150px' }}>Username</TableCell>
+                    <TableCell as="th" style={{ width: '150px' }}>User ID</TableCell>
+                    <TableCell as="th" style={{ width: '150px' }}>User name</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {filteredCheckins.slice((checkinPage - 1) * checkinPageSize, (checkinPage - 1) * checkinPageSize + checkinPageSize)
-                    .map((username) => (
-                      <TableRow key={username}>
-                          <TableCell>{username}</TableCell>
+                  {Object.keys(filteredCheckins).slice((userPage - 1) * userPageSize, (userPage - 1) * userPageSize + userPageSize)
+                      .map((user) => (
+                        <TableRow key={user}>
+                          <TableCell>{user}</TableCell>
+                          <TableCell>{filteredCheckins[user]}</TableCell>
                         </TableRow>
-                    ))
-                  }
+                      ))
+                    }
                 </TableBody>
               </Table>
               <Flex direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>

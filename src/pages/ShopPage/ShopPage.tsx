@@ -229,7 +229,6 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   };
 
   const propagatePoints = async (fields: string[]) => {
-    console.log(users);
     let ids: string[] = [];
     let usernames: string[] = [];
     let numPoints = fields[2];
@@ -245,18 +244,29 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       usernames = fields[1].split("\n");
     }
 
-    // let numValid: number = 0;
-    // for (let i = 0; i < ids.length; i++) {
-    //   if (!Object.values(users).sub.includes(usernames[0])) {
-    //     break;
-    //   }
-    //   numValid++;
-    // }
-    // if (numValid == ids.length) {
-    //   setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users" });
-    // } else {
-    //   setCreatePointsStatus({ show: true, type: "error", message: "Could not update points" });
-    // }
+    let allSubs: string[] = [];
+    for (const values of Object.values(users)) {
+      let sub = values.sub;
+      allSubs.push(sub);
+    }
+
+    // cross check validation
+    let numValid: number = 0;
+    for (let i = 0; i < ids.length; i++) {
+      if (!allSubs.includes(ids[i])) {
+        break;
+      }
+      numValid++;
+    }
+
+    if (numValid == ids.length) {
+      for (let i = 0; i < ids.length; i++) {
+        await createIndividualPoints(ids[i], usernames[i], parseInt(numPoints));
+      }
+      setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users" });
+    } else {
+      setCreatePointsStatus({ show: true, type: "error", message: "Could not update points" });
+    }
   }
 
   const createIndividualPoints = async (id: string, username: string, points: number) => {

@@ -51,7 +51,7 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => {
         <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
           Challenges
         </Heading>
-        <Text marginBottom={"2em"}>You may submit to up to two challenges.</Text>
+        <Text marginBottom={"2em"}>You may submit to up AS MANY challenges as you'd like (update).</Text>
         <Tabs 
           spacing="relative" 
           defaultIndex={ChallengesTabMap.get(window.location.pathname) ?? 0} 

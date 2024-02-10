@@ -233,12 +233,12 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     let usernames: string[] = [];
     let numPoints = fields[2];
 
-    if (ids.includes(",")) {
+    if (fields[0].includes(",")) {
       ids = fields[0].split(",");
     } else {
       ids = fields[0].split("\n");
     }
-    if (usernames.includes(",")) {
+    if (fields[1].includes(",")) {
       usernames = fields[1].split(",");
     } else {
       usernames = fields[1].split("\n");
@@ -246,8 +246,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
 
     let allSubs: string[] = [];
     for (const values of Object.values(users)) {
-      let sub = values.sub;
-      allSubs.push(sub);
+      allSubs.push(values.sub);
     }
 
     // cross check validation

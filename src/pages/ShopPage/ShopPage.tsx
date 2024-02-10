@@ -251,9 +251,10 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
 
     // cross check validation
     let numValid: number = 0;
+    let indices: number[] = [];
     for (let i = 0; i < ids.length; i++) {
       if (!allSubs.includes(ids[i])) {
-        break;
+        indices.push(i);
       }
       numValid++;
     }
@@ -264,7 +265,8 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       }
       setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users" });
     } else {
-      setCreatePointsStatus({ show: true, type: "error", message: "Could not update points" });
+      setCreatePointsStatus({ show: true, type: "error", message: "Could not update points due to " + `${ids[indices[0]]}` + " with " + `${usernames[indices[0]]}` 
+        + "... there were " + `${indices.length} people having problems..` });
     }
   }
 

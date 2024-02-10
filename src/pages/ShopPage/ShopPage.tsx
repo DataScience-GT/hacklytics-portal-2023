@@ -22,6 +22,7 @@ import {
   Flex,
   Pagination,
   SelectField,
+  Loader,
 } from "@aws-amplify/ui-react";
 import { User, UserData } from "../../misc/Interfaces";
 import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
@@ -60,6 +61,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
 
   const [createPointsModalOpen, setCreatePointsModalOpen] = React.useState(false);
   const [createPointsStatus, setCreatePointsStatus] = React.useState<Status>({ show: false });
+  const [propagatingPoints, setPropagatingPoints] = React.useState<boolean>(false);
 
   useEffect(() => {
     loadPoints(() => {
@@ -85,7 +87,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   useEffect(() => {
     const filteredDict: { [key: string]: any } = {};
     for (const key in users) {
-        if (key.toLowerCase().includes(userSearch.toLowerCase())) {
+        if (users[key].name.toLowerCase().includes(userSearch.toLowerCase())) {
             filteredDict[key] = users[key];
         }
     }
@@ -99,7 +101,8 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
 
-    const usersDict: { [name: string]: any } = {};
+    const usersDict: { [userid: string]: any } = {};
+
     userData.body.users.forEach((user: User) => {
       const userInfo: any = {};
       user.Attributes.forEach((attribute) => {
@@ -109,7 +112,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       userInfo['UserLastModifiedDate'] = user.UserLastModifiedDate;
       userInfo['Points'] = points.filter((x) => x.userID == userInfo.sub);
 
-      usersDict[userInfo.name] = userInfo;
+      usersDict[userInfo.sub] = userInfo;
     });
     setUsers(usersDict);
     if (callback) callback();
@@ -126,7 +129,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     });
     let points: Points[] = res.data.listPoints.items;
     let pointsByUser: Map<String, Points> = new Map();
-
+    
     for (var p in points) {
       let point = points[p];
       let existing = pointsByUser.get(point.userID);
@@ -137,10 +140,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
             points: existing.points + point.points
         }))
       } else {
-        pointsByUser.set(point.userID, point)
+        pointsByUser.set(point.userID, point);
       }
     }
-    console.log(Array.from(pointsByUser.values()))
     setPoints(Array.from(pointsByUser.values()));
 
     if (callback) {
@@ -265,6 +267,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
         await createIndividualPoints(ids[i], usernames[i], parseInt(numPoints));
       }
       setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users" });
+      setPropagatingPoints(false);
     } else {
       setCreatePointsStatus({ show: true, type: "error", message: "Could not update points due to " + `${ids[indices[0]]}` + " with " + `${usernames[indices[0]]}` 
         + "... there were " + `${indices.length} people having problems..` });
@@ -503,7 +506,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       </Flex>
 
       <Modal
-          contentLabel="Create Event Modal"
+          contentLabel="Create Points Modal"
           isOpen={createPointsModalOpen}
           onRequestClose={() => {
             setCreatePointsModalOpen(false);
@@ -513,11 +516,21 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
           style={modalFormStyle}
         >
           <StatusAlert status={createPointsStatus} />
+          {propagatingPoints ? (
+            <>
+              <Flex direction={"row"} alignItems={"center"} justifyContent={"center"}>
+                <Loader size="large" />
+              </Flex>
+            </>
+          ) : (
+            <></>
+          )}
           <CreatePoints
             onCancel={() => {
               setCreatePointsModalOpen(false);
             }}
             onSubmit={(fields) => {
+              setPropagatingPoints(true);
               propagatePoints(Array.from(Object.values(fields)));
             }}
           />

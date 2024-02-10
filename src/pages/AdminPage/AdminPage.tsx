@@ -204,7 +204,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       variables: {
         filter: {_deleted: {ne: true}},
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
-        limit: 1000,
+        limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -301,7 +301,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       variables: {
         filter: {_deleted: {ne: true}},
         id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
-        limit: 1000,
+        limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });

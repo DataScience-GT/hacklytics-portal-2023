@@ -128,14 +128,15 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let items = res.data.listPoints.items;
+    console.log(items);
+
+    let points = 0;
     if (items.length > 0) {
-      let points = 0;
       items.forEach((item: Points) => {
         points += item.points;
       });
-    } else {
-      setPoints(0);
     }
+    setPoints(points);
     if (callback) callback();
   };
 

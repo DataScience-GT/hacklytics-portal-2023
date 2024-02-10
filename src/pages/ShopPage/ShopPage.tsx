@@ -140,6 +140,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
         pointsByUser.set(point.userID, point)
       }
     }
+    console.log(Array.from(pointsByUser.values()))
     setPoints(Array.from(pointsByUser.values()));
 
     if (callback) {

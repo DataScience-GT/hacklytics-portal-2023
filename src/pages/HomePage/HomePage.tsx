@@ -123,12 +123,11 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       query: listPoints,
       variables: {
         filter: {userID: {eq: user?.username}, _deleted: {ne: true}},
-        limit: 1000
+        limit: 10000
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let items = res.data.listPoints.items;
-    console.log(items);
 
     let points = 0;
     if (items.length > 0) {

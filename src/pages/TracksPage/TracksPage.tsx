@@ -50,7 +50,7 @@ const TracksPage: FC<TracksPageProps> = ({ user, signOut }) => {
                 <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
                     Tracks
                 </Heading>
-                <Text marginBottom={"2em"}>You may submit to up to one track.</Text>
+                <Text marginBottom={"2em"}>You may submit to up to TWO tracks (updated).</Text>
                 <Tabs 
                     spacing="relative" 
                     defaultIndex={TracksTabMap.get(window.location.pathname) ?? 0} 

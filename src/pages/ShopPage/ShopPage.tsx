@@ -1,10 +1,12 @@
 import React, { FC, useEffect } from "react";
 import styles from "./ShopPage.module.scss";
 
+import Modal from "react-modal";
+
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import { ClaimHoodie, ClaimShirt, ClaimSleepingBag, Points } from "../../models";
 import { listClaimHoodies, listClaimShirts, listClaimSleepingBags, listPoints, listUsers } from "../../graphql/queries";
-import { createClaimHoodie, createClaimShirt, createClaimSleepingBag } from "../../graphql/mutations";
+import { createClaimHoodie, createClaimShirt, createClaimSleepingBag, createPoints } from "../../graphql/mutations";
 import { API } from "aws-amplify";
 import {
   Button,
@@ -22,6 +24,10 @@ import {
   SelectField,
 } from "@aws-amplify/ui-react";
 import { User, UserData } from "../../misc/Interfaces";
+import modalStyle, { modalFormStyle } from "../../misc/ModalStyle";
+import Status from "../../Types/Status";
+import StatusAlert from "../../components/StatusAlert/StatusAlert";
+import CreatePoints from "../../ui-components/CreatePoints";
 
 interface ShopPageProps {
   user?: AmplifyUser;
@@ -51,6 +57,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const [userPageSize, setUserPageSize] = React.useState<number>(localStorage.getItem("userPageSize")
   ? parseInt(localStorage.getItem("userPageSize") as string) : 10);
   const [filteredUsers, setFilteredUsers] = React.useState<{[name: string]: any}>({});
+
+  const [createPointsModalOpen, setCreatePointsModalOpen] = React.useState(false);
+  const [createPointsStatus, setCreatePointsStatus] = React.useState<Status>({ show: false });
 
   useEffect(() => {
     loadPoints(() => {
@@ -116,21 +125,22 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let points: Points[] = res.data.listPoints.items;
-    let finalpoints: Map<String, Points> = new Map()
+    let pointsByUser: Map<String, Points> = new Map();
+
     for (var p in points) {
       let point = points[p];
-      let existing = finalpoints.get(point.userID);
+      let existing = pointsByUser.get(point.userID);
       if (existing) {
-        finalpoints.set(point.userID, new Points({
+        pointsByUser.set(point.userID, new Points({
             userID: point.userID,
             userName: point.userName,
             points: existing.points + point.points
         }))
       } else {
-        finalpoints.set(point.userID, point)
+        pointsByUser.set(point.userID, point)
       }
     }
-    setPoints(Array.from(finalpoints.values()));
+    setPoints(Array.from(pointsByUser.values()));
 
     if (callback) {
       callback();
@@ -218,6 +228,52 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     loadSleepingBagsClaimed();
   };
 
+  const propagatePoints = async (fields: string[]) => {
+    console.log(users);
+    let ids: string[] = [];
+    let usernames: string[] = [];
+    let numPoints = fields[2];
+
+    if (ids.includes(",")) {
+      ids = fields[0].split(",");
+    } else {
+      ids = fields[0].split("\n");
+    }
+    if (usernames.includes(",")) {
+      usernames = fields[1].split(",");
+    } else {
+      usernames = fields[1].split("\n");
+    }
+
+    // let numValid: number = 0;
+    // for (let i = 0; i < ids.length; i++) {
+    //   if (!Object.values(users).sub.includes(usernames[0])) {
+    //     break;
+    //   }
+    //   numValid++;
+    // }
+    // if (numValid == ids.length) {
+    //   setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users" });
+    // } else {
+    //   setCreatePointsStatus({ show: true, type: "error", message: "Could not update points" });
+    // }
+  }
+
+  const createIndividualPoints = async (id: string, username: string, points: number) => {
+    const res: any = await API.graphql({
+      query: createPoints,
+      variables: {
+        input: {
+          userID: id,
+          userName: username,
+          points: points,
+        },
+      },
+      authMode: "AMAZON_COGNITO_USER_POOLS",
+    });
+    return res;
+  }
+
   return (
     <div className={styles.ShopPage}>
       <Flex direction={"column"} padding={"medium"} alignItems={"center"}>
@@ -247,6 +303,15 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               }} 
               isDisabled={usersLoading || users.length === 0}
             />
+            <Button 
+              onClick={() => {
+                setCreatePointsModalOpen(true);
+              }}
+            >
+              Create Points
+            </Button>
+          </Flex>
+          <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
             <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
               Number of shirts claimed: {shirtsClaimed.length}
             </Text>
@@ -424,6 +489,27 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
           )}
         </View>
       </Flex>
+
+      <Modal
+          contentLabel="Create Event Modal"
+          isOpen={createPointsModalOpen}
+          onRequestClose={() => {
+            setCreatePointsModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <StatusAlert status={createPointsStatus} />
+          <CreatePoints
+            onCancel={() => {
+              setCreatePointsModalOpen(false);
+            }}
+            onSubmit={(fields) => {
+              propagatePoints(Array.from(Object.values(fields)));
+            }}
+          />
+        </Modal>
     </div>
   );
 };

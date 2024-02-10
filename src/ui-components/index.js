@@ -9,6 +9,7 @@ export { default as Ampligram } from "./Ampligram";
 export { default as CommentCard } from "./CommentCard";
 export { default as ContactUs } from "./ContactUs";
 export { default as CreateEvent } from "./CreateEvent";
+export { default as CreatePoints } from "./CreatePoints";
 export { default as CreateScavengerHunt } from "./CreateScavengerHunt";
 export { default as DeleteAllEmails } from "./DeleteAllEmails";
 export { default as DeleteAllEvents } from "./DeleteAllEvents";

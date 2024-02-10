@@ -258,19 +258,21 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     for (let i = 0; i < ids.length; i++) {
       if (!allSubs.includes(ids[i])) {
         indices.push(i);
+      } else {
+        numValid++;
       }
-      numValid++;
     }
 
     if (numValid == ids.length) {
       for (let i = 0; i < ids.length; i++) {
         await createIndividualPoints(ids[i], usernames[i], parseInt(numPoints));
       }
-      setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users" });
+      setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users. Num entries added: " + `${numValid}` });
       setPropagatingPoints(false);
     } else {
       setCreatePointsStatus({ show: true, type: "error", message: "Could not update points due to " + `${ids[indices[0]]}` + " with " + `${usernames[indices[0]]}` 
         + "... there were " + `${indices.length} people having problems..` });
+      setPropagatingPoints(false);
     }
   }
 
@@ -510,6 +512,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
           isOpen={createPointsModalOpen}
           onRequestClose={() => {
             setCreatePointsModalOpen(false);
+            setCreatePointsStatus({ show: false });
           }}
           appElement={document.getElementById("modal-container") as HTMLElement}
           parentSelector={() => document.getElementById("modal-container")!}
@@ -528,6 +531,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
           <CreatePoints
             onCancel={() => {
               setCreatePointsModalOpen(false);
+              setCreatePointsStatus({ show: false });
             }}
             onSubmit={(fields) => {
               setPropagatingPoints(true);

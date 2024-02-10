@@ -147,12 +147,24 @@ const ChallengesPage: FC<ChallengesPageProps> = ({ user, signOut }) => {
             <Heading marginTop={"1em"} level={4}>Archetype AI Challenge</Heading>
             <Heading marginTop={"1em"} level={5}>Multimodal AI Challenge</Heading>
             <Text>
-              Archetype AI has built a multimodal AI foundation model that fuses real time sensor data (video, audio, radar, 
-              time series) and natural language to reason about the physical world and discover hidden insights. This pre-trained 
-              foundational model makes it possible for developers to rapidly build physical AI applications. For this challenge,
-              build a camera-based physical AI application to uncover something in the world around you.
-              
-              Submit your results in any form.
+              Develop a solution using Archetype AI’s video description API to extract meaning from real world camera data.
+              <br></br>
+              <br></br>
+              The API supports video and image input. Use it to explore video analysis use cases of any kind. Safety/security, spatial computing, retail/fashion, space utilization, mapping, etc. Single or multiple cameras. Stationary or mobile. Serious or fun.
+              <br></br>
+              <br></br>
+              API ACCESS AND DOCUMENTATION: <a target="_blank" href="https://docs.google.com/presentation/d/1_tAM9fofURsLYqtfnbRjyF8jCa4oZtB33EPJWQrXXCk/edit#slide=id.p" className={styles.Link}>Link</a>
+              <br></br>
+              <br></br>
+              Feed its description output into other models to trigger API calls in response to certain events, actuate physical responses, generate images, generate text, or anything else your creativity leads you to.
+              <br></br>
+              <br></br>
+              Archetype AI has built a multimodal AI foundation model that fuses real time sensor data (video, audio, radar, time series) and natural language to reason about the physical world and discover hidden insights. This pre-trained foundational model makes it possible for developers to rapidly build physical AI applications.
+              <br></br>
+              <br></br>
+              For this challenge, build a camera-based physical AI application to uncover something in the world around you. Submit your results in any form.
+              <br></br>
+              Contact brandon.barbello@archetypeai.team for questions and troubleshooting. 
             </Text>
             <Heading level={5} marginTop={"1em"}>Prizes (team): 1st: $400. 2nd: $100.</Heading>
           </TabItem>

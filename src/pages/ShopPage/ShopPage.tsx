@@ -153,6 +153,10 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const loadShirtsClaimed = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: listClaimShirts,
+      variables: {
+        filter: {_deleted: {ne: true}},
+        limit: 10000,
+      },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     setShirtsClaimed(res.data.listClaimShirts.items);
@@ -164,6 +168,10 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const loadHoodiesClaimed = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: listClaimHoodies,
+      variables: {
+        filter: {_deleted: {ne: true}},
+        limit: 10000,
+      },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     setHoodiesClaimed(res.data.listClaimHoodies.items);
@@ -175,6 +183,10 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
   const loadSleepingBagsClaimed = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: listClaimSleepingBags,
+      variables: {
+        filter: {_deleted: {ne: true}},
+        limit: 10000,
+      },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     setSleepingBagsClaimed(res.data.listClaimSleepingBags.items);
@@ -195,8 +207,8 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
+    await loadShirtsClaimed();
     setTryingToClaimShirt(false);
-    loadShirtsClaimed();
   };
 
   const claimHoodie = async (user: any) => {
@@ -211,8 +223,8 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
+    await loadHoodiesClaimed();
     setTryingToClaimHoodie(false);
-    loadHoodiesClaimed();
   };
 
   const claimSleepingBag = async (user: any) => {
@@ -227,8 +239,8 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
+    await loadSleepingBagsClaimed();
     setTryingToClaimSleepingBag(false);
-    loadSleepingBagsClaimed();
   };
 
   const propagatePoints = async (fields: string[]) => {

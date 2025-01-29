@@ -15,10 +15,7 @@ import {
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import { API, DataStore } from "aws-amplify";
-import {
-  createEventRSVP,
-  deleteEventRSVP,
-} from "../../graphql/mutations";
+import { createEventRSVP, deleteEventRSVP } from "../../graphql/mutations";
 import {
   getAdminSettings,
   getPoints,
@@ -64,9 +61,9 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       setIsMobile(window.innerWidth < 576);
     };
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
+    window.addEventListener("resize", checkIsMobile);
     return () => {
-      window.removeEventListener('resize', checkIsMobile);
+      window.removeEventListener("resize", checkIsMobile);
     };
   }, []);
 
@@ -100,15 +97,33 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     });
     setAdminSettings(res.data.getAdminSettings);
     let settings = res.data.getAdminSettings;
-    if (settings && settings.participantEmails && user && user.attributes && user.attributes.email && settings.participantEmails
-        .map((x: String) => x.toLowerCase()).includes(user.attributes.email.toLowerCase())) {
+    if (
+      settings &&
+      settings.participantEmails &&
+      user &&
+      user.attributes &&
+      user.attributes.email &&
+      settings.participantEmails
+        .map((x: String) => x.toLowerCase())
+        .includes(user.attributes.email.toLowerCase())
+    ) {
       setUserAccess(true);
     } else {
       // check if school email is in participant emails
-      if (user && user.attributes && user.attributes["custom:gtemail"] && settings.participantEmails
-          .map((x: String) => x.toLowerCase()).includes(user.attributes["custom:gtemail"].toLowerCase())) {
+      if (
+        user &&
+        user.attributes &&
+        user.attributes["custom:gtemail"] &&
+        settings.participantEmails
+          .map((x: String) => x.toLowerCase())
+          .includes(user.attributes["custom:gtemail"].toLowerCase())
+      ) {
         setUserAccess(true);
-      } else if (user && (getGroups(user).includes("Administrator") || getGroups(user).includes("Volunteer"))) {
+      } else if (
+        user &&
+        (getGroups(user).includes("Administrator") ||
+          getGroups(user).includes("Volunteer"))
+      ) {
         setUserAccess(true);
       } else {
         setUserAccess(false);
@@ -122,8 +137,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
-        filter: {userID: {eq: user?.username}, _deleted: {ne: true}},
-        limit: 10000
+        filter: { userID: { eq: user?.username }, _deleted: { ne: true } },
+        limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
@@ -143,7 +158,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listEvents,
       variables: {
-        filter: {_deleted: {ne: true}},
+        filter: { _deleted: { ne: true } },
         limit: 1000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -165,7 +180,10 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       let time = new Date(event.start) ?? "june 2000";
       if (time.getTime() < now.getTime()) {
         pastEvents.push(event);
-      } else if (time.getTime() >= now.getTime() && time.getTime() < now.getTime() + (60 * 60 * 1000 * 6)) {
+      } else if (
+        time.getTime() >= now.getTime() &&
+        time.getTime() < now.getTime() + 60 * 60 * 1000 * 6
+      ) {
         currentEvents.push(event);
       } else {
         futureEvents.push(event);
@@ -207,30 +225,41 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
         },
         authMode: "AMAZON_COGNITO_USER_POOLS",
       });
-      setEventRSVPs([
-        ...eventRSVPs,
-        rsvp.data.createEventRSVP,
-      ]);
+      setEventRSVPs([...eventRSVPs, rsvp.data.createEventRSVP]);
       setCurrentlyRSVPing(false);
     }
-  }
+  };
 
   return (
     <div className={styles.HomePage}>
       <View width="100%" padding="medium">
-          {settingsLoading 
-          || pointsLoading 
-          || eventsLoading 
-          || eventRSVPsLoading 
-        ? (
-          <Flex direction={"column"} justifyContent={"center"} alignItems={"center"}>
+        {settingsLoading ||
+        pointsLoading ||
+        eventsLoading ||
+        eventRSVPsLoading ? (
+          <Flex
+            direction={"column"}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
             <Loader size={"large"} />
           </Flex>
-        ) : (adminSettings.hacklyticsOpen && userAccess) || (user && (getGroups(user).includes("Administrator"))) ? (
-          <Flex direction={"column"} gap={"medium"} paddingLeft={"1em"} paddingRight={"1em"}>
+        ) : (adminSettings.hacklyticsOpen && userAccess) ||
+          (user && getGroups(user).includes("Administrator")) ? (
+          <Flex
+            direction={"column"}
+            gap={"medium"}
+            paddingLeft={"1em"}
+            paddingRight={"1em"}
+          >
             <Flex direction={"column"} alignItems={"center"}>
               <View width={"85%"}>
-                <Card variation={"outlined"} borderRadius={"3em"} width={"fit-content"} marginBottom={"1em"}>
+                <Card
+                  variation={"outlined"}
+                  borderRadius={"3em"}
+                  width={"fit-content"}
+                  marginBottom={"1em"}
+                >
                   <Flex direction={"row"} padding={"0 1em"}>
                     <div>
                       <Heading level={4}>Points</Heading>
@@ -238,29 +267,77 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                     </div>
                   </Flex>
                 </Card>
-                <Flex justifyContent={"flex-start"} direction={"row"} gap={"0em"} padding={"0.5em"} wrap={"wrap"} marginBottom={"2em"}>
-                  <Text marginRight={"1em"} color={"var(--amplify-colors-border-primary)"}>Quick Links</Text>
-                  <a className={styles.link} href="https://discord.com/invite/K3VWvg3aMd" target="_blank">Hacklytics Discord</a>
-                  <a className={styles.link} href="https://hacklytics-2024.devfolio.co/" target="_blank">DevFolio - Submission & Judging</a>
-                  <a className={styles.link} href="https://www.canva.com/design/DAF6NJuxpVQ/eNaMAjis3fDnqdLSpN5tdQ/view?utm_content=DAF6NJuxpVQ&utm_campaign=designshare&utm_medium=link&utm_source=editor" target="_blank">Participant Packet</a>
-                  <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a>
-                  <a className={styles.link} href="https://hacklytics.io/" target="_blank">Hacklytics Website</a>
-                  <a className={styles.link} href="https://hack.mlh.io/hacklytics/software" target="_blank">MLH APIs</a>
+                <Flex
+                  justifyContent={"flex-start"}
+                  direction={"row"}
+                  gap={"0em"}
+                  padding={"0.5em"}
+                  wrap={"wrap"}
+                  marginBottom={"2em"}
+                >
+                  <Text
+                    marginRight={"1em"}
+                    color={"var(--amplify-colors-border-primary)"}
+                  >
+                    Quick Links
+                  </Text>
+                  <a
+                    className={styles.link}
+                    href="https://discord.com/invite/K3VWvg3aMd"
+                    target="_blank"
+                  >
+                    Hacklytics Discord
+                  </a>
+                  {/* <a className={styles.link} href="https://hacklytics-2024.devfolio.co/" target="_blank">DevFolio - Submission & Judging</a> */}
+                  {/* <a className={styles.link} href="https://www.canva.com/design/DAF6NJuxpVQ/eNaMAjis3fDnqdLSpN5tdQ/view?utm_content=DAF6NJuxpVQ&utm_campaign=designshare&utm_medium=link&utm_source=editor" target="_blank">Participant Packet</a> */}
+                  {/* <a className={styles.link} href="https://docs.google.com/spreadsheets/d/1LiAXDE3JOKj1vxMY7tIkaY_o9urTQGinPkJqb0q4Vm8/edit#gid=0" target="_blank">Hacklytics Prizes</a> */}
+                  <a
+                    className={styles.link}
+                    href="https://hacklytics.io/"
+                    target="_blank"
+                  >
+                    Hacklytics Website
+                  </a>
+                  <a
+                    className={styles.link}
+                    href="https://hack.mlh.io/hacklytics/software"
+                    target="_blank"
+                  >
+                    MLH APIs
+                  </a>
                 </Flex>
-                <Tabs 
-                  spacing="relative" 
-                  defaultIndex={ScheduleTabMap.get(window.location.pathname) ?? 0} 
+                <Tabs
+                  spacing="relative"
+                  defaultIndex={
+                    ScheduleTabMap.get(window.location.pathname) ?? 0
+                  }
                   grow={1}
                   onChange={(index: string | number) => {
                     let ScheduleTabMapRev = Array.from(ScheduleTabMap.keys());
                     let i = parseInt(index as string);
-                    window.history.pushState({}, "Schedule", ScheduleTabMapRev[i]);
+                    window.history.pushState(
+                      {},
+                      "Schedule",
+                      ScheduleTabMapRev[i]
+                    );
                   }}
                   width={isMobile ? "100%" : "70%"}
                 >
                   <TabItem title="Itemized Schedule" width="50%">
-                    <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Current events</Heading>
-                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                    <Heading
+                      level={3}
+                      marginTop={"large"}
+                      marginBottom={"medium"}
+                    >
+                      Current events
+                    </Heading>
+                    <Flex
+                      direction={"row"}
+                      gap={"medium"}
+                      wrap={"wrap"}
+                      justifyContent={"flex-start"}
+                      marginBottom={"medium"}
+                    >
                       {currentEvents.length == 0 ? (
                         <Text>No events happening now.</Text>
                       ) : (
@@ -270,15 +347,32 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               event={event}
                               key={i}
                               currentlyRSVPing={currentlyRSVPing}
-                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                              isRSVPed={
+                                eventRSVPs.filter((x) => x.eventID === event.id)
+                                  .length >= 1
+                              }
+                              onRSVP={
+                                event.canRSVP ? () => onRsvp(event) : undefined
+                              }
                             />
                           ))}
                         </>
                       )}
                     </Flex>
-                    <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Future events</Heading>
-                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                    <Heading
+                      level={3}
+                      marginTop={"large"}
+                      marginBottom={"medium"}
+                    >
+                      Future events
+                    </Heading>
+                    <Flex
+                      direction={"row"}
+                      gap={"medium"}
+                      wrap={"wrap"}
+                      justifyContent={"flex-start"}
+                      marginBottom={"medium"}
+                    >
                       {futureEvents.length == 0 ? (
                         <Text>No events in the future.</Text>
                       ) : (
@@ -288,15 +382,32 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               event={event}
                               key={i}
                               currentlyRSVPing={currentlyRSVPing}
-                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                              isRSVPed={
+                                eventRSVPs.filter((x) => x.eventID === event.id)
+                                  .length >= 1
+                              }
+                              onRSVP={
+                                event.canRSVP ? () => onRsvp(event) : undefined
+                              }
                             />
                           ))}
                         </>
                       )}
                     </Flex>
-                    <Heading level={3} marginTop={"large"} marginBottom={"medium"}>Previous events</Heading>
-                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                    <Heading
+                      level={3}
+                      marginTop={"large"}
+                      marginBottom={"medium"}
+                    >
+                      Previous events
+                    </Heading>
+                    <Flex
+                      direction={"row"}
+                      gap={"medium"}
+                      wrap={"wrap"}
+                      justifyContent={"flex-start"}
+                      marginBottom={"medium"}
+                    >
                       {pastEvents.length == 0 ? (
                         <Text>No events have ended yet.</Text>
                       ) : (
@@ -306,17 +417,34 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               event={event}
                               key={i}
                               currentlyRSVPing={currentlyRSVPing}
-                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                              isRSVPed={
+                                eventRSVPs.filter((x) => x.eventID === event.id)
+                                  .length >= 1
+                              }
+                              onRSVP={
+                                event.canRSVP ? () => onRsvp(event) : undefined
+                              }
                             />
-                        ))}
+                          ))}
                         </>
                       )}
                     </Flex>
                   </TabItem>
                   <TabItem title="Full Schedule" width="50%">
-                    <Heading level={3} marginTop={"medium"} marginBottom={"medium"}>All events</Heading>
-                    <Flex direction={"row"} gap={"medium"} wrap={"wrap"} justifyContent={"flex-start"} marginBottom={"medium"}>
+                    <Heading
+                      level={3}
+                      marginTop={"medium"}
+                      marginBottom={"medium"}
+                    >
+                      All events
+                    </Heading>
+                    <Flex
+                      direction={"row"}
+                      gap={"medium"}
+                      wrap={"wrap"}
+                      justifyContent={"flex-start"}
+                      marginBottom={"medium"}
+                    >
                       {events.length == 0 ? (
                         <Text>No events.</Text>
                       ) : (
@@ -326,8 +454,13 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                               event={event}
                               key={i}
                               currentlyRSVPing={currentlyRSVPing}
-                              isRSVPed={eventRSVPs.filter((x) => x.eventID === event.id).length >= 1}
-                              onRSVP={event.canRSVP ? () => onRsvp(event) : undefined} 
+                              isRSVPed={
+                                eventRSVPs.filter((x) => x.eventID === event.id)
+                                  .length >= 1
+                              }
+                              onRSVP={
+                                event.canRSVP ? () => onRsvp(event) : undefined
+                              }
                             />
                           ))}
                         </>
@@ -340,22 +473,22 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
           </Flex>
         ) : (
           <>
-          <Flex direction={"column"} alignItems={"center"}>
-            <View width={"85%"}>
-              <HacklyticsCard loading={settingsLoading} access={userAccess} />
-              {!userAccess && (
-                <StatusAlert
-                  status={{
-                    show: true,
-                    type: "error",
-                    message:
-                      "You currently have not been confirmed to participate in Hacklytics. " 
-                      + "Please contact vmiranda6@gatech.edu if you believe this is a mistake.",
-                  }}
-                />
-              )}
-           </View>
-          </Flex>
+            <Flex direction={"column"} alignItems={"center"}>
+              <View width={"85%"}>
+                <HacklyticsCard loading={settingsLoading} access={userAccess} />
+                {!userAccess && (
+                  <StatusAlert
+                    status={{
+                      show: true,
+                      type: "error",
+                      message:
+                        "You currently have not been confirmed to participate in Hacklytics. " +
+                        "Please contact info@hacklytics.io if you believe this is a mistake. Confirmations can take 24 hours to reflect here.",
+                    }}
+                  />
+                )}
+              </View>
+            </Flex>
           </>
         )}
       </View>

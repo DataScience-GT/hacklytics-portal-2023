@@ -12,7 +12,7 @@ import {
   MenuItem,
   Divider,
   Button,
-  Text
+  Text,
 } from "@aws-amplify/ui-react";
 
 import { Link } from "react-router-dom";
@@ -34,38 +34,73 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
       setIsMobile(window.innerWidth < 576);
     };
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
+    window.addEventListener("resize", checkIsMobile);
     return () => {
-      window.removeEventListener('resize', checkIsMobile);
+      window.removeEventListener("resize", checkIsMobile);
     };
   }, []);
 
   return (
     <div data-testid="Navbar">
-      <View as="header" className={styles.Navbar} width="100vw" padding="medium">
-        <Flex direction={"row"} justifyContent="space-between" alignItems="center" gap="0.5em" height="100%" width="100%">
-          <Flex direction={"row"} justifyContent="flex-start" gap="0.5em" height="100%" width={"fit-content"}>
+      <View
+        as="header"
+        className={styles.Navbar}
+        width="100vw"
+        padding="medium"
+      >
+        <Flex
+          direction={"row"}
+          justifyContent="space-between"
+          alignItems="center"
+          gap="0.5em"
+          height="100%"
+          width="100%"
+        >
+          <Flex
+            direction={"row"}
+            justifyContent="flex-start"
+            gap="0.5em"
+            height="100%"
+            width={"fit-content"}
+          >
             <Link to="/" style={{ textDecoration: "none" }}>
-              <Flex direction={"row"} justifyContent="flex-start" alignItems="center" gap="0.5em" height="100%" width="fit-content">
+              <Flex
+                direction={"row"}
+                justifyContent="flex-start"
+                alignItems="center"
+                gap="0.5em"
+                height="100%"
+                width="fit-content"
+              >
                 <Image className={styles.Logo} alt="DSGT Logo" src={logo} />
                 <Heading className={styles.DSGT} level={4}>
-                  Hacklytics 2024
+                  Hacklytics 2025
                 </Heading>
               </Flex>
             </Link>
           </Flex>
-          <Flex direction={"row"} justifyContent="flex-end" alignItems="center" gap="1em" height="100%" width="fit-content" grow={1}>
+          <Flex
+            direction={"row"}
+            justifyContent="flex-end"
+            alignItems="center"
+            gap="1em"
+            height="100%"
+            width="fit-content"
+            grow={1}
+          >
             {!isMobile && user && getGroups(user).includes("Administrator") && (
               <Link to="/admin" style={{ textDecoration: "none" }}>
                 <Button size="small">Admin Console</Button>
               </Link>
             )}
-            {!isMobile && user && (getGroups(user).includes("Administrator")
-                    || (getGroups(user).includes("Volunteer"))) && (
-              <Link to="/shop" style={{ textDecoration: "none" }}>
-                <Button size="small">Checkout Items</Button>
-              </Link>
-            )}
+            {/* {!isMobile &&
+              user &&
+              (getGroups(user).includes("Administrator") ||
+                getGroups(user).includes("Volunteer")) && (
+                <Link to="/shop" style={{ textDecoration: "none" }}>
+                  <Button size="small">Checkout Items</Button>
+                </Link>
+              )} */}
             {!isMobile && (
               <Link to="/challenges" style={{ textDecoration: "none" }}>
                 <Button size="small">Challenges</Button>
@@ -78,17 +113,21 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
             )}
             <View width="fit-content">
               <Menu menuAlign="end">
-                {isMobile && user && getGroups(user).includes("Administrator") && (
-                  <Link to="/admin" style={{ textDecoration: "none" }}>
-                    <MenuItem size="small">Admin Console</MenuItem>
-                  </Link>
-                )}
-                {isMobile && user && (getGroups(user).includes("Administrator")
-                    || (getGroups(user).includes("Volunteer"))) && (
-                  <Link to="/shop" style={{ textDecoration: "none" }}>
-                    <MenuItem size="small">Checkout Items</MenuItem>
-                  </Link>
-                )}
+                {isMobile &&
+                  user &&
+                  getGroups(user).includes("Administrator") && (
+                    <Link to="/admin" style={{ textDecoration: "none" }}>
+                      <MenuItem size="small">Admin Console</MenuItem>
+                    </Link>
+                  )}
+                {isMobile &&
+                  user &&
+                  (getGroups(user).includes("Administrator") ||
+                    getGroups(user).includes("Volunteer")) && (
+                    <Link to="/shop" style={{ textDecoration: "none" }}>
+                      <MenuItem size="small">Checkout Items</MenuItem>
+                    </Link>
+                  )}
                 <Link className={styles.MenuLink} to="/">
                   <MenuItem>Dashboard</MenuItem>
                 </Link>

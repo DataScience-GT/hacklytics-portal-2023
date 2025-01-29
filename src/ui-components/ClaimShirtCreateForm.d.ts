@@ -24,16 +24,19 @@ export declare type ValidationFunction<T> = (value: T, validationResponse: Valid
 export declare type ClaimShirtCreateFormInputValues = {
     userID?: string;
     userName?: string;
+    timestamp?: string;
 };
 export declare type ClaimShirtCreateFormValidationValues = {
     userID?: ValidationFunction<string>;
     userName?: ValidationFunction<string>;
+    timestamp?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type ClaimShirtCreateFormOverridesProps = {
     ClaimShirtCreateFormGrid?: PrimitiveOverrideProps<GridProps>;
     userID?: PrimitiveOverrideProps<TextFieldProps>;
     userName?: PrimitiveOverrideProps<TextFieldProps>;
+    timestamp?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
 export declare type ClaimShirtCreateFormProps = React.PropsWithChildren<{
     overrides?: ClaimShirtCreateFormOverridesProps | undefined | null;

@@ -16,7 +16,7 @@ import {
   Image,
   useTheme,
   Text,
-  Heading
+  Heading,
 } from "@aws-amplify/ui-react";
 import aws_exports from "./aws-exports";
 
@@ -43,14 +43,14 @@ import AccountPage from "./pages/AccountPage/AccountPage";
 import DatasetPage from "./pages/DatasetPage/DatasetPage";
 import ShopPage from "./pages/ShopPage/ShopPage";
 
-import { I18n } from 'aws-amplify';
-import { translations } from '@aws-amplify/ui-react';
+import { I18n } from "aws-amplify";
+import { translations } from "@aws-amplify/ui-react";
 import ChallengesPage from "./pages/ChallengesPage/ChallengesPage";
 import Footer from "./components/Footer/Footer";
 import AccomodationsPage from "./pages/AccomodationsPage/AccomodationsPage";
 import TracksPage from "./pages/TracksPage/TracksPage";
 I18n.putVocabularies(translations);
-I18n.setLanguage('en');
+I18n.setLanguage("en");
 
 Amplify.configure({
   ...aws_exports,
@@ -97,13 +97,8 @@ const components = {
     const { tokens } = useTheme();
     return (
       <View textAlign="center" padding={tokens.space.large}>
-        <Image
-          alt="hacklytics logo"
-          src={logo}
-          width={200}
-          height={200} 
-        />
-        <Heading style={{fontSize: '2em'}}>Hacklytics 2024 Portal</Heading>
+        <Image alt="hacklytics logo" src={logo} width={200} height={200} />
+        <Heading style={{ fontSize: "2em" }}>Hacklytics 2025 Portal</Heading>
         <Text>View scheduling, RSVP, datasets and more</Text>
       </View>
     );
@@ -152,11 +147,12 @@ const components = {
       );
     },
   },
-}
+};
 
 const App = () => {
-  
-  const [theme, setTheme] = useState<Theme>((localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics);
+  const [theme, setTheme] = useState<Theme>(
+    (localStorage.getItem("hacklytics-theme") as Theme) ?? Theme.Hacklytics
+  );
   const [colorMode, setColorMode] = useState<"system" | "light" | "dark">(
     (localStorage.getItem("hacklytics-color-mode") as
       | "system"
@@ -199,7 +195,7 @@ const App = () => {
         theme={ThemeMap.get(theme) ?? hacklytics}
         colorMode={colorMode}
       >
-        <ThemeContext.Provider 
+        <ThemeContext.Provider
           value={{ theme, setTheme, colorMode, setColorMode }}
         >
           <View className={styles.Background}></View>
@@ -224,7 +220,9 @@ const App = () => {
                       />
                       <Route
                         path="/challenges"
-                        element={<ChallengesPage user={user} signOut={signOut} />}
+                        element={
+                          <ChallengesPage user={user} signOut={signOut} />
+                        }
                       />
                       <Route
                         path="/account"
@@ -240,16 +238,16 @@ const App = () => {
                       />
                       <Route
                         path="/accomodations"
-                        element={<AccomodationsPage user={user} signOut={signOut} />}
+                        element={
+                          <AccomodationsPage user={user} signOut={signOut} />
+                        }
                       />
                       {user &&
                         (getGroups(user).includes("Administrator") ||
                           getGroups(user).includes("Volunteer")) && (
                           <Route
                             path="/shop/*"
-                            element={
-                              <ShopPage user={user} signOut={signOut} />
-                            }
+                            element={<ShopPage user={user} signOut={signOut} />}
                           />
                         )}
                       {user && getGroups(user).includes("Administrator") && (

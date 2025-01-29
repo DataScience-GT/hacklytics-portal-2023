@@ -7,13 +7,13 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { ClaimShirt } from "../models";
+import { ClaimSleepingBag } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function ClaimShirtUpdateForm(props) {
+export default function ClaimSleepingBagUpdateForm(props) {
   const {
     id: idProp,
-    claimShirt: claimShirtModelProp,
+    claimSleepingBag: claimSleepingBagModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -32,26 +32,27 @@ export default function ClaimShirtUpdateForm(props) {
   const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = claimShirtRecord
-      ? { ...initialValues, ...claimShirtRecord }
+    const cleanValues = claimSleepingBagRecord
+      ? { ...initialValues, ...claimSleepingBagRecord }
       : initialValues;
     setUserID(cleanValues.userID);
     setUserName(cleanValues.userName);
     setTimestamp(cleanValues.timestamp);
     setErrors({});
   };
-  const [claimShirtRecord, setClaimShirtRecord] =
-    React.useState(claimShirtModelProp);
+  const [claimSleepingBagRecord, setClaimSleepingBagRecord] = React.useState(
+    claimSleepingBagModelProp
+  );
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(ClaimShirt, idProp)
-        : claimShirtModelProp;
-      setClaimShirtRecord(record);
+        ? await DataStore.query(ClaimSleepingBag, idProp)
+        : claimSleepingBagModelProp;
+      setClaimSleepingBagRecord(record);
     };
     queryData();
-  }, [idProp, claimShirtModelProp]);
-  React.useEffect(resetStateValues, [claimShirtRecord]);
+  }, [idProp, claimSleepingBagModelProp]);
+  React.useEffect(resetStateValues, [claimSleepingBagRecord]);
   const validations = {
     userID: [{ type: "Required" }],
     userName: [{ type: "Required" }],
@@ -133,7 +134,7 @@ export default function ClaimShirtUpdateForm(props) {
             }
           });
           await DataStore.save(
-            ClaimShirt.copyOf(claimShirtRecord, (updated) => {
+            ClaimSleepingBag.copyOf(claimSleepingBagRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -146,7 +147,7 @@ export default function ClaimShirtUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "ClaimShirtUpdateForm")}
+      {...getOverrideProps(overrides, "ClaimSleepingBagUpdateForm")}
       {...rest}
     >
       <TextField
@@ -240,7 +241,7 @@ export default function ClaimShirtUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || claimShirtModelProp)}
+          isDisabled={!(idProp || claimSleepingBagModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -252,7 +253,7 @@ export default function ClaimShirtUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || claimShirtModelProp) ||
+              !(idProp || claimSleepingBagModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

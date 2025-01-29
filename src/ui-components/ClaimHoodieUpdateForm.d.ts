@@ -6,7 +6,7 @@
 
 import * as React from "react";
 import { GridProps, TextFieldProps } from "@aws-amplify/ui-react";
-import { ClaimShirt } from "../models";
+import { ClaimHoodie } from "../models";
 export declare type EscapeHatchProps = {
     [elementHierarchy: string]: Record<string, unknown>;
 } | null;
@@ -22,32 +22,32 @@ export declare type ValidationResponse = {
     errorMessage?: string;
 };
 export declare type ValidationFunction<T> = (value: T, validationResponse: ValidationResponse) => ValidationResponse | Promise<ValidationResponse>;
-export declare type ClaimShirtUpdateFormInputValues = {
+export declare type ClaimHoodieUpdateFormInputValues = {
     userID?: string;
     userName?: string;
     timestamp?: string;
 };
-export declare type ClaimShirtUpdateFormValidationValues = {
+export declare type ClaimHoodieUpdateFormValidationValues = {
     userID?: ValidationFunction<string>;
     userName?: ValidationFunction<string>;
     timestamp?: ValidationFunction<string>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
-export declare type ClaimShirtUpdateFormOverridesProps = {
-    ClaimShirtUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
+export declare type ClaimHoodieUpdateFormOverridesProps = {
+    ClaimHoodieUpdateFormGrid?: PrimitiveOverrideProps<GridProps>;
     userID?: PrimitiveOverrideProps<TextFieldProps>;
     userName?: PrimitiveOverrideProps<TextFieldProps>;
     timestamp?: PrimitiveOverrideProps<TextFieldProps>;
 } & EscapeHatchProps;
-export declare type ClaimShirtUpdateFormProps = React.PropsWithChildren<{
-    overrides?: ClaimShirtUpdateFormOverridesProps | undefined | null;
+export declare type ClaimHoodieUpdateFormProps = React.PropsWithChildren<{
+    overrides?: ClaimHoodieUpdateFormOverridesProps | undefined | null;
 } & {
     id?: string;
-    claimShirt?: ClaimShirt;
-    onSubmit?: (fields: ClaimShirtUpdateFormInputValues) => ClaimShirtUpdateFormInputValues;
-    onSuccess?: (fields: ClaimShirtUpdateFormInputValues) => void;
-    onError?: (fields: ClaimShirtUpdateFormInputValues, errorMessage: string) => void;
-    onChange?: (fields: ClaimShirtUpdateFormInputValues) => ClaimShirtUpdateFormInputValues;
-    onValidate?: ClaimShirtUpdateFormValidationValues;
+    claimHoodie?: ClaimHoodie;
+    onSubmit?: (fields: ClaimHoodieUpdateFormInputValues) => ClaimHoodieUpdateFormInputValues;
+    onSuccess?: (fields: ClaimHoodieUpdateFormInputValues) => void;
+    onError?: (fields: ClaimHoodieUpdateFormInputValues, errorMessage: string) => void;
+    onChange?: (fields: ClaimHoodieUpdateFormInputValues) => ClaimHoodieUpdateFormInputValues;
+    onValidate?: ClaimHoodieUpdateFormValidationValues;
 } & React.CSSProperties>;
-export default function ClaimShirtUpdateForm(props: ClaimShirtUpdateFormProps): React.ReactElement;
+export default function ClaimHoodieUpdateForm(props: ClaimHoodieUpdateFormProps): React.ReactElement;

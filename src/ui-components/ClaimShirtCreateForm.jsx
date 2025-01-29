@@ -24,18 +24,22 @@ export default function ClaimShirtCreateForm(props) {
   const initialValues = {
     userID: "",
     userName: "",
+    timestamp: "",
   };
   const [userID, setUserID] = React.useState(initialValues.userID);
   const [userName, setUserName] = React.useState(initialValues.userName);
+  const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setUserID(initialValues.userID);
     setUserName(initialValues.userName);
+    setTimestamp(initialValues.timestamp);
     setErrors({});
   };
   const validations = {
     userID: [{ type: "Required" }],
     userName: [{ type: "Required" }],
+    timestamp: [{ type: "Required" }],
   };
   const runValidationTasks = async (
     fieldName,
@@ -54,6 +58,23 @@ export default function ClaimShirtCreateForm(props) {
     setErrors((errors) => ({ ...errors, [fieldName]: validationResponse }));
     return validationResponse;
   };
+  const convertToLocal = (date) => {
+    const df = new Intl.DateTimeFormat("default", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      calendar: "iso8601",
+      numberingSystem: "latn",
+      hourCycle: "h23",
+    });
+    const parts = df.formatToParts(date).reduce((acc, part) => {
+      acc[part.type] = part.value;
+      return acc;
+    }, {});
+    return `${parts.year}-${parts.month}-${parts.day}T${parts.hour}:${parts.minute}`;
+  };
   return (
     <Grid
       as="form"
@@ -65,6 +86,7 @@ export default function ClaimShirtCreateForm(props) {
         let modelFields = {
           userID,
           userName,
+          timestamp,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -121,6 +143,7 @@ export default function ClaimShirtCreateForm(props) {
             const modelFields = {
               userID: value,
               userName,
+              timestamp,
             };
             const result = onChange(modelFields);
             value = result?.userID ?? value;
@@ -146,6 +169,7 @@ export default function ClaimShirtCreateForm(props) {
             const modelFields = {
               userID,
               userName: value,
+              timestamp,
             };
             const result = onChange(modelFields);
             value = result?.userName ?? value;
@@ -159,6 +183,34 @@ export default function ClaimShirtCreateForm(props) {
         errorMessage={errors.userName?.errorMessage}
         hasError={errors.userName?.hasError}
         {...getOverrideProps(overrides, "userName")}
+      ></TextField>
+      <TextField
+        label="Timestamp"
+        isRequired={true}
+        isReadOnly={false}
+        type="datetime-local"
+        value={timestamp && convertToLocal(new Date(timestamp))}
+        onChange={(e) => {
+          let value =
+            e.target.value === "" ? "" : new Date(e.target.value).toISOString();
+          if (onChange) {
+            const modelFields = {
+              userID,
+              userName,
+              timestamp: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.timestamp ?? value;
+          }
+          if (errors.timestamp?.hasError) {
+            runValidationTasks("timestamp", value);
+          }
+          setTimestamp(value);
+        }}
+        onBlur={() => runValidationTasks("timestamp", timestamp)}
+        errorMessage={errors.timestamp?.errorMessage}
+        hasError={errors.timestamp?.hasError}
+        {...getOverrideProps(overrides, "timestamp")}
       ></TextField>
       <Flex
         justifyContent="space-between"

@@ -7,13 +7,13 @@
 /* eslint-disable */
 import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { ClaimShirt } from "../models";
+import { ClaimHoodie } from "../models";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { DataStore } from "aws-amplify";
-export default function ClaimShirtUpdateForm(props) {
+export default function ClaimHoodieUpdateForm(props) {
   const {
     id: idProp,
-    claimShirt: claimShirtModelProp,
+    claimHoodie: claimHoodieModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -32,26 +32,26 @@ export default function ClaimShirtUpdateForm(props) {
   const [timestamp, setTimestamp] = React.useState(initialValues.timestamp);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    const cleanValues = claimShirtRecord
-      ? { ...initialValues, ...claimShirtRecord }
+    const cleanValues = claimHoodieRecord
+      ? { ...initialValues, ...claimHoodieRecord }
       : initialValues;
     setUserID(cleanValues.userID);
     setUserName(cleanValues.userName);
     setTimestamp(cleanValues.timestamp);
     setErrors({});
   };
-  const [claimShirtRecord, setClaimShirtRecord] =
-    React.useState(claimShirtModelProp);
+  const [claimHoodieRecord, setClaimHoodieRecord] =
+    React.useState(claimHoodieModelProp);
   React.useEffect(() => {
     const queryData = async () => {
       const record = idProp
-        ? await DataStore.query(ClaimShirt, idProp)
-        : claimShirtModelProp;
-      setClaimShirtRecord(record);
+        ? await DataStore.query(ClaimHoodie, idProp)
+        : claimHoodieModelProp;
+      setClaimHoodieRecord(record);
     };
     queryData();
-  }, [idProp, claimShirtModelProp]);
-  React.useEffect(resetStateValues, [claimShirtRecord]);
+  }, [idProp, claimHoodieModelProp]);
+  React.useEffect(resetStateValues, [claimHoodieRecord]);
   const validations = {
     userID: [{ type: "Required" }],
     userName: [{ type: "Required" }],
@@ -133,7 +133,7 @@ export default function ClaimShirtUpdateForm(props) {
             }
           });
           await DataStore.save(
-            ClaimShirt.copyOf(claimShirtRecord, (updated) => {
+            ClaimHoodie.copyOf(claimHoodieRecord, (updated) => {
               Object.assign(updated, modelFields);
             })
           );
@@ -146,7 +146,7 @@ export default function ClaimShirtUpdateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "ClaimShirtUpdateForm")}
+      {...getOverrideProps(overrides, "ClaimHoodieUpdateForm")}
       {...rest}
     >
       <TextField
@@ -240,7 +240,7 @@ export default function ClaimShirtUpdateForm(props) {
             event.preventDefault();
             resetStateValues();
           }}
-          isDisabled={!(idProp || claimShirtModelProp)}
+          isDisabled={!(idProp || claimHoodieModelProp)}
           {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
@@ -252,7 +252,7 @@ export default function ClaimShirtUpdateForm(props) {
             type="submit"
             variation="primary"
             isDisabled={
-              !(idProp || claimShirtModelProp) ||
+              !(idProp || claimHoodieModelProp) ||
               Object.values(errors).some((e) => e?.hasError)
             }
             {...getOverrideProps(overrides, "SubmitButton")}

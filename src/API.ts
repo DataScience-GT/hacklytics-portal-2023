@@ -16,6 +16,8 @@ export type ModelAdminSettingsConditionInput = {
   or?: Array< ModelAdminSettingsConditionInput | null > | null,
   not?: ModelAdminSettingsConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ModelBooleanInput = {
@@ -117,6 +119,8 @@ export type ModelEventConditionInput = {
   or?: Array< ModelEventConditionInput | null > | null,
   not?: ModelEventConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ModelIntInput = {
@@ -212,6 +216,8 @@ export type ModelCheckinConditionInput = {
   or?: Array< ModelCheckinConditionInput | null > | null,
   not?: ModelCheckinConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   eventCheckinsId?: ModelIDInput | null,
 };
 
@@ -262,6 +268,8 @@ export type ModelPointsConditionInput = {
   or?: Array< ModelPointsConditionInput | null > | null,
   not?: ModelPointsConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type Points = {
@@ -308,6 +316,8 @@ export type ModelScavengerHuntConditionInput = {
   or?: Array< ModelScavengerHuntConditionInput | null > | null,
   not?: ModelScavengerHuntConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ScavengerHunt = {
@@ -352,6 +362,8 @@ export type ModelScavengerHuntCheckinConditionInput = {
   or?: Array< ModelScavengerHuntCheckinConditionInput | null > | null,
   not?: ModelScavengerHuntCheckinConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ScavengerHuntCheckin = {
@@ -394,6 +406,9 @@ export type ModelEventRSVPConditionInput = {
   or?: Array< ModelEventRSVPConditionInput | null > | null,
   not?: ModelEventRSVPConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type EventRSVP = {
@@ -443,6 +458,8 @@ export type ModelLogConditionInput = {
   or?: Array< ModelLogConditionInput | null > | null,
   not?: ModelLogConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type Log = {
@@ -491,6 +508,8 @@ export type ModelClaimShirtConditionInput = {
   or?: Array< ModelClaimShirtConditionInput | null > | null,
   not?: ModelClaimShirtConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ClaimShirt = {
@@ -535,6 +554,8 @@ export type ModelClaimHoodieConditionInput = {
   or?: Array< ModelClaimHoodieConditionInput | null > | null,
   not?: ModelClaimHoodieConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ClaimHoodie = {
@@ -579,6 +600,8 @@ export type ModelClaimSleepingBagConditionInput = {
   or?: Array< ModelClaimSleepingBagConditionInput | null > | null,
   not?: ModelClaimSleepingBagConditionInput | null,
   _deleted?: ModelBooleanInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
 };
 
 export type ClaimSleepingBag = {
@@ -611,6 +634,8 @@ export type ModelAdminSettingsFilterInput = {
   id?: ModelIDInput | null,
   hacklyticsOpen?: ModelBooleanInput | null,
   participantEmails?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelAdminSettingsFilterInput | null > | null,
   or?: Array< ModelAdminSettingsFilterInput | null > | null,
   not?: ModelAdminSettingsFilterInput | null,
@@ -635,6 +660,8 @@ export type ModelEventFilterInput = {
   end?: ModelStringInput | null,
   location?: ModelStringInput | null,
   points?: ModelIntInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelEventFilterInput | null > | null,
   or?: Array< ModelEventFilterInput | null > | null,
   not?: ModelEventFilterInput | null,
@@ -654,6 +681,8 @@ export type ModelCheckinFilterInput = {
   createdByName?: ModelStringInput | null,
   user?: ModelStringInput | null,
   userName?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelCheckinFilterInput | null > | null,
   or?: Array< ModelCheckinFilterInput | null > | null,
   not?: ModelCheckinFilterInput | null,
@@ -665,6 +694,9 @@ export type ModelPointsFilterInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
   points?: ModelIntInput | null,
+  id?: ModelIDInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelPointsFilterInput | null > | null,
   or?: Array< ModelPointsFilterInput | null > | null,
   not?: ModelPointsFilterInput | null,
@@ -684,6 +716,8 @@ export type ModelScavengerHuntFilterInput = {
   description?: ModelStringInput | null,
   status?: ModelBooleanInput | null,
   points?: ModelIntInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelScavengerHuntFilterInput | null > | null,
   or?: Array< ModelScavengerHuntFilterInput | null > | null,
   not?: ModelScavengerHuntFilterInput | null,
@@ -701,6 +735,8 @@ export type ModelScavengerHuntCheckinFilterInput = {
   id?: ModelIDInput | null,
   checkpointID?: ModelStringInput | null,
   userID?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelScavengerHuntCheckinFilterInput | null > | null,
   or?: Array< ModelScavengerHuntCheckinFilterInput | null > | null,
   not?: ModelScavengerHuntCheckinFilterInput | null,
@@ -719,10 +755,13 @@ export type ModelEventRSVPFilterInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
   eventID?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelEventRSVPFilterInput | null > | null,
   or?: Array< ModelEventRSVPFilterInput | null > | null,
   not?: ModelEventRSVPFilterInput | null,
   _deleted?: ModelBooleanInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelEventRSVPConnection = {
@@ -739,6 +778,8 @@ export type ModelLogFilterInput = {
   type?: ModelStringInput | null,
   message?: ModelStringInput | null,
   timestamp?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelLogFilterInput | null > | null,
   or?: Array< ModelLogFilterInput | null > | null,
   not?: ModelLogFilterInput | null,
@@ -757,6 +798,8 @@ export type ModelClaimShirtFilterInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
   timestamp?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelClaimShirtFilterInput | null > | null,
   or?: Array< ModelClaimShirtFilterInput | null > | null,
   not?: ModelClaimShirtFilterInput | null,
@@ -775,6 +818,8 @@ export type ModelClaimHoodieFilterInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
   timestamp?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelClaimHoodieFilterInput | null > | null,
   or?: Array< ModelClaimHoodieFilterInput | null > | null,
   not?: ModelClaimHoodieFilterInput | null,
@@ -793,6 +838,8 @@ export type ModelClaimSleepingBagFilterInput = {
   userID?: ModelStringInput | null,
   userName?: ModelStringInput | null,
   timestamp?: ModelStringInput | null,
+  createdAt?: ModelStringInput | null,
+  updatedAt?: ModelStringInput | null,
   and?: Array< ModelClaimSleepingBagFilterInput | null > | null,
   or?: Array< ModelClaimSleepingBagFilterInput | null > | null,
   not?: ModelClaimSleepingBagFilterInput | null,
@@ -810,6 +857,8 @@ export type ModelSubscriptionAdminSettingsFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   hacklyticsOpen?: ModelSubscriptionBooleanInput | null,
   participantEmails?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
   or?: Array< ModelSubscriptionAdminSettingsFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -861,9 +910,12 @@ export type ModelSubscriptionEventFilterInput = {
   end?: ModelSubscriptionStringInput | null,
   location?: ModelSubscriptionStringInput | null,
   points?: ModelSubscriptionIntInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionEventFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
+  eventCheckinsId?: ModelSubscriptionIDInput | null,
 };
 
 export type ModelSubscriptionIntInput = {
@@ -884,6 +936,8 @@ export type ModelSubscriptionCheckinFilterInput = {
   createdByName?: ModelSubscriptionStringInput | null,
   user?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
   or?: Array< ModelSubscriptionCheckinFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -893,6 +947,9 @@ export type ModelSubscriptionPointsFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
   points?: ModelSubscriptionIntInput | null,
+  id?: ModelSubscriptionIDInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionPointsFilterInput | null > | null,
   or?: Array< ModelSubscriptionPointsFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -904,6 +961,8 @@ export type ModelSubscriptionScavengerHuntFilterInput = {
   description?: ModelSubscriptionStringInput | null,
   status?: ModelSubscriptionBooleanInput | null,
   points?: ModelSubscriptionIntInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
   or?: Array< ModelSubscriptionScavengerHuntFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -913,6 +972,8 @@ export type ModelSubscriptionScavengerHuntCheckinFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   checkpointID?: ModelSubscriptionStringInput | null,
   userID?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
   or?: Array< ModelSubscriptionScavengerHuntCheckinFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -923,9 +984,12 @@ export type ModelSubscriptionEventRSVPFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
   eventID?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
   or?: Array< ModelSubscriptionEventRSVPFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
+  owner?: ModelStringInput | null,
 };
 
 export type ModelSubscriptionLogFilterInput = {
@@ -935,6 +999,8 @@ export type ModelSubscriptionLogFilterInput = {
   type?: ModelSubscriptionStringInput | null,
   message?: ModelSubscriptionStringInput | null,
   timestamp?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionLogFilterInput | null > | null,
   or?: Array< ModelSubscriptionLogFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -945,6 +1011,8 @@ export type ModelSubscriptionClaimShirtFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
   timestamp?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimShirtFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -955,6 +1023,8 @@ export type ModelSubscriptionClaimHoodieFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
   timestamp?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimHoodieFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimHoodieFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,
@@ -965,6 +1035,8 @@ export type ModelSubscriptionClaimSleepingBagFilterInput = {
   userID?: ModelSubscriptionStringInput | null,
   userName?: ModelSubscriptionStringInput | null,
   timestamp?: ModelSubscriptionStringInput | null,
+  createdAt?: ModelSubscriptionStringInput | null,
+  updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionClaimSleepingBagFilterInput | null > | null,
   or?: Array< ModelSubscriptionClaimSleepingBagFilterInput | null > | null,
   _deleted?: ModelBooleanInput | null,

@@ -4,9 +4,25 @@ import styles from "./ShopPage.module.scss";
 import Modal from "react-modal";
 
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
-import { ClaimHoodie, ClaimShirt, ClaimSleepingBag, Points } from "../../models";
-import { listClaimHoodies, listClaimShirts, listClaimSleepingBags, listPoints, listUsers } from "../../graphql/queries";
-import { createClaimHoodie, createClaimShirt, createClaimSleepingBag, createPoints } from "../../graphql/mutations";
+import {
+  ClaimHoodie,
+  ClaimShirt,
+  ClaimSleepingBag,
+  Points,
+} from "../../models";
+import {
+  listClaimHoodies,
+  listClaimShirts,
+  listClaimSleepingBags,
+  listPoints,
+  listUsers,
+} from "../../graphql/queries";
+import {
+  createClaimHoodie,
+  createClaimShirt,
+  createClaimSleepingBag,
+  createPoints,
+} from "../../graphql/mutations";
 import { API } from "aws-amplify";
 import {
   Button,
@@ -36,32 +52,48 @@ interface ShopPageProps {
 }
 
 const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
-  
   const [points, setPoints] = React.useState<Points[]>([]);
   const [loadingPoints, setLoadingPoints] = React.useState<boolean>(true);
 
   const [shirtsClaimed, setShirtsClaimed] = React.useState<ClaimShirt[]>([]);
-  const [loadingShirtsClaimed, setLoadingShirtsClaimed] = React.useState<boolean>(true);
+  const [loadingShirtsClaimed, setLoadingShirtsClaimed] =
+    React.useState<boolean>(true);
   const [hoodiesClaimed, setHoodiesClaimed] = React.useState<ClaimHoodie[]>([]);
-  const [loadingHoodiesClaimed, setLoadingHoodiesClaimed] = React.useState<boolean>(true);
-  const [sleepingBagsClaimed, setSleepingBagsClaimed] = React.useState<ClaimSleepingBag[]>([]);
-  const [loadingSleepingBagsClaimed, setLoadingSleepingBagsClaimed] = React.useState<boolean>(true);
+  const [loadingHoodiesClaimed, setLoadingHoodiesClaimed] =
+    React.useState<boolean>(true);
+  const [sleepingBagsClaimed, setSleepingBagsClaimed] = React.useState<
+    ClaimSleepingBag[]
+  >([]);
+  const [loadingSleepingBagsClaimed, setLoadingSleepingBagsClaimed] =
+    React.useState<boolean>(true);
 
-  const [tryingToClaimShirt, setTryingToClaimShirt] = React.useState<boolean>(false);
-  const [tryingToClaimHoodie, setTryingToClaimHoodie] = React.useState<boolean>(false);
-  const [tryingToClaimSleepingBag, setTryingToClaimSleepingBag] = React.useState<boolean>(false);
+  const [tryingToClaimShirt, setTryingToClaimShirt] =
+    React.useState<boolean>(false);
+  const [tryingToClaimHoodie, setTryingToClaimHoodie] =
+    React.useState<boolean>(false);
+  const [tryingToClaimSleepingBag, setTryingToClaimSleepingBag] =
+    React.useState<boolean>(false);
 
-  const [users, setUsers] = React.useState<{[name: string]: any}>({});
+  const [users, setUsers] = React.useState<{ [name: string]: any }>({});
   const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
   const [userSearch, setUserSearch] = React.useState<string>("");
   const [userPage, setUserPage] = React.useState<number>(1);
-  const [userPageSize, setUserPageSize] = React.useState<number>(localStorage.getItem("userPageSize")
-  ? parseInt(localStorage.getItem("userPageSize") as string) : 10);
-  const [filteredUsers, setFilteredUsers] = React.useState<{[name: string]: any}>({});
+  const [userPageSize, setUserPageSize] = React.useState<number>(
+    localStorage.getItem("userPageSize")
+      ? parseInt(localStorage.getItem("userPageSize") as string)
+      : 10
+  );
+  const [filteredUsers, setFilteredUsers] = React.useState<{
+    [name: string]: any;
+  }>({});
 
-  const [createPointsModalOpen, setCreatePointsModalOpen] = React.useState(false);
-  const [createPointsStatus, setCreatePointsStatus] = React.useState<Status>({ show: false });
-  const [propagatingPoints, setPropagatingPoints] = React.useState<boolean>(false);
+  const [createPointsModalOpen, setCreatePointsModalOpen] =
+    React.useState(false);
+  const [createPointsStatus, setCreatePointsStatus] = React.useState<Status>({
+    show: false,
+  });
+  const [propagatingPoints, setPropagatingPoints] =
+    React.useState<boolean>(false);
 
   useEffect(() => {
     loadPoints(() => {
@@ -72,25 +104,28 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     });
     loadHoodiesClaimed(() => {
       setLoadingHoodiesClaimed(false);
-    })
+    });
     loadSleepingBagsClaimed(() => {
       setLoadingSleepingBagsClaimed(false);
-    })
+    });
   }, []);
 
   useEffect(() => {
     loadUsers(() => {
       setUsersLoading(false);
-    })
+    });
   }, [points]);
 
   useEffect(() => {
     const filteredDict: { [key: string]: any } = {};
     for (const key in users) {
-        if (users[key].name.toLowerCase().includes(userSearch.toLowerCase())) {
-            filteredDict[key] = users[key];
-        }
+      const userName = users[key].name ? users[key].name : "Name undefined";
+
+      if (userName.toLowerCase().includes(userSearch.toLowerCase())) {
+        filteredDict[key] = users[key];
+      }
     }
+
     setFilteredUsers(filteredDict);
   }, [users, userSearch]);
 
@@ -106,39 +141,42 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     userData.body.users.forEach((user: User) => {
       const userInfo: any = {};
       user.Attributes.forEach((attribute) => {
-          userInfo[attribute.Name] = attribute.Value;
+        userInfo[attribute.Name] = attribute.Value;
       });
-      userInfo['UserCreateDate'] = user.UserCreateDate;
-      userInfo['UserLastModifiedDate'] = user.UserLastModifiedDate;
-      userInfo['Points'] = points.filter((x) => x.userID == userInfo.sub);
+      userInfo["UserCreateDate"] = user.UserCreateDate;
+      userInfo["UserLastModifiedDate"] = user.UserLastModifiedDate;
+      userInfo["Points"] = points.filter((x) => x.userID == userInfo.sub);
 
       usersDict[userInfo.sub] = userInfo;
     });
     setUsers(usersDict);
     if (callback) callback();
-  }
+  };
 
   const loadPoints = async (callback?: () => void) => {
     const res: any = await API.graphql({
       query: listPoints,
       variables: {
-        filter: {_deleted: {ne: true}},
-        limit: 10000
+        filter: { _deleted: { ne: true } },
+        limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let points: Points[] = res.data.listPoints.items;
     let pointsByUser: Map<String, Points> = new Map();
-    
+
     for (var p in points) {
       let point = points[p];
       let existing = pointsByUser.get(point.userID);
       if (existing) {
-        pointsByUser.set(point.userID, new Points({
+        pointsByUser.set(
+          point.userID,
+          new Points({
             userID: point.userID,
             userName: point.userName,
-            points: existing.points + point.points
-        }))
+            points: existing.points + point.points,
+          })
+        );
       } else {
         pointsByUser.set(point.userID, point);
       }
@@ -154,7 +192,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listClaimShirts,
       variables: {
-        filter: {_deleted: {ne: true}},
+        filter: { _deleted: { ne: true } },
         limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -169,7 +207,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listClaimHoodies,
       variables: {
-        filter: {_deleted: {ne: true}},
+        filter: { _deleted: { ne: true } },
         limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -184,7 +222,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     const res: any = await API.graphql({
       query: listClaimSleepingBags,
       variables: {
-        filter: {_deleted: {ne: true}},
+        filter: { _deleted: { ne: true } },
         limit: 10000,
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -202,7 +240,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
         input: {
           userID: user.sub,
           userName: user.name,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -218,7 +256,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
         input: {
           userID: user.sub,
           userName: user.name,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -234,7 +272,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
         input: {
           userID: user.sub,
           userName: user.name,
-          timestamp: new Date()
+          timestamp: new Date(),
         },
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
@@ -279,16 +317,34 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       for (let i = 0; i < ids.length; i++) {
         await createIndividualPoints(ids[i], usernames[i], parseInt(numPoints));
       }
-      setCreatePointsStatus({ show: true, type: "success", message: "Propagated points to all users. Num entries added: " + `${numValid}` });
+      setCreatePointsStatus({
+        show: true,
+        type: "success",
+        message:
+          "Propagated points to all users. Num entries added: " + `${numValid}`,
+      });
       setPropagatingPoints(false);
     } else {
-      setCreatePointsStatus({ show: true, type: "error", message: "Could not update points due to " + `${ids[indices[0]]}` + " with " + `${usernames[indices[0]]}` 
-        + "... there were " + `${indices.length} people having problems..` });
+      setCreatePointsStatus({
+        show: true,
+        type: "error",
+        message:
+          "Could not update points due to " +
+          `${ids[indices[0]]}` +
+          " with " +
+          `${usernames[indices[0]]}` +
+          "... there were " +
+          `${indices.length} people having problems..`,
+      });
       setPropagatingPoints(false);
     }
-  }
+  };
 
-  const createIndividualPoints = async (id: string, username: string, points: number) => {
+  const createIndividualPoints = async (
+    id: string,
+    username: string,
+    points: number
+  ) => {
     const res: any = await API.graphql({
       query: createPoints,
       variables: {
@@ -301,7 +357,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     return res;
-  }
+  };
 
   return (
     <div className={styles.ShopPage}>
@@ -310,29 +366,36 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
           <Heading level={3} marginBottom={"medium"} marginTop={"medium"}>
             Points Shop
           </Heading>
-          <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
+          <Flex
+            direction={"row"}
+            gap={"medium"}
+            marginBottom={"medium"}
+            wrap={"wrap"}
+          >
             <SearchField
               label=""
               labelHidden={true}
               placeholder={"Search"}
               onChange={(e) => {
                 setUserSearch(e.target.value.toLowerCase());
-                let maxPages = Math.ceil(Object.keys(filteredUsers).length / userPageSize);
+                let maxPages = Math.ceil(
+                  Object.keys(filteredUsers).length / userPageSize
+                );
                 if (userPage > maxPages && maxPages !== 0) {
                   setUserPage(maxPages);
                 } else if (userPage < 1) {
                   setUserPage(1);
                 }
-              }} 
+              }}
               onClear={() => {
                 setUserSearch("");
                 if (userPage < 1) {
                   setUserPage(1);
                 }
-              }} 
+              }}
               isDisabled={usersLoading || users.length === 0}
             />
-            <Button 
+            <Button
               onClick={() => {
                 setCreatePointsModalOpen(true);
               }}
@@ -340,19 +403,46 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
               Create Points
             </Button>
           </Flex>
-          <Flex direction={"row"} gap={"medium"} marginBottom={"medium"} wrap={"wrap"}>
-            <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+          <Flex
+            direction={"row"}
+            gap={"medium"}
+            marginBottom={"medium"}
+            wrap={"wrap"}
+          >
+            <Text
+              style={{
+                background: "var(--amplify-colors-background-secondary)",
+                padding: "0.5em",
+                width: "fit-content",
+              }}
+            >
               Number of shirts claimed: {shirtsClaimed.length}
             </Text>
-            <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+            <Text
+              style={{
+                background: "var(--amplify-colors-background-secondary)",
+                padding: "0.5em",
+                width: "fit-content",
+              }}
+            >
               Number of hoodies claimed: {hoodiesClaimed.length}
             </Text>
-            <Text style={{ background: "var(--amplify-colors-background-secondary)", padding: "0.5em", width: "fit-content" }}>
+            <Text
+              style={{
+                background: "var(--amplify-colors-background-secondary)",
+                padding: "0.5em",
+                width: "fit-content",
+              }}
+            >
               Number of sleeping bags claimed: {sleepingBagsClaimed.length}
             </Text>
           </Flex>
 
-          {loadingPoints || loadingShirtsClaimed || loadingHoodiesClaimed || loadingSleepingBagsClaimed || usersLoading ? (
+          {loadingPoints ||
+          loadingShirtsClaimed ||
+          loadingHoodiesClaimed ||
+          loadingSleepingBagsClaimed ||
+          usersLoading ? (
             <Text>Loading...</Text>
           ) : users.length <= 0 ? (
             <Table>
@@ -373,38 +463,48 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
             </Table>
           ) : (
             <>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell as="th" width={"20%"}>Participant</TableCell>
-                  <TableCell as="th" width={"20%"}>Points</TableCell>
-                  <TableCell as="th" width={"20%"}>Claim Shirt</TableCell>
-                  <TableCell as="th" width={"20%"}>Claim Hoodie</TableCell>
-                  <TableCell as="th" width={"20%"}>Claim Sleeping Bag</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {Object.values(filteredUsers).slice((userPage - 1) * userPageSize, (userPage - 1) * userPageSize + userPageSize)
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell as="th" width={"20%"}>
+                      Participant
+                    </TableCell>
+                    <TableCell as="th" width={"20%"}>
+                      Points
+                    </TableCell>
+                    <TableCell as="th" width={"20%"}>
+                      Claim Shirt
+                    </TableCell>
+                    <TableCell as="th" width={"20%"}>
+                      Claim Hoodie
+                    </TableCell>
+                    <TableCell as="th" width={"20%"}>
+                      Claim Sleeping Bag
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {Object.values(filteredUsers)
+                    .slice(
+                      (userPage - 1) * userPageSize,
+                      (userPage - 1) * userPageSize + userPageSize
+                    )
                     .map((user) => (
                       <TableRow key={user.sub}>
                         <TableCell>{user.name}</TableCell>
                         <TableCell>
                           {user.Points.length > 0 ? (
-                            <>
-                            {user.Points[0].points}
-                            </>
+                            <>{user.Points[0].points}</>
                           ) : (
-                            <>
-                            0
-                            </>
+                            <>0</>
                           )}
                         </TableCell>
                         <TableCell>
                           {shirtsClaimed.filter((x) => x.userID === user.sub)
                             .length > 0 ? (
-                              <>
-                                <Button disabled={true}>Claimed</Button>
-                              </>
+                            <>
+                              <Button disabled={true}>Claimed</Button>
+                            </>
                           ) : (
                             <Button
                               onClick={() => {
@@ -413,16 +513,16 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                               }}
                               isLoading={tryingToClaimShirt}
                               loadingText="Claiming"
-                              isDisabled={user.Points.length == 0 || user.Points[0].points < 5}
+                              isDisabled={
+                                user.Points.length == 0 ||
+                                user.Points[0].points < 5
+                              }
                             >
-                              {user.Points.length == 0 || user.Points[0].points < 5 ? (
-                                <>
-                                  Not enough points
-                                </>
+                              {user.Points.length == 0 ||
+                              user.Points[0].points < 5 ? (
+                                <>Not enough points</>
                               ) : (
-                                <>
-                                  Claim
-                                </>
+                                <>Claim</>
                               )}
                             </Button>
                           )}
@@ -430,9 +530,9 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                         <TableCell>
                           {hoodiesClaimed.filter((x) => x.userID === user.sub)
                             .length > 0 ? (
-                              <>
-                                <Button disabled={true}>Claimed</Button>
-                              </>
+                            <>
+                              <Button disabled={true}>Claimed</Button>
+                            </>
                           ) : (
                             <Button
                               onClick={() => {
@@ -441,26 +541,27 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                               }}
                               isLoading={tryingToClaimHoodie}
                               loadingText="Claiming"
-                              isDisabled={user.Points.length == 0 || user.Points[0].points < 20}
+                              isDisabled={
+                                user.Points.length == 0 ||
+                                user.Points[0].points < 20
+                              }
                             >
-                              {user.Points.length == 0 || user.Points[0].points < 20 ? (
-                                <>
-                                  Not enough points
-                                </>
+                              {user.Points.length == 0 ||
+                              user.Points[0].points < 20 ? (
+                                <>Not enough points</>
                               ) : (
-                                <>
-                                  Claim
-                                </>
+                                <>Claim</>
                               )}
                             </Button>
                           )}
                         </TableCell>
                         <TableCell>
-                          {sleepingBagsClaimed.filter((x) => x.userID === user.sub)
-                            .length > 0 ? (
-                              <>
-                                <Button disabled={true}>Claimed</Button>
-                              </>
+                          {sleepingBagsClaimed.filter(
+                            (x) => x.userID === user.sub
+                          ).length > 0 ? (
+                            <>
+                              <Button disabled={true}>Claimed</Button>
+                            </>
                           ) : (
                             <Button
                               onClick={() => {
@@ -475,82 +576,93 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
                           )}
                         </TableCell>
                       </TableRow>
-                    ))
-                  }
-              </TableBody>
-            </Table>
-            <Flex marginTop={"1em"} direction={"row"} justifyContent={"center"} alignItems={"center"} gap={"large"}>
-              <Pagination
-                currentPage={userPage}
-                totalPages={Math.ceil(Object.keys(filteredUsers).length / userPageSize)}
-                siblingCount={1}
-                onChange={(newPageIndex, previousPageIndex) => {
-                  setUserPage(newPageIndex);
-                }}
-                onNext={() => {
-                  setUserPage(userPage + 1);
-                }}
-                onPrevious={() => {
-                  setUserPage(userPage - 1);
-                }}
-              />
-              <Flex direction={"row"} alignItems={"center"}>
-                <SelectField
-                  label="" 
-                  labelHidden={true}
-                  onChange={(e) => {
-                    setUserPageSize(parseInt(e.target.value));
-                    localStorage.setItem("userPageSize", e.target.value);
+                    ))}
+                </TableBody>
+              </Table>
+              <Flex
+                marginTop={"1em"}
+                direction={"row"}
+                justifyContent={"center"}
+                alignItems={"center"}
+                gap={"large"}
+              >
+                <Pagination
+                  currentPage={userPage}
+                  totalPages={Math.ceil(
+                    Object.keys(filteredUsers).length / userPageSize
+                  )}
+                  siblingCount={1}
+                  onChange={(newPageIndex, previousPageIndex) => {
+                    setUserPage(newPageIndex);
                   }}
-                  defaultValue={userPageSize.toString()}
-                  size={"small"}
-                >
-                  <option value={1}>1</option>
-                  <option value={5}>5</option>
-                  <option value={10}>10</option>
-                  <option value={20}>20</option>
-                  <option value={30}>30</option>
-                </SelectField>
-                <Text>users per page</Text>
+                  onNext={() => {
+                    setUserPage(userPage + 1);
+                  }}
+                  onPrevious={() => {
+                    setUserPage(userPage - 1);
+                  }}
+                />
+                <Flex direction={"row"} alignItems={"center"}>
+                  <SelectField
+                    label=""
+                    labelHidden={true}
+                    onChange={(e) => {
+                      setUserPageSize(parseInt(e.target.value));
+                      localStorage.setItem("userPageSize", e.target.value);
+                    }}
+                    defaultValue={userPageSize.toString()}
+                    size={"small"}
+                  >
+                    <option value={1}>1</option>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={20}>20</option>
+                    <option value={30}>30</option>
+                  </SelectField>
+                  <Text>users per page</Text>
+                </Flex>
               </Flex>
-            </Flex>
-          </>
+            </>
           )}
         </View>
       </Flex>
 
       <Modal
-          contentLabel="Create Points Modal"
-          isOpen={createPointsModalOpen}
-          onRequestClose={() => {
+        contentLabel="Create Points Modal"
+        isOpen={createPointsModalOpen}
+        onRequestClose={() => {
+          setCreatePointsModalOpen(false);
+          setCreatePointsStatus({ show: false });
+        }}
+        appElement={document.getElementById("modal-container") as HTMLElement}
+        parentSelector={() => document.getElementById("modal-container")!}
+        style={modalFormStyle}
+      >
+        <StatusAlert status={createPointsStatus} />
+        {propagatingPoints ? (
+          <>
+            <Flex
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent={"center"}
+            >
+              <Loader size="large" />
+            </Flex>
+          </>
+        ) : (
+          <></>
+        )}
+        <CreatePoints
+          onCancel={() => {
             setCreatePointsModalOpen(false);
             setCreatePointsStatus({ show: false });
           }}
-          appElement={document.getElementById("modal-container") as HTMLElement}
-          parentSelector={() => document.getElementById("modal-container")!}
-          style={modalFormStyle}
-        >
-          <StatusAlert status={createPointsStatus} />
-          {propagatingPoints ? (
-            <>
-              <Flex direction={"row"} alignItems={"center"} justifyContent={"center"}>
-                <Loader size="large" />
-              </Flex>
-            </>
-          ) : (
-            <></>
-          )}
-          <CreatePoints
-            onCancel={() => {
-              setCreatePointsModalOpen(false);
-              setCreatePointsStatus({ show: false });
-            }}
-            onSubmit={(fields) => {
-              setPropagatingPoints(true);
-              propagatePoints(Array.from(Object.values(fields)));
-            }}
-          />
-        </Modal>
+          onSubmit={(fields) => {
+            setPropagatingPoints(true);
+            propagatePoints(Array.from(Object.values(fields)));
+          }}
+        />
+      </Modal>
     </div>
   );
 };

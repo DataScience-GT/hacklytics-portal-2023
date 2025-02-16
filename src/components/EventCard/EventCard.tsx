@@ -179,12 +179,12 @@ const EventCard: FC<EventCardProps> = ({
             {isRSVPed ? "Cancel RSVP" : "RSVP"}
           </Button>
         )}
-        {inProgress &&
-          (isCheckedIn ? (
+        {inProgress ? (
+          isCheckedIn ? (
             <Button
-              width={"100%"}
+              width="100%"
               marginTop="small"
-              borderRadius={"100px"}
+              borderRadius="100px"
               variation="primary"
               isDisabled
             >
@@ -192,15 +192,27 @@ const EventCard: FC<EventCardProps> = ({
             </Button>
           ) : (
             <Button
-              width={"100%"}
+              width="100%"
               marginTop="small"
-              borderRadius={"100px"}
+              borderRadius="100px"
               variation="primary"
               onClick={() => setShowCheckInModal(true)}
             >
               Check In
             </Button>
-          ))}
+          )
+        ) : isCheckedIn ? (
+          <Button
+            width="100%"
+            marginTop="small"
+            borderRadius="100px"
+            variation="primary"
+            isDisabled
+            style={{ opacity: 0.5 }}
+          >
+            Attended
+          </Button>
+        ) : null}
       </Card>
       {showCheckInModal && event && (
         <CheckInModal

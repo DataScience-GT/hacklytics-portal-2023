@@ -8,15 +8,15 @@ import {
   useTheme,
 } from "@aws-amplify/ui-react";
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import { createCheckin } from "../../graphql/mutations";
-import SimpleModal from "./SimpleModal"; // Adjust path as needed
+import { createCheckin, createPoints } from "../../graphql/mutations";
+import SimpleModal from "./SimpleModal";
 import { Event } from "../../models";
 
 interface CheckInModalProps {
   isOpen: boolean;
   event: Event;
   onClose: () => void;
-  onSuccess: () => void;
+  onSuccess: (message: string) => void;
 }
 
 const CheckInModal: React.FC<CheckInModalProps> = ({
@@ -29,24 +29,54 @@ const CheckInModal: React.FC<CheckInModalProps> = ({
   const [error, setError] = useState("");
   const { tokens } = useTheme();
 
+  // Helper function to propagate points
+  const createIndividualPoints = async (
+    userId: string,
+    userEmail: string,
+    points: number
+  ) => {
+    try {
+      await API.graphql(
+        graphqlOperation(createPoints, {
+          input: {
+            userID: userId,
+            userName: userEmail,
+            points: points,
+          },
+        })
+      );
+    } catch (err) {
+      console.error("Error creating points:", err);
+    }
+  };
+
   const handleSubmit = async () => {
     if (inputCode.trim() === event.checkInCode?.trim()) {
-      const currentUser = await Auth.currentAuthenticatedUser();
-
       try {
+        const currentUser = await Auth.currentAuthenticatedUser();
+        const userSub = currentUser.attributes?.sub;
+        const userEmail = currentUser.attributes?.email;
+        // Create check-in record
         const checkinInput = {
-          createdBy: currentUser.attributes?.sub, // user's unique ID
-          createdByName: currentUser.attributes?.name, // user's name
-          user: currentUser.attributes?.sub, // same as createdBy
-          userName: currentUser.attributes?.name, // same as createdByName
-          eventCheckinsId: event.id, // event's ID
+          createdBy: userSub,
+          createdByName: currentUser.attributes?.name,
+          user: userSub,
+          userName: currentUser.attributes?.name,
+          eventCheckinsId: event.id,
         };
 
         const result: any = await API.graphql(
           graphqlOperation(createCheckin, { input: checkinInput })
         );
         console.log("Check-in successful:", result);
-        onSuccess();
+
+        // Award points using event.points (fallback to 10)
+        const pointsToAward = event.points ?? 10;
+        await createIndividualPoints(userSub, userEmail, pointsToAward);
+
+        // Create success message and call onSuccess callback
+        const successMsg = `${userEmail} successfully scanned for event "${event.name}"`;
+        onSuccess(successMsg);
         onClose();
       } catch (err) {
         console.error("Check-in failed:", err);
@@ -66,7 +96,9 @@ const CheckInModal: React.FC<CheckInModalProps> = ({
           label="Check-In Code"
           placeholder="Enter code here"
           value={inputCode}
-          onChange={(e: any) => setInputCode(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setInputCode(e.target.value)
+          }
         />
         {error && (
           <Text color={tokens.colors.red[60] as unknown as string}>

@@ -195,8 +195,8 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
 
   // LOGGING REMOVE BEFORE DEPLOYMENT
   useEffect(() => {
-    console.log("Current events:", events);
-  }, [events]);
+    console.log("Editing event:", eventEditing);
+  }, [eventEditing]);
 
   useEffect(() => {
     setFilteredUsernames(
@@ -1211,6 +1211,7 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
               let newEvent = { ...eventEditing, ...fields };
               setEditEventModalOpen(false);
               let x = [...events];
+              console.log(eventEditing);
               x = x.map((e) => (e.id === eventEditing.id ? newEvent : e));
               setEvents(x);
             }}

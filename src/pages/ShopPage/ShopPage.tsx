@@ -136,7 +136,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
-    console.log(userData);
+    // console.log(userData);
 
     const usersDict: { [userid: string]: any } = {};
 

@@ -10,6 +10,9 @@ import React, { FC, useEffect, useState } from "react";
 import styles from "./EventCard.module.scss";
 import { Event } from "../../models";
 import { DayOfWeek } from "../../misc/DaysOfWeek";
+import CheckInModal from "./CheckInModal";
+import { API, Auth, graphqlOperation } from "aws-amplify";
+import { listCheckins } from "../../graphql/queries";
 
 interface EventCardProps {
   event?: Event;
@@ -25,25 +28,21 @@ const EventCard: FC<EventCardProps> = ({
   onRSVP,
   currentlyRSVPing,
 }: EventCardProps) => {
-  const start = event?.start
-    ? new Date(event?.start ?? "").toLocaleString(undefined, {
-        // month: "short",
-        // day: "numeric",
-        weekday: "long",
-        // year: "numeric",
+  const [showCheckInModal, setShowCheckInModal] = useState(false);
+  const [isCheckedIn, setIsCheckedIn] = useState(false);
 
+  // Calculate timeframe, sameDay, day, etc.
+  const start = event?.start
+    ? new Date(event.start).toLocaleString(undefined, {
+        weekday: "long",
         hour: "numeric",
         minute: "numeric",
         hour12: true,
       })
     : "";
   const end = event?.end
-    ? new Date(event?.end ?? "").toLocaleString(undefined, {
-        // month: "short",
-        // day: "numeric",
+    ? new Date(event.end).toLocaleString(undefined, {
         weekday: "long",
-        // year: "numeric",
-
         hour: "numeric",
         minute: "numeric",
         hour12: true,
@@ -53,32 +52,26 @@ const EventCard: FC<EventCardProps> = ({
   let timeframe =
     event?.start && event?.end ? `${start} - ${end}` : start || end;
 
-  // check if on the same day
-  // get day of week for each
   let sameDay = false;
   let day = "";
   if (event?.start && event?.end) {
-    const startDay = new Date(event?.start ?? "").getDay();
-    const endDay = new Date(event?.end ?? "").getDay();
+    const startDay = new Date(event.start).getDay();
+    const endDay = new Date(event.end).getDay();
     sameDay = startDay === endDay;
     day = DayOfWeek(startDay);
   }
   if (sameDay) {
-    // before ex: "Monday 12:00 PM - Monday 1:00 PM"
-    // after ex: "Monday 12:00 PM - 1:00 PM"
     timeframe = timeframe.replace(` ${day}`, "");
   }
 
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
-    let x = setInterval(() => {
+    const interval = setInterval(() => {
       setNow(new Date());
     }, 10 * 1000);
-    return () => {
-      clearInterval(x);
-    };
-  });
+    return () => clearInterval(interval);
+  }, []);
 
   let until = -1;
   let untilUnit = "";
@@ -88,10 +81,9 @@ const EventCard: FC<EventCardProps> = ({
     let x = Math.round(diff / (60 * 1000));
     if (Math.abs(x) > 0) {
       until = x;
-      untilUnit = Math.abs(x) == 1 ? "minute" : "minutes";
+      untilUnit = Math.abs(x) === 1 ? "minute" : "minutes";
     }
     if (x < 0 && event.end) {
-      // check if in progress
       let dur = new Date(event.end).getTime() - now.getTime();
       if (dur > 0) {
         inProgress = true;
@@ -100,14 +92,42 @@ const EventCard: FC<EventCardProps> = ({
     x = Math.round(diff / (60 * 60 * 1000));
     if (Math.abs(x) > 0) {
       until = x;
-      untilUnit = Math.abs(x) == 1 ? "hour" : "hours";
+      untilUnit = Math.abs(x) === 1 ? "hour" : "hours";
     }
     x = Math.round(diff / (24 * 60 * 60 * 1000));
     if (Math.abs(x) > 0) {
       until = x;
-      untilUnit = Math.abs(x) == 1 ? "day" : "days";
+      untilUnit = Math.abs(x) === 1 ? "day" : "days";
     }
   }
+
+  // When the event changes, check if the current user is already checked in
+  useEffect(() => {
+    const checkUserCheckIn = async () => {
+      if (event) {
+        try {
+          const currentUser = await Auth.currentAuthenticatedUser();
+          const filter = {
+            eventCheckinsId: { eq: event.id },
+            user: { eq: currentUser.attributes.sub },
+          };
+          const response: any = await API.graphql(
+            graphqlOperation(listCheckins, { filter })
+          );
+          const items = response.data.listCheckins.items;
+          if (items && items.length > 0) {
+            setIsCheckedIn(true);
+          } else {
+            setIsCheckedIn(false);
+          }
+        } catch (err) {
+          console.error("Error checking check-in status:", err);
+        }
+      }
+    };
+
+    checkUserCheckIn();
+  }, [event]);
 
   return (
     <div className={styles.EventCard} data-testid="EventCard">
@@ -159,17 +179,41 @@ const EventCard: FC<EventCardProps> = ({
             {isRSVPed ? "Cancel RSVP" : "RSVP"}
           </Button>
         )}
-        {inProgress && (
-          <Button
-            width={"100%"}
-            marginTop="small"
-            borderRadius={"100px"}
-            variation="primary"
-          >
-            Check In
-          </Button>
-        )}
+        {inProgress &&
+          (isCheckedIn ? (
+            <Button
+              width={"100%"}
+              marginTop="small"
+              borderRadius={"100px"}
+              variation="primary"
+              isDisabled
+            >
+              Checked In
+            </Button>
+          ) : (
+            <Button
+              width={"100%"}
+              marginTop="small"
+              borderRadius={"100px"}
+              variation="primary"
+              onClick={() => setShowCheckInModal(true)}
+            >
+              Check In
+            </Button>
+          ))}
       </Card>
+      {showCheckInModal && event && (
+        <CheckInModal
+          isOpen={showCheckInModal}
+          event={event}
+          onClose={() => setShowCheckInModal(false)}
+          onSuccess={() => {
+            console.log("Checked-in at event");
+            setShowCheckInModal(false);
+            setIsCheckedIn(true);
+          }}
+        />
+      )}
     </div>
   );
 };

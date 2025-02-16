@@ -16,6 +16,7 @@ import {
   listClaimSleepingBags,
   listPoints,
   listUsers,
+  getUserByName,
 } from "../../graphql/queries";
 import {
   createClaimHoodie,
@@ -135,6 +136,7 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
     let userData: UserData = JSON.parse(res.data.listUsers);
+    console.log(userData);
 
     const usersDict: { [userid: string]: any } = {};
 
@@ -281,63 +283,96 @@ const ShopPage: FC<ShopPageProps> = ({ user, signOut }) => {
     setTryingToClaimSleepingBag(false);
   };
 
+  async function getUserByEmail(email: string) {
+    await loadUsers();
+    for (const key in users) {
+      if (users[key].email === email) {
+        return {
+          userId: users[key].sub,
+          userName: users[key].name,
+        };
+      }
+    }
+    return null;
+  }
+
+  const emailLookup = React.useMemo(() => {
+    const dict: { [email: string]: { userId: string; userName: string } } = {};
+    Object.values(users).forEach((user: any) => {
+      if (user.email) {
+        dict[user.email.toLowerCase()] = {
+          userId: user.sub,
+          userName: user.name,
+        };
+      }
+    });
+    return dict;
+  }, [users]);
+
   const propagatePoints = async (fields: string[]) => {
     let ids: string[] = [];
-    let usernames: string[] = [];
-    let numPoints = fields[2];
+    let emails: string[] = [];
+    const numPoints = parseInt(fields[2]);
 
-    if (fields[0].includes(",")) {
-      ids = fields[0].split(",");
-    } else {
-      ids = fields[0].split("\n");
-    }
-    if (fields[1].includes(",")) {
-      usernames = fields[1].split(",");
-    } else {
-      usernames = fields[1].split("\n");
+    // Split IDs
+    ids = fields[0].includes(",")
+      ? fields[0].split(",")
+      : fields[0].split("\n");
+
+    // Split emails
+    emails = fields[1].includes(",")
+      ? fields[1].split(",")
+      : fields[1].split("\n");
+
+    // For each missing ID, lookup via email from our precomputed dictionary
+    for (let i = 0; i < emails.length; i++) {
+      if (!ids[i] || !ids[i].trim().length) {
+        const userInfo = emailLookup[emails[i].trim().toLowerCase()];
+        if (userInfo) {
+          ids[i] = userInfo.userId;
+          // Optionally, you could update emails[i] to userInfo.userName if desired
+        }
+      }
     }
 
-    let allSubs: string[] = [];
-    for (const values of Object.values(users)) {
-      allSubs.push(values.sub);
-    }
+    // Collect all valid user IDs (subs)
+    const allSubs = Object.values(users).map((u: any) => u.sub);
 
-    // cross check validation
-    let numValid: number = 0;
-    let indices: number[] = [];
+    let numValid = 0;
+    const invalidIndices: number[] = [];
     for (let i = 0; i < ids.length; i++) {
       if (!allSubs.includes(ids[i])) {
-        indices.push(i);
+        invalidIndices.push(i);
       } else {
         numValid++;
       }
     }
 
-    if (numValid == ids.length) {
+    if (numValid === ids.length) {
       for (let i = 0; i < ids.length; i++) {
-        await createIndividualPoints(ids[i], usernames[i], parseInt(numPoints));
+        await createIndividualPoints(ids[i], emails[i], numPoints);
       }
       setCreatePointsStatus({
         show: true,
         type: "success",
         message:
-          "Propagated points to all users. Num entries added: " + `${numValid}`,
+          "Propagated points to all users. Num entries added: " + numValid,
       });
-      setPropagatingPoints(false);
     } else {
       setCreatePointsStatus({
         show: true,
         type: "error",
         message:
           "Could not update points due to " +
-          `${ids[indices[0]]}` +
+          ids[invalidIndices[0]] +
           " with " +
-          `${usernames[indices[0]]}` +
+          emails[invalidIndices[0]] +
           "... there were " +
-          `${indices.length} people having problems..`,
+          invalidIndices.length +
+          " people having problems..",
       });
-      setPropagatingPoints(false);
     }
+    setPropagatingPoints(false);
   };
 
   const createIndividualPoints = async (

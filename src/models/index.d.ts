@@ -79,6 +79,7 @@ type EagerEvent = {
   readonly end?: string | null;
   readonly location?: string | null;
   readonly points?: number | null;
+  readonly checkInCode?: string | null;
   readonly checkins?: (Checkin | null)[] | null;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;
@@ -95,6 +96,7 @@ type LazyEvent = {
   readonly end?: string | null;
   readonly location?: string | null;
   readonly points?: number | null;
+  readonly checkInCode?: string | null;
   readonly checkins: AsyncCollection<Checkin>;
   readonly createdAt?: string | null;
   readonly updatedAt?: string | null;

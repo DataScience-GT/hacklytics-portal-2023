@@ -154,6 +154,13 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "checkInCode": {
+                    "name": "checkInCode",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "checkins": {
                     "name": "checkins",
                     "isArray": true,
@@ -1033,5 +1040,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.4",
-    "version": "d8f0cb385c0cb73cff7d0ddece98a20b"
+    "version": "e4bf650ee01bf7582eebc5a48ffb13bf"
 };

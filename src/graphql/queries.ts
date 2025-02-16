@@ -113,6 +113,7 @@ export const getEvent = /* GraphQL */ `query GetEvent($id: ID!) {
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -144,6 +145,7 @@ export const listEvents = /* GraphQL */ `query ListEvents(
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version
@@ -183,6 +185,7 @@ export const syncEvents = /* GraphQL */ `query SyncEvents(
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version
@@ -217,6 +220,7 @@ export const getCheckin = /* GraphQL */ `query GetCheckin($id: ID!) {
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version

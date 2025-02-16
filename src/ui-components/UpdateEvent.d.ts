@@ -30,8 +30,9 @@ export declare type UpdateEventInputValues = {
     start?: string;
     end?: string;
     points?: number;
-    requireRSVP?: boolean;
+    checkInCode?: string;
     canRSVP?: boolean;
+    requireRSVP?: boolean;
 };
 export declare type UpdateEventValidationValues = {
     name?: ValidationFunction<string>;
@@ -41,8 +42,9 @@ export declare type UpdateEventValidationValues = {
     start?: ValidationFunction<string>;
     end?: ValidationFunction<string>;
     points?: ValidationFunction<number>;
-    requireRSVP?: ValidationFunction<boolean>;
+    checkInCode?: ValidationFunction<string>;
     canRSVP?: ValidationFunction<boolean>;
+    requireRSVP?: ValidationFunction<boolean>;
 };
 export declare type PrimitiveOverrideProps<T> = Partial<T> & React.DOMAttributes<HTMLDivElement>;
 export declare type UpdateEventOverridesProps = {
@@ -55,8 +57,9 @@ export declare type UpdateEventOverridesProps = {
     start?: PrimitiveOverrideProps<TextFieldProps>;
     end?: PrimitiveOverrideProps<TextFieldProps>;
     points?: PrimitiveOverrideProps<TextFieldProps>;
-    requireRSVP?: PrimitiveOverrideProps<SwitchFieldProps>;
+    checkInCode?: PrimitiveOverrideProps<TextFieldProps>;
     canRSVP?: PrimitiveOverrideProps<SwitchFieldProps>;
+    requireRSVP?: PrimitiveOverrideProps<SwitchFieldProps>;
 } & EscapeHatchProps;
 export declare type UpdateEventProps = React.PropsWithChildren<{
     overrides?: UpdateEventOverridesProps | undefined | null;

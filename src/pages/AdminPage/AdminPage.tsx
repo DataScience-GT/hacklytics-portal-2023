@@ -4,6 +4,7 @@ import styles from "./AdminPage.module.scss";
 import Modal from "react-modal";
 
 import { UserData, User } from "../../misc/Interfaces";
+import CreateEventModal from "./CreateEventModal";
 import { sub_query } from "../../misc/CustomQueries";
 import { AmplifyUser, AuthEventData } from "@aws-amplify/ui";
 import {
@@ -191,6 +192,11 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
       )
     );
   }, [events, eventSearch]);
+
+  // LOGGING REMOVE BEFORE DEPLOYMENT
+  useEffect(() => {
+    console.log("Current events:", events);
+  }, [events]);
 
   useEffect(() => {
     setFilteredUsernames(
@@ -976,7 +982,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             <QRScan />
           </TabItem>
         </Tabs>
-
         {/* SETTINGS MODAL */}
         <Modal
           isOpen={settingsModalOpen}
@@ -1163,50 +1168,14 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             </Flex>
           </Flex>
         </Modal>
-
         {/* CREATE EVENT MODAL */}
-        <Modal
-          contentLabel="Create Event Modal"
-          isOpen={createEventModalOpen}
-          onRequestClose={() => {
-            setCreateEventModalOpen(false);
-          }}
-          appElement={document.getElementById("modal-container") as HTMLElement}
-          parentSelector={() => document.getElementById("modal-container")!}
-          style={modalFormStyle}
-        >
-          <StatusAlert status={createEventStatus} />
-          <CreateEvent
-            onCancel={() => {
-              setCreateEventModalOpen(false);
-            }}
-            onSubmit={(fields) => {
-              const updatedFields: any = {};
-              Object.keys(fields).forEach((key) => {
-                if (typeof fields[key as keyof typeof fields] === "string") {
-                  updatedFields[key] = (
-                    fields[key as keyof typeof fields] as string
-                  ).trim();
-                } else {
-                  updatedFields[key] = fields[key as keyof typeof fields];
-                }
-              });
-              return updatedFields;
-            }}
-            onSuccess={(fields) => {
-              setCreateEventModalOpen(false);
-              setEvents([...events, fields as Event]);
-            }}
-            onError={(error) => {
-              console.error(error);
-              setCreateEventStatus({
-                show: true,
-                type: "error",
-                message: "Error creating event",
-              });
-            }}
-          />
-        </Modal>
+        <CreateEventModal
+          createEventModalOpen={createEventModalOpen}
+          setCreateEventModalOpen={setCreateEventModalOpen}
+          events={events}
+          setEvents={setEvents}
+          setCreateEventStatus={setCreateEventStatus}
+        />
 
         {/* EDIT EVENT MODAL */}
         <Modal
@@ -1255,7 +1224,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
           />
         </Modal>
-
         {/* DELETE EVENT MODAL */}
         <Modal
           contentLabel="Delete Event Modal"
@@ -1277,7 +1245,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
           />
         </Modal>
-
         {/* DELETE ALL EVENTS MODAL */}
         <Modal
           contentLabel="Delete All Events Modal"
@@ -1299,7 +1266,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
           />
         </Modal>
-
         {/* DELETE ALL EMAILS MODAL */}
         <Modal
           contentLabel="Delete All Emails Modal"
@@ -1321,7 +1287,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             }}
           />
         </Modal>
-
         {/* SHOW EVENT RSVPS MODAL */}
         <Modal
           contentLabel="Show Event Rsvps Modal"
@@ -1444,7 +1409,6 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
             )}
           </Flex>
         </Modal>
-
         {/* SHOW EVENT CHECKINS MODAL */}
         <Modal
           contentLabel="Show Event Checkins Modal"

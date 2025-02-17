@@ -11,7 +11,7 @@ import {
 import { QrReader } from "@blackbox-vision/react-qr-reader";
 import { API, graphqlOperation } from "aws-amplify";
 import { createCheckin, createPoints } from "../../graphql/mutations";
-import { listEvents } from "../../graphql/queries";
+import { listEvents, listCheckins } from "../../graphql/queries";
 import { Event } from "../../models";
 
 const QRScanCheckIn: React.FC = () => {
@@ -98,10 +98,32 @@ const QRScanCheckIn: React.FC = () => {
       const selectedEvent = events.find(
         (event) => event.id === selectedEventId
       );
-      const eventName = selectedEvent ? selectedEvent.name : "Unknown Event";
+      if (!selectedEvent) {
+        setError("Selected event not found.");
+        return;
+      }
+      const eventName = selectedEvent.name;
       // Use the event's points attribute, fallback to 10 if not provided
-      const pointsToAward = selectedEvent?.points ?? 10;
+      const pointsToAward = selectedEvent.points ?? 10;
 
+      // Check if the user has already been checked in for this event.
+      const filter = {
+        eventCheckinsId: { eq: selectedEventId },
+        user: { eq: userSub },
+      };
+      const checkinRes: any = await API.graphql(
+        graphqlOperation(listCheckins, { filter })
+      );
+      const existingCheckins = checkinRes.data.listCheckins.items;
+      if (existingCheckins && existingCheckins.length > 0) {
+        setSuccessMessage("");
+        setError(
+          `${userEmail} has already been checked in for event "${eventName}".`
+        );
+        return;
+      }
+
+      // Create the check-in record
       const checkinInput = {
         createdBy: userSub,
         createdByName: userEmail,
@@ -109,18 +131,16 @@ const QRScanCheckIn: React.FC = () => {
         userName: userEmail,
         eventCheckinsId: selectedEventId,
       };
-
-      // Create the check-in record
-      const checkinRes: any = await API.graphql(
+      const checkinResult: any = await API.graphql(
         graphqlOperation(createCheckin, { input: checkinInput })
       );
-      console.log("QR check-in successful:", checkinRes);
+      console.log("QR check-in successful:", checkinResult);
 
-      // Propagate points for the check-in using the event's points value :3
+      // Propagate points for the check-in using the event's points value
       await createIndividualPoints(userSub, userEmail, pointsToAward);
 
       setSuccessMessage(
-        `${userEmail} successfully scanned for event "${eventName}".`
+        `${userEmail} successfully checked in for event "${eventName}".`
       );
       setError("");
       setScanned(true);

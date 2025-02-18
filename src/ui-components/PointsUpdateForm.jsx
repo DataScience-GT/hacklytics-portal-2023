@@ -132,7 +132,7 @@ export default function PointsUpdateForm(props) {
       {...rest}
     >
       <TextField
-        label="User id"
+        label="User IDs (Optional)"
         isRequired={true}
         isReadOnly={false}
         value={userID}

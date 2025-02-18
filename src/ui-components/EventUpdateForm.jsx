@@ -38,6 +38,7 @@ export default function EventUpdateForm(props) {
     end: "",
     location: "",
     points: "",
+    checkInCode: "",
   };
   const [name, setName] = React.useState(initialValues.name);
   const [description, setDescription] = React.useState(
@@ -52,6 +53,9 @@ export default function EventUpdateForm(props) {
   const [end, setEnd] = React.useState(initialValues.end);
   const [location, setLocation] = React.useState(initialValues.location);
   const [points, setPoints] = React.useState(initialValues.points);
+  const [checkInCode, setCheckInCode] = React.useState(
+    initialValues.checkInCode
+  );
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = eventRecord
@@ -66,6 +70,7 @@ export default function EventUpdateForm(props) {
     setEnd(cleanValues.end);
     setLocation(cleanValues.location);
     setPoints(cleanValues.points);
+    setCheckInCode(cleanValues.checkInCode);
     setErrors({});
   };
   const [eventRecord, setEventRecord] = React.useState(eventModelProp);
@@ -89,6 +94,7 @@ export default function EventUpdateForm(props) {
     end: [],
     location: [],
     points: [],
+    checkInCode: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -142,6 +148,7 @@ export default function EventUpdateForm(props) {
           end,
           location,
           points,
+          checkInCode,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -206,6 +213,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.name ?? value;
@@ -238,6 +246,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.description ?? value;
@@ -270,6 +279,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.status ?? value;
@@ -302,6 +312,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.requireRSVP ?? value;
@@ -334,6 +345,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.canRSVP ?? value;
@@ -368,6 +380,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.start ?? value;
@@ -402,6 +415,7 @@ export default function EventUpdateForm(props) {
               end: value,
               location,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.end ?? value;
@@ -434,6 +448,7 @@ export default function EventUpdateForm(props) {
               end,
               location: value,
               points,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.location ?? value;
@@ -470,6 +485,7 @@ export default function EventUpdateForm(props) {
               end,
               location,
               points: value,
+              checkInCode,
             };
             const result = onChange(modelFields);
             value = result?.points ?? value;
@@ -483,6 +499,39 @@ export default function EventUpdateForm(props) {
         errorMessage={errors.points?.errorMessage}
         hasError={errors.points?.hasError}
         {...getOverrideProps(overrides, "points")}
+      ></TextField>
+      <TextField
+        label="Check in code"
+        isRequired={false}
+        isReadOnly={false}
+        value={checkInCode}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              name,
+              description,
+              status,
+              requireRSVP,
+              canRSVP,
+              start,
+              end,
+              location,
+              points,
+              checkInCode: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.checkInCode ?? value;
+          }
+          if (errors.checkInCode?.hasError) {
+            runValidationTasks("checkInCode", value);
+          }
+          setCheckInCode(value);
+        }}
+        onBlur={() => runValidationTasks("checkInCode", checkInCode)}
+        errorMessage={errors.checkInCode?.errorMessage}
+        hasError={errors.checkInCode?.hasError}
+        {...getOverrideProps(overrides, "checkInCode")}
       ></TextField>
       <Flex
         justifyContent="space-between"

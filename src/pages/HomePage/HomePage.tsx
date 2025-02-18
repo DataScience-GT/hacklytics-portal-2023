@@ -95,6 +95,8 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
       },
       authMode: "AMAZON_COGNITO_USER_POOLS",
     });
+    // console.log(process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID);
+    // console.log(res);
     setAdminSettings(res.data.getAdminSettings);
     let settings = res.data.getAdminSettings;
     if (

@@ -37,6 +37,7 @@ type Event
   end: AWSDateTime
   location: String
   points: Int
+  checkInCode: String
   checkins: [Checkin] @hasMany
 }
 

@@ -77,6 +77,7 @@ export const onCreateEvent = /* GraphQL */ `subscription OnCreateEvent($filter: 
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -106,6 +107,7 @@ export const onUpdateEvent = /* GraphQL */ `subscription OnUpdateEvent($filter: 
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -135,6 +137,7 @@ export const onDeleteEvent = /* GraphQL */ `subscription OnDeleteEvent($filter: 
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -170,6 +173,7 @@ export const onCreateCheckin = /* GraphQL */ `subscription OnCreateCheckin($filt
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version
@@ -208,6 +212,7 @@ export const onUpdateCheckin = /* GraphQL */ `subscription OnUpdateCheckin($filt
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version
@@ -246,6 +251,7 @@ export const onDeleteCheckin = /* GraphQL */ `subscription OnDeleteCheckin($filt
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version

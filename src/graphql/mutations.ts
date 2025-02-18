@@ -83,6 +83,7 @@ export const createEvent = /* GraphQL */ `mutation CreateEvent(
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -115,6 +116,7 @@ export const updateEvent = /* GraphQL */ `mutation UpdateEvent(
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -147,6 +149,7 @@ export const deleteEvent = /* GraphQL */ `mutation DeleteEvent(
     end
     location
     points
+    checkInCode
     checkins {
       nextToken
       startedAt
@@ -185,6 +188,7 @@ export const createCheckin = /* GraphQL */ `mutation CreateCheckin(
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version
@@ -226,6 +230,7 @@ export const updateCheckin = /* GraphQL */ `mutation UpdateCheckin(
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version
@@ -267,6 +272,7 @@ export const deleteCheckin = /* GraphQL */ `mutation DeleteCheckin(
       end
       location
       points
+      checkInCode
       createdAt
       updatedAt
       _version

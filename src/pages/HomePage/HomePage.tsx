@@ -285,7 +285,7 @@ const HomePage: FC<HomePageProps> = ({ user, signOut }) => {
                   </Text>
                   <a
                     className={styles.link}
-                    href="https://discord.com/invite/K3VWvg3aMd"
+                    href="https://discord.gg/GUASdhxRwq"
                     target="_blank"
                   >
                     Hacklytics Discord

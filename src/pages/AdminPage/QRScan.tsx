@@ -22,6 +22,10 @@ const QRScanCheckIn: React.FC = () => {
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [loadingEvents, setLoadingEvents] = useState<boolean>(false);
   const [successMessage, setSuccessMessage] = useState<string>("");
+  // New state: which camera to use
+  const [facingMode, setFacingMode] = useState<"environment" | "user">(
+    "environment"
+  );
 
   // Load available events for the dropdown
   useEffect(() => {
@@ -155,10 +159,21 @@ const QRScanCheckIn: React.FC = () => {
       <Heading level={3}>QR Code Scanner & Check-In</Heading>
       {error && <Text color="red">{error}</Text>}
       {successMessage && <Text color="green">{successMessage}</Text>}
+      {/* Add a drop-down to select camera */}
+      <SelectField
+        label="Select Camera"
+        onChange={(e) =>
+          setFacingMode(e.target.value as "environment" | "user")
+        }
+        value={facingMode}
+      >
+        <option value="environment">Back Camera</option>
+        <option value="user">Front Camera</option>
+      </SelectField>
       {!scanned ? (
         <QrReader
           onResult={handleResult}
-          constraints={{ video: { facingMode: "environment" } }}
+          constraints={{ video: { facingMode } }}
           style={{ width: "100%" }}
         />
       ) : (

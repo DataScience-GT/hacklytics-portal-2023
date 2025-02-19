@@ -165,10 +165,10 @@ const EventCard: FC<EventCardProps> = ({
             graphqlOperation(listCheckins, { filter })
           );
           const items = response.data.listCheckins.items;
-          console.log(
-            `Participants for event ${event.id} (${event.name}):`,
-            items
-          );
+          // console.log(
+          //   `Participants for event ${event.id} (${event.name}):`,
+          //   items
+          // );
         } catch (err) {
           console.error(
             `Error logging participants for event ${event?.id}:`,

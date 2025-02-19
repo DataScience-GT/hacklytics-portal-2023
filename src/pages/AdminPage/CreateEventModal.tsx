@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "react-modal";
 import { API, graphqlOperation } from "aws-amplify";
 import { createEvent } from "../../graphql/mutations";
+import { listEvents } from "../../graphql/queries";
 import CreateEvent from "../../ui-components/CreateEvent";
 import modalFormStyle from "../../misc/ModalStyle";
 import StatusAlert from "../../components/StatusAlert/StatusAlert";
@@ -11,7 +12,6 @@ import Status from "../../Types/Status";
 interface CreateEventModalProps {
   createEventModalOpen: boolean;
   setCreateEventModalOpen: (open: boolean) => void;
-  events: Event[];
   setEvents: (events: Event[]) => void;
   setCreateEventStatus: (status: Status) => void;
 }
@@ -19,7 +19,6 @@ interface CreateEventModalProps {
 const CreateEventModal: React.FC<CreateEventModalProps> = ({
   createEventModalOpen,
   setCreateEventModalOpen,
-  events,
   setEvents,
   setCreateEventStatus,
 }) => {
@@ -40,27 +39,35 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
           setCreateEventModalOpen(false);
         }}
         onSubmit={(fields) => {
-          const updatedFields: any = {};
+          // Process fields (trimming strings, etc.)
+          const updatedFields: Record<string, any> = {};
           const fieldRecord = fields as Record<string, any>;
           Object.keys(fieldRecord).forEach((key) => {
-            if (typeof fieldRecord[key] === "string") {
-              updatedFields[key] = fieldRecord[key].trim();
-            } else {
-              updatedFields[key] = fieldRecord[key];
-            }
+            updatedFields[key] =
+              typeof fieldRecord[key] === "string"
+                ? fieldRecord[key].trim()
+                : fieldRecord[key];
           });
+          console.log("Processed fields for createEvent:", updatedFields);
           return updatedFields;
         }}
         onSuccess={async (processedFields) => {
           try {
             // Call the GraphQL mutation to create the event.
-            const result: any = await API.graphql(
-              graphqlOperation(createEvent, { input: processedFields })
-            );
-            const newEvent = result.data.createEvent;
-            console.log("Event created successfully:", newEvent);
-            // Update local state with the new event.
-            setEvents([...events, newEvent as Event]);
+            // const result: any = await API.graphql(
+            //   graphqlOperation(createEvent, { input: processedFields })
+            // );
+            // console.log("Mutation result:", result);
+            // Instead of appending the event to local state,
+            // re-fetch the entire events list from the backend.
+            // const res: any = await API.graphql(
+            //   graphqlOperation(listEvents, {
+            //     filter: { _deleted: { ne: true } },
+            //   })
+            // );
+            // const refreshedEvents: Event[] = res.data.listEvents.items;
+            // console.log("Refreshed events list:", refreshedEvents);
+            // setEvents(refreshedEvents);
             setCreateEventModalOpen(false);
           } catch (err) {
             console.error("Error in createEvent mutation:", err);
@@ -70,7 +77,7 @@ const CreateEventModal: React.FC<CreateEventModalProps> = ({
               message: "Error creating event",
             });
           }
-          // Return the processedFields (the CreateEvent component expects a return value)
+          // Return processedFields to satisfy CreateEvent's expectations.
           return processedFields;
         }}
         onError={(error) => {

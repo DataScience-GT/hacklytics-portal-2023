@@ -30,6 +30,9 @@ const EventCard: FC<EventCardProps> = ({
 }: EventCardProps) => {
   const [showCheckInModal, setShowCheckInModal] = useState(false);
   const [isCheckedIn, setIsCheckedIn] = useState(false);
+  const [eventCheckinsMap, setEventCheckinsMap] = useState<
+    Map<string, { [userSub: string]: string }>
+  >(new Map());
 
   // Calculate timeframe, sameDay, day, etc.
   const start = event?.start
@@ -65,7 +68,6 @@ const EventCard: FC<EventCardProps> = ({
   }
 
   const [now, setNow] = useState(new Date());
-
   useEffect(() => {
     const interval = setInterval(() => {
       setNow(new Date());
@@ -101,32 +103,82 @@ const EventCard: FC<EventCardProps> = ({
     }
   }
 
-  // When the event changes, check if the current user is already checked in
+  // Reuse the admin page query logic to load all check-ins into a map.
   useEffect(() => {
-    const checkUserCheckIn = async () => {
+    const loadEventCheckins = async () => {
+      const res: any = await API.graphql({
+        query: listCheckins,
+        variables: {
+          id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+          limit: 10000,
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      const checkins = res.data.listCheckins.items;
+      // console.log("Loaded check-ins for event:", checkins);
+      const map: Map<string, { [userSub: string]: string }> = new Map();
+      for (const checkin of checkins) {
+        if (!checkin) continue;
+        // Ensure these field names match your schema!
+        const eventID: string = checkin.eventCheckinsId;
+        const username: string = checkin.userName;
+        const sub: string = checkin.user;
+        const record = map.get(eventID) || {};
+        // console.log("Adding check-in record:", eventID, sub, username);
+        record[sub] = username;
+        map.set(eventID, record);
+      }
+      setEventCheckinsMap(map);
+    };
+
+    loadEventCheckins();
+  }, []);
+
+  // Now check if the current user is checked in for this event.
+  useEffect(() => {
+    const checkCurrentUserCheckIn = async () => {
+      if (!event) return;
+      try {
+        const currentUser = await Auth.currentAuthenticatedUser();
+        const userSub = currentUser.attributes.sub;
+        const checkinsForEvent = eventCheckinsMap.get(event.id);
+        if (checkinsForEvent && checkinsForEvent[userSub]) {
+          setIsCheckedIn(true);
+        } else {
+          setIsCheckedIn(false);
+        }
+      } catch (err) {
+        console.error("Error checking current user check-in:", err);
+      }
+    };
+
+    checkCurrentUserCheckIn();
+  }, [event, eventCheckinsMap]);
+
+  // New logging effect: Print all participants for the event.
+  useEffect(() => {
+    const logParticipants = async () => {
       if (event) {
         try {
-          const currentUser = await Auth.currentAuthenticatedUser();
-          const filter = {
-            eventCheckinsId: { eq: event.id },
-            user: { eq: currentUser.attributes.sub },
-          };
+          const filter = { eventCheckinsId: { eq: event.id } };
           const response: any = await API.graphql(
             graphqlOperation(listCheckins, { filter })
           );
           const items = response.data.listCheckins.items;
-          if (items && items.length > 0) {
-            setIsCheckedIn(true);
-          } else {
-            setIsCheckedIn(false);
-          }
+          console.log(
+            `Participants for event ${event.id} (${event.name}):`,
+            items
+          );
         } catch (err) {
-          console.error("Error checking check-in status:", err);
+          console.error(
+            `Error logging participants for event ${event?.id}:`,
+            err
+          );
         }
       }
     };
 
-    checkUserCheckIn();
+    logParticipants();
   }, [event]);
 
   return (

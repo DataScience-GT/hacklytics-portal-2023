@@ -10,6 +10,7 @@ import {
 } from "@aws-amplify/ui-react";
 import { QrReader } from "@blackbox-vision/react-qr-reader";
 import { API, graphqlOperation } from "aws-amplify";
+import { Auth } from "aws-amplify";
 import { createCheckin, createPoints } from "../../graphql/mutations";
 import { listEvents, listCheckins } from "../../graphql/queries";
 import { Event } from "../../models";
@@ -21,9 +22,15 @@ const QRScanCheckIn: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [selectedEventId, setSelectedEventId] = useState<string>("");
   const [loadingEvents, setLoadingEvents] = useState<boolean>(false);
-  const [successMessage, setSuccessMessage] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
+  const [messageColor, setMessageColor] = useState<string>("");
 
-  // Load available events for the dropdown
+  // New state for check-ins map
+  const [eventCheckinsMap, setEventCheckinsMap] = useState<
+    Map<string, { [userSub: string]: string }>
+  >(new Map());
+
+  // Load all events
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -47,35 +54,62 @@ const QRScanCheckIn: React.FC = () => {
     fetchEvents();
   }, []);
 
+  // Load check-ins map (same logic as in your admin page)
+  useEffect(() => {
+    const loadEventCheckins = async () => {
+      try {
+        const res: any = await API.graphql({
+          query: listCheckins,
+          variables: {
+            // Using your admin settings id here. Make sure this fits your schema.
+            id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+            limit: 10000,
+          },
+          authMode: "AMAZON_COGNITO_USER_POOLS",
+        });
+        const checkins = res.data.listCheckins.items;
+        const map: Map<string, { [userSub: string]: string }> = new Map();
+        for (const checkin of checkins) {
+          if (!checkin) continue;
+          const eventID: string = checkin.eventCheckinsId;
+          const username: string = checkin.userName;
+          const sub: string = checkin.user;
+          const record = map.get(eventID) || {};
+          record[sub] = username;
+          map.set(eventID, record);
+        }
+        setEventCheckinsMap(map);
+      } catch (err) {
+        console.error("Error loading check-ins map:", err);
+      }
+    };
+    loadEventCheckins();
+  }, []);
+
   // Handle QR reader result
-  const handleResult = (result: any, error: any) => {
+  const handleResult = (result: any, err: any) => {
     if (result) {
-      // Assume the QR code returns a CSV string: "email,sub"
       setQRResult(result.text);
       setScanned(true);
       setError("");
-      setSuccessMessage("");
+      setMessage("");
     }
-    if (error && !result) {
-      console.info("QR scan error:", error);
-      setError("Please Scan Again");
+    if (err && !result) {
+      console.error("QR scan error:", err);
+      setError("QR scan error. Please try again.");
     }
   };
 
-  // Helper function to propagate points using the createPoints mutation
+  // Helper: Create points record for the user
   const createIndividualPoints = async (
-    id: string,
-    email: string,
+    userId: string,
+    userEmail: string,
     points: number
   ) => {
     try {
       await API.graphql(
         graphqlOperation(createPoints, {
-          input: {
-            userID: id,
-            userName: email,
-            points: points,
-          },
+          input: { userID: userId, userName: userEmail, points },
         })
       );
     } catch (err) {
@@ -83,10 +117,33 @@ const QRScanCheckIn: React.FC = () => {
     }
   };
 
-  // Handle check-in via QR code
-  const handleQRCheckIn = async () => {
+  // Helper: Log all check-in records for a given event (for debugging)
+  const logAllCheckInsForEvent = async (eventId: string) => {
     try {
-      // Expecting QR result in format "email,sub"
+      const res: any = await API.graphql(
+        graphqlOperation(listCheckins, {
+          filter: { eventCheckinsId: { eq: eventId } },
+        })
+      );
+      // console.log(
+      //   "All check-in records for event",
+      //   eventId,
+      //   res.data.listCheckins.items
+      // );
+    } catch (err) {
+      console.error("Error fetching check-in records:", err);
+    }
+  };
+
+  // Handle QR check-in process
+  const handleQRCheckIn = async () => {
+    if (loadingEvents || events.length === 0) {
+      setError("Data is still loading, please wait.");
+      return;
+    }
+
+    try {
+      // Expect QR result in format: "email,sub"
       const parts = qrResult.split(",");
       if (parts.length < 2) {
         setError("Invalid QR code format.");
@@ -103,23 +160,16 @@ const QRScanCheckIn: React.FC = () => {
         return;
       }
       const eventName = selectedEvent.name;
-      // Use the event's points attribute, fallback to 10 if not provided
       const pointsToAward = selectedEvent.points ?? 10;
 
-      // Check if the user has already been checked in for this event.
-      const filter = {
-        eventCheckinsId: { eq: selectedEventId },
-        user: { eq: userSub },
-      };
-      const checkinRes: any = await API.graphql(
-        graphqlOperation(listCheckins, { filter })
-      );
-      const existingCheckins = checkinRes.data.listCheckins.items;
-      if (existingCheckins && existingCheckins.length > 0) {
-        setSuccessMessage("");
-        setError(
+      // Use the check-ins map to determine if this user has already been scanned
+      const checkinsForEvent = eventCheckinsMap.get(selectedEventId) || {};
+      if (checkinsForEvent[userSub]) {
+        setMessage(
           `${userEmail} has already been checked in for event "${eventName}".`
         );
+        setMessageColor("red");
+        await logAllCheckInsForEvent(selectedEventId);
         return;
       }
 
@@ -131,19 +181,46 @@ const QRScanCheckIn: React.FC = () => {
         userName: userEmail,
         eventCheckinsId: selectedEventId,
       };
-      const checkinResult: any = await API.graphql(
+      const result: any = await API.graphql(
         graphqlOperation(createCheckin, { input: checkinInput })
       );
-      console.log("QR check-in successful:", checkinResult);
+      console.log("QR check-in successful:", result);
 
-      // Propagate points for the check-in using the event's points value
+      // Propagate points
       await createIndividualPoints(userSub, userEmail, pointsToAward);
 
-      setSuccessMessage(
+      setMessage(
         `${userEmail} successfully checked in for event "${eventName}".`
       );
+      setMessageColor("green");
       setError("");
       setScanned(true);
+
+      // Optionally, reload the check-ins map after a successful check-in
+      // so that subsequent scans reflect the new state
+      const res: any = await API.graphql({
+        query: listCheckins,
+        variables: {
+          id: process.env.REACT_APP_HACKLYTICS_ADMIN_SETTINGS_ID,
+          limit: 10000,
+        },
+        authMode: "AMAZON_COGNITO_USER_POOLS",
+      });
+      const checkins = res.data.listCheckins.items;
+      const map: Map<string, { [userSub: string]: string }> = new Map();
+      for (const checkin of checkins) {
+        if (!checkin) continue;
+        const eventID: string = checkin.eventCheckinsId;
+        const username: string = checkin.userName;
+        const sub: string = checkin.user;
+        const record = map.get(eventID) || {};
+        record[sub] = username;
+        map.set(eventID, record);
+      }
+      setEventCheckinsMap(map);
+
+      // Debug: log updated check-in records for the event
+      await logAllCheckInsForEvent(selectedEventId);
     } catch (err) {
       console.error("QR check-in failed:", err);
       setError("Error processing QR code. Please try again.");
@@ -154,7 +231,7 @@ const QRScanCheckIn: React.FC = () => {
     <View padding="medium">
       <Heading level={3}>QR Code Scanner & Check-In</Heading>
       {error && <Text color="red">{error}</Text>}
-      {successMessage && <Text color="green">{successMessage}</Text>}
+      {message && <Text color={messageColor}>{message}</Text>}
       {!scanned ? (
         <QrReader
           onResult={handleResult}
@@ -168,7 +245,6 @@ const QRScanCheckIn: React.FC = () => {
             label="Select Event"
             onChange={(e) => setSelectedEventId(e.target.value)}
             value={selectedEventId}
-            isDisabled={loadingEvents}
           >
             {events.map((event) => (
               <option key={event.id} value={event.id}>
@@ -184,7 +260,7 @@ const QRScanCheckIn: React.FC = () => {
               onClick={() => {
                 setQRResult("");
                 setScanned(false);
-                setSuccessMessage("");
+                setMessage("");
                 setError("");
               }}
             >

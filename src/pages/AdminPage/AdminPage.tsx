@@ -207,6 +207,68 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
   }, [eventRsvps, eventChosen, usernameSearch]);
 
   useEffect(() => {
+    console.log("=== Events List ===");
+    events.forEach((event) => {
+      console.log(`Event ID: ${event.id}`);
+      console.log(`Name: ${event.name}`);
+      console.log(`Description: ${event.description}`);
+      console.log(`Status: ${event.status}`);
+      console.log(`Require RSVP: ${event.requireRSVP}`);
+      console.log(`Can RSVP: ${event.canRSVP}`);
+      console.log(`Start: ${event.start}`);
+      console.log(`End: ${event.end}`);
+      console.log(`Location: ${event.location}`);
+      console.log(`Points: ${event.points}`);
+      console.log(`Check-In Code: ${event.checkInCode}`);
+      console.log(`Checkins:`, event.checkins);
+      console.log("--------------------");
+    });
+    // const compressed = compressEvents(events);
+    // setEvents(compressed);
+  }, [events]);
+
+  /**
+   * Create a signature for an event ignoring the ID field.
+   * This includes the fields that must match for the event to be considered a duplicate.
+   */
+  function createEventSignature(e: Event): string {
+    return JSON.stringify({
+      name: e.name,
+      description: e.description,
+      status: e.status,
+      requireRSVP: e.requireRSVP,
+      canRSVP: e.canRSVP,
+      start: e.start,
+      end: e.end,
+      location: e.location,
+      points: e.points,
+      checkInCode: e.checkInCode,
+    });
+  }
+
+  /**
+   * Given an array of events, return a new array that removes
+   * "duplicates" which differ only by ID.
+   *
+   * The first event encountered for a given signature is kept.
+   * Subsequent events with the same signature are skipped.
+   */
+  function compressEvents(events: Event[]): Event[] {
+    const seen = new Map<string, Event>();
+
+    for (const e of events) {
+      const signature = createEventSignature(e);
+      // Only add the first event we encounter with this signature
+      if (!seen.has(signature)) {
+        seen.set(signature, e);
+      }
+    }
+
+    // Return the values in the order they were added
+    return Array.from(seen.values());
+  }
+
+  useEffect(() => {
     const filteredDict: { [userid: string]: any } = {};
     let usersDict: any = eventCheckins.get(eventChosen.id) ?? {};
 
@@ -1172,10 +1234,51 @@ const AdminPage: FC<AdminPageProps> = ({ user, signOut }) => {
         <CreateEventModal
           createEventModalOpen={createEventModalOpen}
           setCreateEventModalOpen={setCreateEventModalOpen}
-          events={events}
           setEvents={setEvents}
           setCreateEventStatus={setCreateEventStatus}
         />
+        {/* <Modal
+          contentLabel="Create Event Modal"
+          isOpen={createEventModalOpen}
+          onRequestClose={() => {
+            setCreateEventModalOpen(false);
+          }}
+          appElement={document.getElementById("modal-container") as HTMLElement}
+          parentSelector={() => document.getElementById("modal-container")!}
+          style={modalFormStyle}
+        >
+          <StatusAlert status={createEventStatus} />
+          <CreateEvent
+            onCancel={() => {
+              setCreateEventModalOpen(false);
+            }}
+            onSubmit={(fields) => {
+              const updatedFields: any = {};
+              Object.keys(fields).forEach((key) => {
+                if (typeof fields[key as keyof typeof fields] === "string") {
+                  updatedFields[key] = (
+                    fields[key as keyof typeof fields] as string
+                  ).trim();
+                } else {
+                  updatedFields[key] = fields[key as keyof typeof fields];
+                }
+              });
+              return updatedFields;
+            }}
+            onSuccess={(fields) => {
+              setCreateEventModalOpen(false);
+              setEvents([...events, fields as Event]);
+            }}
+            onError={(error) => {
+              console.error(error);
+              setCreateEventStatus({
+                show: true,
+                type: "error",
+                message: "Error creating event",
+              });
+            }}
+          />
+        </Modal> */}
 
         {/* EDIT EVENT MODAL */}
         <Modal

@@ -101,11 +101,11 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                   <Button size="small">Checkout Items</Button>
                 </Link>
               )} */}
-            {/* {!isMobile && (
+            {!isMobile && (
               <Link to="/challenges" style={{ textDecoration: "none" }}>
                 <Button size="small">Challenges</Button>
               </Link>
-            )} */}
+            )}
             {!isMobile && (
               <Link to="/tracks" style={{ textDecoration: "none" }}>
                 <Button size="small">Tracks</Button>
@@ -131,11 +131,11 @@ const Navbar: FC<NavbarProps> = ({ user, signOut }) => {
                 <Link className={styles.MenuLink} to="/">
                   <MenuItem>Dashboard</MenuItem>
                 </Link>
-                {/* {isMobile && (
+                {isMobile && (
                   <Link to="/challenges" className={styles.MenuLink}>
                     <MenuItem size="small">Challenges</MenuItem>
                   </Link>
-                )} */}
+                )}
                 {isMobile && (
                   <Link to="/tracks" className={styles.MenuLink}>
                     <MenuItem size="small">Tracks</MenuItem>
